@@ -1,0 +1,604 @@
+<title>東京・湘南旅行帖</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: a travel journal lying open on a wooden desk. Pages are laid out at a fixed size and scaled to the screen;
+   two-page spreads on wide screens, one page on phones. Single deliberate look (paper on wood) in both themes. */
+:root{
+  --desk:#3A312B; --desk-2:#2C2520; --paper:#FBF6EC; --paper-2:#F3EBDC; --ink:#3B3431; --muted:#857A71;
+  --beni:#C9473E; --sakura:#EBA9A7; --matcha:#A9C796; --sora:#9CC3DE; --yuzu:#F3CD73; --memo:#FFF4C9;
+  --on-desk:#F3EBDC; --on-desk-muted:#B9AC9F;
+  --f-hand:"LXGW WenKai TC","Kaiti TC","BiauKai","STKaiti",serif;
+  --f-sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-latin:"Caveat","Segoe Print","Bradley Hand",cursive;
+  color-scheme:light;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--desk);color:var(--on-desk);font-family:var(--f-hand);overflow:hidden;
+  background-image:radial-gradient(ellipse at 50% 40%,var(--desk) 0%,var(--desk-2) 100%)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk-2)}
+.app{height:100%;display:flex;flex-direction:column;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));box-sizing:border-box}
+
+/* top and bottom bars on the desk */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px 6px;min-height:40px}
+.brand{font-weight:700;font-size:17px;letter-spacing:.06em;white-space:nowrap}
+.brand small{font:500 15px var(--f-latin);color:var(--on-desk-muted);margin-left:8px;letter-spacing:0}
+.tb-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{font:700 14px var(--f-hand);color:var(--on-desk);background:transparent;border:1.5px solid var(--on-desk-muted);border-radius:999px;
+  padding:5px 14px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--on-desk)}
+.btn:focus-visible,.navbtn:focus-visible,input:focus-visible,.toc a:focus-visible{outline:2px solid var(--yuzu);outline-offset:2px}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;position:relative;perspective:2400px}
+.bottombar{display:flex;align-items:center;gap:12px;padding-block:6px calc(10px + env(safe-area-inset-bottom,0px))}
+.navbtn{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--on-desk-muted);background:transparent;color:var(--on-desk);
+  font-size:20px;cursor:pointer;line-height:1}
+.navbtn:disabled{opacity:.3;cursor:default}
+#slider{flex:1;min-width:0;accent-color:var(--yuzu)}
+#pagelabel{font:700 18px var(--f-latin);min-width:92px;text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* the book */
+.book{position:relative;display:flex;transform-origin:center center;transform-style:preserve-3d}
+.slot{position:relative;width:var(--pw);height:var(--ph)}
+.slot.empty{visibility:hidden}
+.page{position:absolute;inset:0;width:var(--pw);height:var(--ph);box-sizing:border-box;background:var(--paper);color:var(--ink);overflow:hidden;
+  font:400 15.5px/1.72 var(--f-hand);
+  background-image:
+    radial-gradient(circle at 20% 30%,rgba(255,255,255,.5),transparent 40%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .36  0 0 0 0 .25  0 0 0 .06 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.slot.left .page{border-radius:6px 2px 2px 6px;box-shadow:inset -18px 0 26px -18px rgba(80,55,30,.35),0 8px 30px rgba(0,0,0,.35)}
+.slot.right .page{border-radius:2px 6px 6px 2px;box-shadow:inset 18px 0 26px -18px rgba(80,55,30,.35),0 8px 30px rgba(0,0,0,.35)}
+.single .slot .page{border-radius:6px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+
+/* turning leaf */
+.leaf{position:absolute;top:0;width:var(--pw);height:var(--ph);transform-style:preserve-3d;z-index:5;pointer-events:none}
+.leaf .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.leaf .face .page{box-shadow:none}
+.leaf .back{transform:rotateY(180deg)}
+.leaf .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(60,40,20,.28),rgba(60,40,20,0) 40%,rgba(255,255,255,.12) 70%,rgba(60,40,20,.12));opacity:0}
+
+/* page furniture */
+.page .inner{position:absolute;inset:34px 36px 40px}
+.runhead{position:absolute;top:12px;left:36px;right:36px;display:flex;align-items:center;gap:6px;font:600 15px var(--f-latin);color:var(--muted)}
+.runhead svg{width:22px;height:22px}
+.runhead .rh-ch{font:700 12.5px var(--f-hand);letter-spacing:.06em}
+.folio{position:absolute;bottom:10px;left:0;right:0;text-align:center;font:700 16px var(--f-latin);color:var(--muted)}
+.flow{position:absolute;inset:0;overflow:hidden}
+.flow>*:first-child{margin-top:0}
+
+/* content typography */
+.page h2{display:inline-block;position:relative;margin:16px 0 8px;padding:3px 14px 3px 12px;font-size:20px;line-height:1.35;font-weight:700;
+  transform:rotate(-.6deg);clip-path:polygon(0 4%,3% 0,97% 6%,100% 0,99% 50%,100% 96%,96% 100%,3% 94%,0 100%,1% 50%)}
+.page[data-washi="sakura"] h2{background:rgba(235,169,167,.62)}
+.page[data-washi="matcha"] h2{background:rgba(169,199,150,.66)}
+.page[data-washi="sora"] h2{background:rgba(156,195,222,.66)}
+.page[data-washi="yuzu"] h2{background:rgba(243,205,115,.7)}
+.page h3{margin:14px 0 4px;font-size:17px;font-weight:700;display:inline-block;
+  background:linear-gradient(transparent 62%,rgba(243,205,115,.55) 62%,rgba(243,205,115,.55) 92%,transparent 92%)}
+.page p{margin:6px 0}
+.page ul,.page ol{margin:6px 0;padding-left:1.25em}
+.page ol{padding-left:1.9em}
+.page ul{list-style:none;padding-left:1.1em}
+.page ul>li{position:relative}
+.page ul>li::before{content:"";position:absolute;left:-1em;top:.62em;width:.48em;height:.48em;border-radius:50% 45% 55% 40%;background:var(--sakura);opacity:.9}
+.page li{margin:2px 0}
+.page strong{font-weight:700;background:linear-gradient(transparent 58%,rgba(235,169,167,.45) 58%)}
+.page a{color:var(--ink);text-decoration:underline dotted;text-underline-offset:3px}
+.page hr{border:0;height:10px;margin:12px 0;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.6px) 0 50%/12px 10px repeat-x;opacity:.5}
+.page code{font-family:var(--f-sans);font-size:.9em;background:var(--paper-2);padding:0 4px;border-radius:3px}
+.page pre{white-space:pre-wrap;font-size:12px}
+.page blockquote{position:relative;margin:12px 4px;padding:12px 14px 10px;background:var(--memo);transform:rotate(.5deg);box-shadow:0 2px 6px rgba(90,70,40,.18);font-size:14.5px}
+.page blockquote::before{content:"MEMO";position:absolute;top:-10px;left:16px;padding:0 10px;font:700 14px var(--f-latin);letter-spacing:.06em;
+  background:rgba(156,195,222,.75);transform:rotate(-2deg)}
+.page blockquote p{margin:3px 0}
+.stamp{display:inline-block;font:700 11px/1 var(--f-hand);color:var(--beni);border:1.5px solid var(--beni);border-radius:50%;padding:5px 3px;
+  transform:rotate(-8deg);vertical-align:1px;margin:0 2px;opacity:.9}
+.todo{list-style:none}
+.page ul>li.todo::before{display:none}
+.todo .box{display:inline-block;width:13px;height:13px;border:1.6px solid var(--ink);border-radius:2px;margin:0 8px 0 -1.1em;vertical-align:-1px;transform:rotate(-3deg)}
+
+.tw{margin:8px 0}
+.page table{border-collapse:collapse;width:100%;font:400 12.6px/1.5 var(--f-sans);font-variant-numeric:tabular-nums}
+.page th{font:700 12.6px/1.4 var(--f-hand);text-align:left;padding:5px 6px;background:rgba(243,205,115,.42)}
+.page td{padding:5px 6px;vertical-align:top;border-bottom:1px dashed rgba(133,122,113,.45)}
+.page td:first-child{font-weight:700;min-width:3.2em}
+.page table.cont caption{caption-side:top;text-align:right;font:600 13px var(--f-latin);color:var(--muted)}
+
+figure{margin:10px 0}
+.artfig .art{display:block;width:100%;height:auto;max-height:calc(var(--flowh) * .9)}
+.artfig{cursor:zoom-in}
+svg text.hand{font-family:var(--f-hand)}
+svg text.latin{font-family:var(--f-latin);font-size-adjust:none}
+.photo{position:relative;background:#fff;padding:7px 7px 6px;box-shadow:0 3px 10px rgba(80,60,40,.25);transform:rotate(-1.2deg);margin:14px 6px}
+.photo:nth-of-type(even){transform:rotate(1.1deg)}
+.photo::before{content:"";position:absolute;top:-9px;left:50%;width:84px;height:20px;transform:translateX(-50%) rotate(-3deg);background:rgba(169,199,150,.7)}
+.photo img{display:block;width:100%;height:auto;max-height:calc(var(--flowh) * .42);object-fit:cover}
+.photo figcaption{display:flex;justify-content:space-between;gap:8px;align-items:baseline;padding-top:4px;font-size:13.5px}
+.photo figcaption small{font:400 9.5px/1.3 var(--f-sans);color:var(--muted);text-align:right}
+.photo.pending .ph,.hero.pending .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:150px;
+  background:radial-gradient(ellipse at 40% 40%,rgba(156,195,222,.45),rgba(169,199,150,.3) 60%,transparent 75%);color:var(--muted);font-size:13px}
+
+/* special pages */
+.cover .art{position:absolute;inset:0;width:100%;height:100%}
+.cover-title{position:absolute;left:34px;right:34px;top:40px}
+.cover-title .kicker{font:700 20px var(--f-latin);color:var(--ink);letter-spacing:.04em}
+.cover-title h1{margin:4px 0 0;font-size:50px;line-height:1.15;font-weight:700;color:var(--ink);text-wrap:balance}
+.cover-title .sub{margin-top:8px;font-size:17px}
+.cover-issue{position:absolute;right:30px;top:244px;width:96px;height:96px;border-radius:50%;background:var(--beni);color:#FFF6E8;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(10deg);text-align:center;line-height:1.2}
+.cover-issue b{font-size:20px}.cover-issue span{font-size:12px}
+.opener-hero{position:absolute;inset:0;display:flex;flex-direction:column}
+.opener-hero .hero{margin:0;flex:1;display:flex;flex-direction:column;position:relative}
+.opener-hero .hero img{flex:1;min-height:0;width:100%;object-fit:cover}
+.opener-hero .hero figcaption{position:absolute;left:18px;bottom:18px;background:var(--paper);padding:4px 10px;font-size:14px;transform:rotate(-1.5deg);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);display:flex;flex-direction:column}
+.opener-hero .hero figcaption small{font:400 9.5px var(--f-sans);color:var(--muted)}
+.opener-hero .hero.pending .ph{flex:1;height:auto}
+.opener-hero .bignum{position:absolute;right:22px;top:4px;font:700 120px/1 var(--f-latin);color:rgba(255,255,255,.88);text-shadow:0 2px 12px rgba(0,0,0,.25)}
+.opener-hero .hero.pending ~ .bignum{color:rgba(201,71,62,.75);text-shadow:none}
+.opener h1{font-size:34px;line-height:1.25;margin:6px 0 2px;text-wrap:balance}
+.opener .chlabel{font:700 24px var(--f-latin);color:var(--beni)}
+.opener .romaji{font:600 18px var(--f-latin);color:var(--muted);margin:0 0 10px}
+.opener .stk{position:absolute;right:28px;top:26px;transform:rotate(8deg)}
+.contents{list-style:none;padding:0;margin:14px 0 0;font-size:14.5px}
+.contents li{display:flex;gap:6px;align-items:baseline;padding:2px 0}
+.contents li::before{display:none}
+.contents a{text-decoration:none;flex:1;min-width:0;display:flex;gap:6px}
+.contents .dots{flex:1;border-bottom:1.5px dotted var(--muted);transform:translateY(-4px)}
+.contents .pn{font:700 16px var(--f-latin);font-variant-numeric:tabular-nums}
+.toc-page h2{font-size:26px}
+.toc-grid{display:grid;grid-template-columns:1fr;gap:4px;margin-top:10px}
+.toc-row{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);padding:3px 0;border-bottom:1px dashed rgba(133,122,113,.35)}
+.toc-row svg{width:34px;height:34px;flex:0 0 auto}
+.toc-row .t{flex:1;min-width:0;font-size:16.5px;font-weight:700}
+.toc-row .r{font:600 14px var(--f-latin);color:var(--muted)}
+.toc-row .pn{font:700 20px var(--f-latin);min-width:2em;text-align:right}
+.memo-page .grid{position:absolute;inset:60px 36px 50px;background-image:radial-gradient(circle,rgba(133,122,113,.35) 1px,transparent 1.4px);background-size:18px 18px}
+.memo-page .hint{position:absolute;left:36px;top:30px;font:700 22px var(--f-latin);color:var(--muted)}
+.ticket{border:1.5px dashed var(--muted);border-radius:10px;padding:10px 14px;margin:12px 0;background:rgba(255,255,255,.5)}
+.ticket .leg{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ticket .leg b{font:700 22px var(--f-latin)}
+.ticket .count{font:700 16px var(--f-hand);color:var(--beni)}
+
+/* overlays */
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(30,24,20,.82);display:flex;align-items:center;justify-content:center;
+  padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.overlay-card{background:var(--paper);color:var(--ink);border-radius:10px;max-width:min(920px,100%);max-height:100%;overflow:auto;padding:18px;box-sizing:border-box;position:relative}
+.overlay-card .art{width:100%;height:auto;display:block;min-width:min(640px,100%)}
+.overlay .close{position:sticky;top:0;float:right;margin:-6px -6px 0 0;background:var(--paper);border:1.5px solid var(--muted);border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;color:var(--ink)}
+.toc-overlay .toc-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:4px 18px}
+.loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 22px var(--f-latin);color:var(--on-desk-muted)}
+#measure{position:absolute;left:-99999px;top:0;visibility:hidden}
+@media (prefers-reduced-motion:reduce){.leaf{display:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter>
+<filter id="wc1" x="-15%" y="-15%" width="130%" height="130%"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="1.4"/></filter>
+<filter id="wc2" x="-15%" y="-15%" width="130%" height="130%"><feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="1.2"/></filter>
+<filter id="wc3" x="-15%" y="-15%" width="130%" height="130%"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="3" seed="21" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="18" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="1.6"/></filter>
+</defs></svg>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">東京・湘南旅行帖<small>Vol.1 冬</small></div>
+    <div class="tb-actions">
+      <button class="btn" id="btn-toc" type="button">目錄</button>
+    </div>
+  </header>
+  <div class="stage" id="stage">
+    <div class="book" id="book"></div>
+    <div class="loading" id="loading">翻開手帳中…</div>
+  </div>
+  <footer class="bottombar">
+    <button class="navbtn" id="prev" type="button" aria-label="上一頁">‹</button>
+    <input id="slider" type="range" min="0" max="0" value="0" aria-label="頁碼">
+    <span id="pagelabel">封面</span>
+    <button class="navbtn" id="next" type="button" aria-label="下一頁">›</button>
+  </footer>
+</div>
+<div id="measure"></div>
+<div class="overlay toc-overlay" id="toc-overlay" hidden><div class="overlay-card"><button class="close" type="button" aria-label="關閉">×</button><h2 style="margin:0 0 8px;font-size:24px">目錄</h2><div class="toc-grid" id="toc-list"></div></div></div>
+<div class="overlay" id="zoom-overlay" hidden><div class="overlay-card"><button class="close" type="button" aria-label="關閉">×</button><div id="zoom-body"></div></div></div>
+
+<template id="cover-src">{{COVER}}</template>
+<template id="credits-src">{{CREDITS}}</template>
+{{STICKERS}}
+{{CHAPTERS}}
+
+<script>
+(function(){
+  "use strict";
+  var book=document.getElementById("book"), stage=document.getElementById("stage"), measure=document.getElementById("measure");
+  var slider=document.getElementById("slider"), label=document.getElementById("pagelabel");
+  var prevBtn=document.getElementById("prev"), nextBtn=document.getElementById("next");
+  var chapterTpls=[].slice.call(document.querySelectorAll("template.chapter"));
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var pages=[], chapterStart={}, mode=null, geom=null, idx=0, busy=null;
+
+  function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+  function sticker(ch){var t=document.querySelector('template[data-sticker="'+ch+'"]');return t?t.innerHTML:"";}
+
+  // ---------- geometry
+  function pickMode(){
+    var w=stage.clientWidth, h=stage.clientHeight;
+    var spread = w>=860 && w/h>1.15;
+    if(spread){return {mode:"spread",pw:520,ph:740};}
+    var pw=400, ph=Math.round(Math.min(860,Math.max(600,pw*h/Math.max(w,1))));
+    return {mode:"single",pw:pw,ph:ph};
+  }
+  function applyScale(){
+    var w=stage.clientWidth-8, h=stage.clientHeight-8;
+    var bw=geom.pw*(mode==="spread"?2:1), s=Math.min(w/bw,h/geom.ph);
+    book.style.transform="scale("+s+")";
+  }
+
+  // ---------- page factories
+  function basePage(cls,washi){
+    var p=el("div","page "+(cls||""));
+    if(washi)p.setAttribute("data-washi",washi);
+    return p;
+  }
+  function flowPage(ch){
+    var p=basePage("flow-page",ch.washi);
+    p.innerHTML='<div class="runhead">'+sticker(ch.num)+'<span>TK'+ch.num+'</span><span class="rh-ch">'+ch.short+'</span></div>'+
+      '<div class="inner"><div class="flow"></div></div><div class="folio"></div>';
+    p.dataset.ch=ch.num;
+    return p;
+  }
+  function coverPage(){
+    var p=basePage("cover");
+    p.innerHTML=document.getElementById("cover-src").innerHTML+
+      '<div class="cover-title"><div class="kicker">Tokyo · Kamakura · Enoshima</div><h1>東京・湘南<br>旅行帖</h1>'+
+      '<div class="sub">2026.12.25 – 2027.1.2　ふたり旅 9 日間</div></div>'+
+      '<div class="cover-issue"><b>Vol.1</b><span>冬・年末年始號</span></div>';
+    return p;
+  }
+  function introPage(){
+    var p=basePage("intro-page","sora");
+    var start=new Date("2026-12-25T15:00:00+08:00"), now=new Date(), d=Math.ceil((start-now)/864e5);
+    var count=d>0?"距離出發還有 "+d+" 天":"旅途中，玩得開心！";
+    p.innerHTML='<div class="inner"><h2>這本手帳怎麼用</h2>'+
+      '<div class="ticket"><div class="count">'+count+'</div>'+
+      '<div class="leg"><span>去程 JX804　12/25（五）</span><b>15:00 TPE → 19:00 NRT T2</b></div>'+
+      '<div class="leg"><span>回程 JX805　1/2（六）</span><b>20:10 NRT T2 → 23:20 TPE</b></div></div>'+
+      '<ul><li>電腦：點書頁右半邊、按 → 鍵或滾輪往下翻；左半邊、← 鍵往回翻</li><li>手機：左右滑動翻頁</li>'+
+      '<li>下方滑桿可以快速跳頁，右上「目錄」直接跳到章節</li><li>手繪圖點一下可以放大看</li></ul>'+
+      '<p>看到 <span class="stamp">確認</span> 的資訊，是年末年始可能變動的項目，出發前一週請再查一次官網。</p>'+
+      '<blockquote><p>內容綜合 Dcard、PTT、Threads、FB 社團、部落格，以及日文、英文旅遊網站與官方公告整理。整理日期 2026/10/31。</p></blockquote></div>'+
+      '<div class="folio"></div>';
+    return p;
+  }
+  function tocPage(){
+    var p=basePage("toc-page","yuzu");
+    p.innerHTML='<div class="inner"><h2>目錄 Contents</h2><div class="toc-grid" data-toc></div></div><div class="folio"></div>';
+    return p;
+  }
+  function memoPage(){
+    var p=basePage("memo-page");
+    p.innerHTML='<div class="hint">memo ✎</div><div class="grid"></div><div class="folio"></div>';
+    return p;
+  }
+  function creditsPage(){
+    var p=basePage("credits-page","matcha");
+    p.innerHTML='<div class="inner"><h2>照片來源與授權</h2><ul class="credits" style="font-size:11.5px;line-height:1.5">'+
+      document.getElementById("credits-src").innerHTML+'</ul><p style="font-size:13px">手繪插圖與整理圖為本手帳原創。照片依各自授權條款使用。</p></div><div class="folio"></div>';
+    return p;
+  }
+  function backPage(){
+    var p=basePage("back-page");
+    p.innerHTML='<div class="inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">'+
+      sticker("06").replace(/width="30" height="30"/,'width="120" height="120"')+
+      '<div style="font:700 34px var(--f-latin)">よいお年を！</div><div style="font-size:18px">祝我們有個美好的新年 ♡</div>'+
+      '<div style="font:600 16px var(--f-latin);color:var(--muted)">Tokyo · Kamakura · Enoshima 2026–2027</div></div>';
+    return p;
+  }
+  function openerLeft(ch){
+    var p=basePage("opener-left",ch.washi);
+    p.innerHTML='<div class="opener-hero">'+ch.hero+'<div class="bignum">'+ch.num+'</div></div>';
+    if(!ch.hero){p.querySelector(".opener-hero").insertAdjacentHTML("afterbegin",'<figure class="hero pending"><div class="ph">'+ch.stickerBig+'</div></figure>');}
+    p.dataset.ch=ch.num;
+    return p;
+  }
+  function openerRight(ch){
+    var p=basePage("opener",ch.washi);
+    p.innerHTML='<div class="inner"><div class="stk">'+ch.stickerBig+'</div><div class="chlabel">Chapter '+ch.num+'</div><h1>'+ch.title+'</h1>'+
+      '<p class="romaji">'+ch.romaji+'</p>'+ch.lead+'<ul class="contents" data-contents="'+ch.num+'"></ul></div><div class="folio"></div>';
+    p.dataset.ch=ch.num;
+    return p;
+  }
+
+  // ---------- pagination
+  function fits(flow){return flow.scrollHeight<=flow.clientHeight+1;}
+  function splitTable(tw,flow,newPage){
+    var table=tw.querySelector("table"), rows=[].slice.call(table.tBodies[0].rows);
+    var head=table.tHead?table.tHead.outerHTML:"";
+    var cap=table.caption?table.caption.outerHTML:"";
+    var part=el("div","tw"), t=el("table",table.className); t.innerHTML=cap+head+"<tbody></tbody>"; part.appendChild(t); flow.appendChild(part);
+    var i=0;
+    while(i<rows.length){t.tBodies[0].appendChild(rows[i]);if(!fits(flow)){t.tBodies[0].removeChild(rows[i]);break;}i++;}
+    if(i===0){flow.removeChild(part);}
+    if(i<rows.length){
+      var rest=el("div","tw"), t2=el("table","cont"); t2.innerHTML="<caption>（續）</caption>"+head+"<tbody></tbody>";
+      rows.slice(i).forEach(function(r){t2.tBodies[0].appendChild(r);}); rest.appendChild(t2);
+      return rest;
+    }
+    return null;
+  }
+  function splitList(list,flow){
+    var items=[].slice.call(list.children), part=list.cloneNode(false); flow.appendChild(part);
+    var i=0;
+    while(i<items.length){part.appendChild(items[i]);if(!fits(flow)){part.removeChild(items[i]);break;}i++;}
+    if(i===0){flow.removeChild(part);}
+    if(i<items.length){
+      var rest=list.cloneNode(false);
+      if(list.tagName==="OL"){rest.setAttribute("start",(parseInt(list.getAttribute("start")||"1",10)+i));}
+      items.slice(i).forEach(function(li){rest.appendChild(li);}); return rest;
+    }
+    return null;
+  }
+  function isHeading(n){return n&&/^H[23]$/.test(n.tagName);}
+
+  function layoutChapter(ch,out){
+    var src=ch.tpl.content.querySelector(".flowsrc").cloneNode(true);
+    var blocks=[].slice.call(src.children);
+    var page=flowPage(ch), flow=page.querySelector(".flow");
+    measure.appendChild(page);
+    function newPage(){
+      measure.removeChild(page); out.push(page); page=flowPage(ch); flow=page.querySelector(".flow"); measure.appendChild(page);
+    }
+    var queue=blocks.slice();
+    var guard=0;
+    while(queue.length&&guard++<5000){
+      var b=queue.shift();
+      flow.appendChild(b);
+      if(fits(flow))continue;
+      flow.removeChild(b);
+      var rest=null, empty=!flow.children.length, before=flow.children.length, split=false;
+      if(b.classList&&b.classList.contains("tw")){rest=splitTable(b,flow);split=true;}
+      else if(b.tagName==="UL"||b.tagName==="OL"){rest=splitList(b,flow);split=true;}
+      if(rest){queue.unshift(rest);newPage();continue;}
+      if(split&&flow.children.length>before)continue; // every row or item found room
+      if(empty){flow.appendChild(b);continue;} // taller than a page: let it clip rather than loop
+      // A picture may shrink to use the space left on this page when that space is generous.
+      var media=b.querySelector&&b.querySelector("svg.art, img");
+      if(media){
+        var used=flow.lastElementChild?flow.lastElementChild.offsetTop+flow.lastElementChild.offsetHeight:0;
+        var room=flow.clientHeight-used-(b.tagName==="FIGURE"&&b.classList.contains("photo")?70:30);
+        var natural=flow.clientHeight*0.42;
+        if(media.tagName.toLowerCase()==="svg"){var vb=media.viewBox.baseVal;natural=Math.min(flow.clientWidth*vb.height/vb.width,flow.clientHeight*0.9);}
+        if(room>=natural*0.82){media.style.maxHeight=room+"px";flow.appendChild(b);if(fits(flow))continue;flow.removeChild(b);media.style.maxHeight="";}
+      }
+      // keep headings with what follows them, unless the page holds nothing else
+      var carry=[];
+      while(isHeading(flow.lastElementChild)){carry.unshift(flow.lastElementChild);flow.removeChild(flow.lastElementChild);}
+      if(!flow.children.length){
+        carry.forEach(function(c){flow.appendChild(c);});
+        if(media){var used2=flow.lastElementChild.offsetTop+flow.lastElementChild.offsetHeight;media.style.maxHeight=(flow.clientHeight-used2-60)+"px";}
+        flow.appendChild(b);continue;
+      }
+      newPage();
+      carry.forEach(function(c){flow.appendChild(c);});
+      queue.unshift(b);
+    }
+    measure.removeChild(page); out.push(page);
+  }
+
+  function loadChapters(){
+    return chapterTpls.map(function(tpl){
+      var m=tpl.content.querySelector(".meta");
+      return {tpl:tpl,num:tpl.dataset.ch,short:tpl.dataset.short,washi:tpl.dataset.washi,
+        title:m.querySelector("h1").innerHTML,romaji:m.querySelector(".romaji").innerHTML,
+        lead:m.querySelector(".lead").innerHTML,hero:m.querySelector(".hero-src").innerHTML,
+        stickerBig:m.querySelector(".sticker-src").innerHTML};
+    });
+  }
+
+  function paginate(){
+    measure.innerHTML="";
+    measure.style.setProperty("--pw",geom.pw+"px");measure.style.setProperty("--ph",geom.ph+"px");
+    measure.style.setProperty("--flowh",(geom.ph-74)+"px");
+    var out=[coverPage(),introPage(),tocPage()];
+    chapterStart={};
+    var chs=loadChapters();
+    chs.forEach(function(ch){
+      if(mode==="spread"&&out.length%2===0){var m=memoPage();out.push(m);}
+      chapterStart[ch.num]=out.length;
+      out.push(openerLeft(ch));out.push(openerRight(ch));
+      layoutChapter(ch,out);
+    });
+    out.push(creditsPage());
+    if(mode==="spread"&&out.length%2===0){out.push(memoPage());}
+    out.push(backPage());
+    out.forEach(function(p,i){
+      p.dataset.index=i;
+      var f=p.querySelector(".folio"); if(f&&i>0)f.textContent="— "+i+" —";
+    });
+    // section page numbers for chapter openers and the table of contents
+    chs.forEach(function(ch){
+      var ul=out[chapterStart[ch.num]+1].querySelector("[data-contents]"), html="";
+      out.forEach(function(p,i){
+        if(p.dataset.ch!==ch.num)return;
+        p.querySelectorAll(".flow > h2").forEach(function(h){
+          html+='<li><a href="#p'+i+'" data-page="'+i+'"><span>'+h.textContent+'</span><span class="dots"></span><span class="pn">'+i+'</span></a></li>';
+        });
+      });
+      ul.innerHTML=html;
+    });
+    var tocHtml=chs.map(function(ch){
+      return '<a class="toc-row" href="#p'+chapterStart[ch.num]+'" data-page="'+chapterStart[ch.num]+'">'+sticker(ch.num)+
+        '<span class="t">'+ch.num+'　'+ch.title+'</span><span class="r">'+ch.romaji+'</span><span class="pn">'+chapterStart[ch.num]+'</span></a>';
+    }).join("");
+    out[2].querySelector("[data-toc]").innerHTML=tocHtml;
+    document.getElementById("toc-list").innerHTML=tocHtml;
+    pages=out;
+    slider.max=pages.length-1;
+  }
+
+  // ---------- rendering & flipping
+  function normalize(i){
+    i=Math.max(0,Math.min(pages.length-1,i|0));
+    if(mode==="spread"&&i>0&&i%2===0)i-=1;
+    return i;
+  }
+  function visible(i){return mode==="spread"?(i===0?[null,pages[0]]:[pages[i],pages[i+1]||null]):[pages[i]];}
+  function slotFor(page,side){
+    var s=el("div","slot "+(side||""));
+    if(page){s.appendChild(page.cloneNode(true));}else{s.classList.add("empty");}
+    return s;
+  }
+  function render(){
+    book.innerHTML="";
+    book.classList.toggle("single",mode==="single");
+    book.style.setProperty("--pw",geom.pw+"px");book.style.setProperty("--ph",geom.ph+"px");
+    book.style.setProperty("--flowh",(geom.ph-74)+"px");
+    var v=visible(idx);
+    if(mode==="spread"){book.appendChild(slotFor(v[0],"left"));book.appendChild(slotFor(v[1],"right"));}
+    else{book.appendChild(slotFor(v[0],""));}
+    slider.value=idx;
+    label.textContent=idx===0?"封面":(mode==="spread"&&pages[idx+1]?idx+"–"+(idx+1):String(idx))+" / "+(pages.length-1);
+    prevBtn.disabled=idx===0; nextBtn.disabled=nextIndex(idx)===idx;
+    try{history.replaceState(null,"","#p"+idx);}catch(e){location.hash="p"+idx;}
+  }
+  function nextIndex(i){
+    if(mode==="spread"){var n=i===0?1:i+2;return n<pages.length?n:i;}
+    return i+1<pages.length?i+1:i;
+  }
+  function prevIndex(i){
+    if(mode==="spread"){return i<=1?0:i-2;}
+    return i>0?i-1:0;
+  }
+  function makeLeaf(front,back,side){
+    var leaf=el("div","leaf");
+    var f=el("div","face front"),bk=el("div","face back");
+    if(front)f.appendChild(front.cloneNode(true)); else f.appendChild(basePage("blank"));
+    if(back)bk.appendChild(back.cloneNode(true)); else bk.appendChild(basePage("blank"));
+    f.appendChild(el("div","shade"));bk.appendChild(el("div","shade"));
+    leaf.appendChild(f);leaf.appendChild(bk);
+    leaf.style.left=side==="right"?geom.pw+"px":"0px";
+    leaf.style.transformOrigin=side==="right"?"left center":"right center";
+    return leaf;
+  }
+  function flipTo(target){
+    target=normalize(target);
+    if(busy){busy.finish();}
+    if(target===idx)return;
+    var forward=target>idx, adjacent=forward?target===nextIndex(idx):target===prevIndex(idx);
+    if(reduce||!adjacent){idx=target;render();return;}
+    var cur=visible(idx), nxt=visible(target), leaf, kf;
+    if(mode==="spread"){
+      if(forward){
+        // right page lifts and lands on the left
+        book.children[1].replaceWith(slotFor(nxt[1],"right"));
+        leaf=makeLeaf(cur[1],nxt[0],"right");
+        kf=[{transform:"rotateY(0deg)"},{transform:"rotateY(-180deg)"}];
+      }else{
+        book.children[0].replaceWith(slotFor(nxt[0],"left"));
+        if(!nxt[0])book.children[0].classList.add("empty");
+        leaf=makeLeaf(cur[0],nxt[1],"left");
+        kf=[{transform:"rotateY(0deg)"},{transform:"rotateY(180deg)"}];
+      }
+    }else{
+      if(forward){
+        book.innerHTML="";book.appendChild(slotFor(nxt[0],""));
+        leaf=makeLeaf(cur[0],null,"right");leaf.style.left="0px";leaf.style.transformOrigin="left center";
+        kf=[{transform:"rotateY(0deg)",opacity:1},{transform:"rotateY(-100deg)",opacity:.4}];
+      }else{
+        leaf=makeLeaf(nxt[0],null,"right");leaf.style.left="0px";leaf.style.transformOrigin="left center";
+        kf=[{transform:"rotateY(-100deg)",opacity:.4},{transform:"rotateY(0deg)",opacity:1}];
+      }
+    }
+    book.appendChild(leaf);
+    var shades=leaf.querySelectorAll(".shade");
+    shades.forEach(function(s){s.animate([{opacity:0},{opacity:1},{opacity:0}],{duration:650,easing:"ease-in-out"});});
+    var anim=leaf.animate(kf,{duration:650,easing:"cubic-bezier(.35,.05,.2,1)"});
+    busy=anim;
+    var done=function(){if(busy===anim){busy=null;}idx=target;render();};
+    anim.onfinish=done; anim.oncancel=done;
+  }
+  function go(i){flipTo(i);}
+  function next(){go(nextIndex(idx));}
+  function prev(){go(prevIndex(idx));}
+
+  // ---------- input
+  prevBtn.addEventListener("click",prev); nextBtn.addEventListener("click",next);
+  slider.addEventListener("input",function(){idx=normalize(+slider.value);render();});
+  document.addEventListener("keydown",function(e){
+    if(!document.getElementById("zoom-overlay").hidden||!document.getElementById("toc-overlay").hidden){if(e.key==="Escape")closeOverlays();return;}
+    if(e.target&&e.target.tagName==="INPUT"&&e.target.type!=="range")return;
+    if(e.key==="ArrowRight"||e.key==="PageDown"||e.key===" "){e.preventDefault();next();}
+    else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();prev();}
+    else if(e.key==="Home"){go(0);}else if(e.key==="End"){go(pages.length-1);}
+  });
+  var wheelLock=0;
+  stage.addEventListener("wheel",function(e){
+    var now=Date.now(); if(now<wheelLock||Math.abs(e.deltaY)<20)return;
+    wheelLock=now+700; if(e.deltaY>0)next();else prev();
+  },{passive:true});
+  var down=null;
+  stage.addEventListener("pointerdown",function(e){down={x:e.clientX,y:e.clientY,t:Date.now()};});
+  stage.addEventListener("pointerup",function(e){
+    if(!down)return; var dx=e.clientX-down.x, dy=e.clientY-down.y, d=down; down=null;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){if(dx<0)next();else prev();return;}
+    if(Math.abs(dx)>8||Math.abs(dy)>8||Date.now()-d.t>500)return;
+    var target=e.target;
+    var link=target.closest&&target.closest("[data-page],[data-goto],a");
+    if(link&&book.contains(link)){
+      e.preventDefault();
+      if(link.dataset.page){go(+link.dataset.page);}
+      else if(link.dataset.goto){go(chapterStart[link.dataset.goto.slice(2)]||0);}
+      else if(link.href){window.open(link.href,"_blank","noopener");}
+      return;
+    }
+    var fig=target.closest&&target.closest(".artfig");
+    if(fig&&book.contains(fig)){openZoom(fig.innerHTML);return;}
+    var r=book.getBoundingClientRect();
+    if(e.clientX>r.left+r.width/2)next();else prev();
+  });
+  book.addEventListener("click",function(e){if(e.target.closest("a"))e.preventDefault();});
+
+  function openZoom(html){document.getElementById("zoom-body").innerHTML=html;document.getElementById("zoom-overlay").hidden=false;}
+  function closeOverlays(){document.getElementById("zoom-overlay").hidden=true;document.getElementById("toc-overlay").hidden=true;}
+  document.querySelectorAll(".overlay").forEach(function(o){
+    o.addEventListener("click",function(e){
+      var link=e.target.closest("[data-page]");
+      if(link){e.preventDefault();closeOverlays();idx=normalize(+link.dataset.page);render();return;}
+      if(e.target===o||e.target.closest(".close"))closeOverlays();
+    });
+  });
+  document.getElementById("btn-toc").addEventListener("click",function(){document.getElementById("toc-overlay").hidden=false;});
+
+  // ---------- boot
+  // Lay out for the current screen. keepCh: chapter to stay in after a layout change.
+  function setup(keepCh){
+    geom=pickMode(); mode=geom.mode;
+    paginate();
+    var fromHash=/^#p(\d+)$/.exec(location.hash);
+    if(keepCh&&chapterStart[keepCh]!=null){idx=normalize(chapterStart[keepCh]);}
+    else if(fromHash){idx=normalize(+fromHash[1]);}
+    else{idx=0;}
+    render();
+    applyScale();
+  }
+  var resizeT;
+  window.addEventListener("resize",function(){clearTimeout(resizeT);resizeT=setTimeout(function(){
+    var g=pickMode();
+    if(g.mode!==mode||(g.mode==="single"&&g.ph!==geom.ph)){setup(pages[idx]&&pages[idx].dataset.ch);}
+    else{applyScale();}
+  },200);});
+
+  var allText=chapterTpls.map(function(t){return t.content.textContent;}).join("").replace(/\s+/g,"");
+  var uniq=Array.from(new Set(allText)).join("")+"東京湘南旅行帖目錄這本手帳怎麼用照片來源與授權";
+  var faces=['400 16px "LXGW WenKai TC"','700 16px "LXGW WenKai TC"','400 13px "Noto Sans TC"','700 13px "Noto Sans TC"',
+    '500 16px "Caveat"','600 16px "Caveat"','700 16px "Caveat"'];
+  var fontLoads=faces.map(function(f){return document.fonts?document.fonts.load(f,uniq).catch(function(){}):Promise.resolve();});
+  var timeout=new Promise(function(r){setTimeout(r,6000);});
+  Promise.race([Promise.all(fontLoads),timeout]).catch(function(){}).then(function(){
+    document.getElementById("loading").remove();
+    setup();
+  });
+})();
+</script>

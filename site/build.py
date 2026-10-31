@@ -9,32 +9,12 @@ import re
 import sys
 from pathlib import Path
 
-import markdown
+from mdlib import ROMAJI, ROOT, SHORT, load_chapters
 
-ROOT = Path(__file__).resolve().parent.parent
-GUIDE = ROOT / "guide"
 TEMPLATE = Path(__file__).resolve().parent / "template.html"
 
-# Short names shown on the station-sign headers and the line map.
-SHORT = {
-    "00": "速覽", "01": "行前準備", "02": "交通", "03": "住宿", "04": "東京分區",
-    "05": "鎌倉・江之島", "06": "年末年始", "07": "美食", "08": "購物",
-    "09": "約會・拍照", "10": "一日遊", "11": "行程表", "12": "預算・避雷",
-}
-ROMAJI = {
-    "00": "Overview", "01": "Junbi", "02": "Kōtsū", "03": "Shukuhaku", "04": "Tōkyō",
-    "05": "Kamakura・Enoshima", "06": "Nenmatsu Nenshi", "07": "Gurume", "08": "Kaimono",
-    "09": "Dēto", "10": "Higaeri", "11": "Nittei", "12": "Yosan",
-}
 
-
-def render_chapter(path):
-    num = path.name[:2]
-    text = path.read_text(encoding="utf-8")
-    first, _, body = text.partition("\n")
-    title = re.sub(r"^#\s*\d+\.\s*", "", first).strip()
-    md = markdown.Markdown(extensions=["tables", "fenced_code", "sane_lists"])
-    out = md.convert(body)
+def render_chapter(num, title, out):
     # Wide tables scroll inside their own box.
     out = out.replace("<table>", '<div class="tw"><table>').replace("</table>", "</table></div>")
     # Warning marker becomes a chip.
@@ -60,7 +40,7 @@ def render_chapter(path):
 
 
 def build():
-    chapters = [render_chapter(p) for p in sorted(GUIDE.glob("[0-9][0-9]-*.md"))]
+    chapters = [render_chapter(*c) for c in load_chapters()]
     nav = "\n".join(
         f'<a class="stop" href="#ch{n}"><span class="code">TK{n}</span><span class="nm">{SHORT[n]}</span></a>'
         for n, _, _ in chapters
