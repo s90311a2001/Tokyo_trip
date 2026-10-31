@@ -1,0 +1,5129 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
+<title>東京・湘南旅行帖</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: a train line. Sticky search bar + line map of chapter "stations"; each chapter opens with a station-name sign. */
+:root{
+  --paper:#F3F5F2; --card:#FFFFFF; --ink:#1A1F2B; --muted:#5A6371; --rule:#D6DBD5;
+  --torii:#C3352B; --line:#2E9A4E; --hl:#FFE27A; --zebra:#F7F8F6;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-label:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11141A; --card:#181C24; --ink:#E6E9ED; --muted:#9BA3AE; --rule:#2B313B;
+  --torii:#FF6E60; --line:#4CC46F; --hl:#6A5A14; --zebra:#1C2029; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11141A; --card:#181C24; --ink:#E6E9ED; --muted:#9BA3AE; --rule:#2B313B;
+  --torii:#FF6E60; --line:#4CC46F; --hl:#6A5A14; --zebra:#1C2029; color-scheme:dark}
+
+body{background:var(--paper);color:var(--ink);font:400 16px/1.75 var(--f-body);
+  -webkit-text-size-adjust:100%;text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+a{color:var(--line);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--torii);outline-offset:2px;border-radius:4px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--rule)}
+.bar .wrap{display:flex;flex-direction:column;gap:8px;padding-block:10px 0}
+.bar-row{display:flex;align-items:center;gap:12px}
+.brand{font-weight:900;font-size:15px;letter-spacing:.04em;white-space:nowrap}
+.brand span{color:var(--torii)}
+.search{flex:1;min-width:0;position:relative}
+.search input{width:100%;box-sizing:border-box;font:500 15px var(--f-body);color:var(--ink);background:var(--paper);
+  border:1px solid var(--rule);border-radius:999px;padding:7px 36px 7px 14px}
+.search button{position:absolute;right:4px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted);
+  font-size:18px;width:30px;height:30px;cursor:pointer}
+.hits{font:600 12px var(--f-label);color:var(--muted);letter-spacing:.04em;min-height:0}
+.linemap{display:flex;overflow-x:auto;scrollbar-width:none;position:relative;padding-bottom:8px;gap:0}
+.linemap::-webkit-scrollbar{display:none}
+.stop{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--ink);
+  min-width:64px;position:relative;padding-top:2px}
+.stop::before{content:"";position:absolute;top:13px;left:0;right:0;height:4px;background:var(--line)}
+.stop:first-child::before{left:50%}.stop:last-child::before{right:50%}
+.stop .code{position:relative;z-index:1;font:700 10px/1 var(--f-label);letter-spacing:.02em;background:var(--card);
+  border:3px solid var(--line);border-radius:7px;padding:4px 4px 3px;color:var(--ink)}
+.stop .nm{font-size:12px;font-weight:500;white-space:nowrap}
+.stop.here .code{background:var(--line);color:var(--card)}
+.stop.here .nm{font-weight:900}
+
+/* Hero ticket */
+.hero{padding-block:24px 8px}
+.ticket{background:var(--card);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+.ticket-top{padding:18px 18px 14px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
+.ticket h1{margin:0;font-weight:900;font-size:clamp(26px,7vw,40px);line-height:1.2;text-wrap:balance}
+.ticket h1 small{display:block;font:600 13px var(--f-label);letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.count{font:700 14px var(--f-label);color:var(--torii);letter-spacing:.04em}
+.legs{display:grid;grid-template-columns:1fr 1fr;border-top:1px dashed var(--rule)}
+.leg{padding:12px 18px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.leg+.leg{border-left:1px dashed var(--rule)}
+.leg .k{font:600 11px var(--f-label);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.leg .t{font:700 20px var(--f-label);font-variant-numeric:tabular-nums}
+.leg .d{font-size:13px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);margin:12px 2px 0}
+.note .warn{margin:0 2px}
+
+/* Chapter sign */
+.chapter{padding-block:28px 8px;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 112px)}
+.sign{background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.sign-top{display:flex;align-items:center;gap:14px;padding:14px 16px 10px}
+.num{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;width:48px;height:48px;box-sizing:border-box;
+  border:4px solid var(--line);border-radius:10px;font:700 11px/1 var(--f-label);letter-spacing:.04em}
+.num b{font-size:19px;line-height:1}
+.sign-name{min-width:0}
+.sign h2{margin:0;font-weight:900;font-size:clamp(21px,5.6vw,28px);line-height:1.25;text-wrap:balance}
+.romaji{margin:2px 0 0;font:600 13px var(--f-label);letter-spacing:.12em;color:var(--muted)}
+.sign-line{height:8px;background:var(--line)}
+.sign-adj{display:flex;justify-content:space-between;padding:6px 16px;font:600 13px var(--f-label);letter-spacing:.03em}
+.sign-adj a{color:var(--muted);text-decoration:none}
+
+/* Sub-sections */
+.sub{border-bottom:1px solid var(--rule)}
+.sub>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 0}
+.sub>summary::-webkit-details-marker{display:none}
+.sub>summary::before{content:"";flex:0 0 auto;width:8px;height:8px;border-right:2px solid var(--torii);border-bottom:2px solid var(--torii);
+  transform:rotate(-45deg);transition:transform .15s}
+.sub[open]>summary::before{transform:rotate(45deg)}
+.sub>summary h3{margin:0;font-size:18px;font-weight:700;line-height:1.4;text-wrap:balance}
+.subbody{padding-bottom:12px}
+.chbody>blockquote:first-child{margin-top:0}
+.chbody h3{font-size:16.5px;font-weight:700;margin:20px 0 6px}
+.chbody p,.chbody li{max-width:68ch}
+.chbody ul,.chbody ol{padding-left:1.3em}
+.chbody li{margin:3px 0}
+.chbody strong{font-weight:700}
+.chbody hr{border:0;border-top:1px solid var(--rule);margin:22px 0}
+blockquote{margin:12px 0;padding:10px 14px;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--torii);border-radius:6px;font-size:15px}
+blockquote p{margin:4px 0}
+pre{overflow-x:auto;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;font-size:12px;line-height:1.5}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--rule);border-radius:8px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+th{font-weight:700;font-size:13px;color:var(--muted);white-space:nowrap;background:var(--zebra)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500;min-width:5.5em}
+tbody tr:nth-child(even){background:var(--zebra)}
+
+.warn{display:inline-block;font:700 11px/1 var(--f-label);letter-spacing:.06em;color:var(--torii);border:1.5px solid var(--torii);
+  border-radius:4px;padding:2px 4px 1px;vertical-align:2px;white-space:nowrap}
+li.chk{list-style:none;margin-left:-1.3em}
+li.chk input{width:18px;height:18px;vertical-align:-3px;margin-right:6px;accent-color:var(--line)}
+
+::highlight(q){background:var(--hl);color:var(--ink)}
+.hidden-by-search{display:none}
+
+footer{padding-block:32px calc(40px + env(safe-area-inset-bottom,0px));color:var(--muted);font-size:13px}
+.top{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-size:18px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.12)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (min-width:700px){html{scroll-behavior:smooth}}
+</style>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-row">
+      <div class="brand">東京<span>・</span>湘南旅行帖</div>
+      <div class="search">
+        <input id="q" type="search" placeholder="搜尋：福袋、吻仔魚、Skyliner…" autocomplete="off" aria-label="搜尋攻略">
+        <button id="qclear" type="button" aria-label="清除搜尋" hidden>×</button>
+      </div>
+    </div>
+    <div class="hits" id="hits" hidden></div>
+    <nav class="linemap" id="linemap" aria-label="章節">
+<a class="stop" href="#ch00"><span class="code">TK00</span><span class="nm">速覽</span></a>
+<a class="stop" href="#ch01"><span class="code">TK01</span><span class="nm">行前準備</span></a>
+<a class="stop" href="#ch02"><span class="code">TK02</span><span class="nm">交通</span></a>
+<a class="stop" href="#ch03"><span class="code">TK03</span><span class="nm">住宿</span></a>
+<a class="stop" href="#ch04"><span class="code">TK04</span><span class="nm">東京分區</span></a>
+<a class="stop" href="#ch05"><span class="code">TK05</span><span class="nm">鎌倉・江之島</span></a>
+<a class="stop" href="#ch06"><span class="code">TK06</span><span class="nm">年末年始</span></a>
+<a class="stop" href="#ch07"><span class="code">TK07</span><span class="nm">美食</span></a>
+<a class="stop" href="#ch08"><span class="code">TK08</span><span class="nm">購物</span></a>
+<a class="stop" href="#ch09"><span class="code">TK09</span><span class="nm">約會・拍照</span></a>
+<a class="stop" href="#ch10"><span class="code">TK10</span><span class="nm">一日遊</span></a>
+<a class="stop" href="#ch11"><span class="code">TK11</span><span class="nm">行程表</span></a>
+<a class="stop" href="#ch12"><span class="code">TK12</span><span class="nm">預算・避雷</span></a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="ticket">
+      <div class="ticket-top">
+        <h1><small>Tokyo · Kamakura · Enoshima</small>東京・鎌倉・江之島 9 日</h1>
+        <span class="count" id="count">2026/12/25 – 2027/1/2</span>
+      </div>
+      <div class="legs">
+        <div class="leg"><span class="k">去程 JX804</span><span class="t">15:00 → 19:00</span><span class="d">12/25（五）桃園 T1 → 成田 T2</span></div>
+        <div class="leg"><span class="k">回程 JX805</span><span class="t">20:10 → 23:20</span><span class="d">1/2（六）成田 T2 → 桃園 T1</span></div>
+      </div>
+    </div>
+    <p class="note">整理日期 2026/10/31。標 <span class="warn">確認</span> 的是年末年始可能變動的資訊，出發前一週再查一次官網。上方路線圖可以跳到各章，每段標題點一下可收合。</p>
+  </section>
+
+<section class="chapter" id="ch00"><header class="sign"><div class="sign-top"><span class="num">TK<b>00</b></span><div class="sign-name"><h2>一頁速覽</h2><p class="romaji">Overview</p></div></div><div class="sign-line"></div><nav class="sign-adj"><span></span><a href="#ch01">行前準備 →</a></nav></header><div class="chbody"><blockquote>
+<p>兩人第一次東京＋鎌倉・江之島｜2026/12/25（五）～2027/1/2（六）｜9 天 8 夜
+本攻略於 2026/10/31 整理。<span class="warn" title="出發前再確認">確認</span> 標記的是年末年始期間可能變動的資訊，出發前一週請再查一次官網。</p>
+</blockquote>
+
+<details class="sub" open id="ch00-0"><summary><h3>航班</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>航班</th>
+<th>日期</th>
+<th>時間</th>
+<th>航廈</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>去程</td>
+<td>星宇 JX804</td>
+<td>12/25（五）</td>
+<td>15:00 桃園 → <strong>19:00 成田</strong></td>
+<td>桃園 T1 → 成田 <strong>T2</strong></td>
+</tr>
+<tr>
+<td>回程</td>
+<td>星宇 JX805</td>
+<td>1/2（六）</td>
+<td><strong>20:10 成田</strong> → 23:20 桃園</td>
+<td>成田 <strong>T2</strong> → 桃園 T1</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>抵達日：入境＋領行李約 45～75 分鐘，<strong>21:30 前後才會到飯店</strong>，第一晚只排「飯店附近吃宵夜＋聖誕燈飾」</li>
+<li>回程日：國際線建議 2.5～3 小時前到機場，新年連假人潮多 → <strong>17:15 前到成田 T2</strong>，從上野最晚 <strong>16:30 左右</strong>出發</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch00-1"><summary><h3>行程總覽（主推版）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>主題</th>
+<th>住宿</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12/25（五）</td>
+<td>抵達、丸之內聖誕燈飾、上野宵夜</td>
+<td>上野</td>
+</tr>
+<tr>
+<td>12/26（六）</td>
+<td>淺草和服散步 → 晴空塔 → 寶可夢中心</td>
+<td>上野</td>
+</tr>
+<tr>
+<td>12/27（日）</td>
+<td>明治神宮 → 原宿表參道 → 澀谷 PARCO → <strong>Shibuya Sky 夕陽</strong></td>
+<td>上野</td>
+</tr>
+<tr>
+<td>12/28（一）</td>
+<td><strong>鎌倉</strong>：鶴岡八幡宮、小町通、大佛、長谷寺 → 灌籃高手平交道 → 七里濱夕陽 → 「湘南の宝石」燈飾</td>
+<td><strong>江之島／片瀨</strong></td>
+</tr>
+<tr>
+<td>12/29（二）</td>
+<td><strong>江之島</strong>晨間富士山、江島神社、吻仔魚丼 → 浪漫特快回新宿 → 都廳夜景、回憶橫丁</td>
+<td>上野</td>
+</tr>
+<tr>
+<td>12/30（三）</td>
+<td>豐洲 teamLab Planets → 台場 → 銀座 → 阿美橫町年末市集</td>
+<td>上野</td>
+</tr>
+<tr>
+<td>12/31（四）</td>
+<td>秋葉原、神田明神 → 麻布台之丘 teamLab Borderless → <strong>增上寺＋東京鐵塔跨年</strong></td>
+<td>上野</td>
+</tr>
+<tr>
+<td>1/1（五）</td>
+<td>睡飽 → 淺草寺／明治神宮初詣 → 福袋（部分品牌）→ 夜景</td>
+<td>上野</td>
+</tr>
+<tr>
+<td>1/2（六）</td>
+<td>百貨公司初賣福袋 或 皇居新年一般參賀 → 16:30 上野搭 Skyliner → 20:10 起飛</td>
+<td>✈️</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>也可以換成「12/31 住江之島、1/1 看初日出」的跨年海景版，或把一天換成迪士尼。詳見<a href="#ch11">第 11 章 建議行程</a>。</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch00-2"><summary><h3>這趟情侶必做 TOP 15</h3></summary><div class="subbody">
+<p>綜合中文（Dcard／PTT／FB 社團／Threads／部落格）、日文與英文社群的出現頻率，加上「年末年始才有」的加分：</p>
+<ol>
+<li><strong>Shibuya Sky 夕陽轉夜景</strong>：社群聲量第一的展望台，預約 15:30～16:00 入場，夕陽和夜景一次看完</li>
+<li><strong>淺草穿和服</strong>拍雷門、仲見世通，再到隅田川邊拍晴空塔</li>
+<li><strong>鎌倉高校前「灌籃高手平交道」</strong>：江之電經過的瞬間</li>
+<li><strong>七里濱夕陽＋富士山剪影</strong>：冬天空氣乾淨，是看到富士山機率最高的季節</li>
+<li><strong>江之島「湘南の宝石」燈飾</strong>：日本三大燈飾之一，12/1 起點燈</li>
+<li><strong>龍戀之鐘</strong>：兩人一起敲鐘、在柵欄掛愛情鎖</li>
+<li><strong>teamLab Planets／Borderless</strong>：拍照效果最好的沉浸式展覽</li>
+<li><strong>東京鐵塔跨年</strong>：增上寺除夜之鐘＋鐵塔倒數燈光</li>
+<li><strong>初詣</strong>：淺草寺或明治神宮，一起抽籤、買御守（情侶可買「縁結び」御守）</li>
+<li><strong>澀谷 PARCO 6F</strong>：任天堂、寶可夢、JUMP、卡普空，動漫迷一次逛完</li>
+<li><strong>阿美橫町年末市集</strong>：12/28～12/31 才有的年貨叫賣氣氛</li>
+<li><strong>燒肉／和牛壽喜燒約會晚餐</strong>：一晚預算拉高吃好的</li>
+<li><strong>福袋</strong>：1/1～1/2 初賣，跟日本人一起排隊開福袋</li>
+<li><strong>丸之內聖誕燈飾</strong>：抵達當晚就能看到，香檳金色的行道樹</li>
+<li><strong>麻布台之丘／六本木 Tokyo City View</strong>：能把東京鐵塔拍得最漂亮的高樓</li>
+</ol>
+</div></details>
+<details class="sub" open id="ch00-3"><summary><h3>年末年始營業日曆（最重要的一張表）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>大致狀況</th>
+<th>建議安排</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12/25～12/28</td>
+<td><strong>一切正常</strong>，聖誕燈飾很多在 12/25 結束</td>
+<td>想去的餐廳、美術館、市場排在這幾天</td>
+</tr>
+<tr>
+<td>12/29～12/30</td>
+<td>公家機關、部分美術館、築地／豐洲部分店家開始休；百貨照常</td>
+<td>室內景點先查休館日</td>
+</tr>
+<tr>
+<td>12/31</td>
+<td>百貨、商場多數<strong>提早關門</strong>（約 18:00～19:00）；餐廳很多休息</td>
+<td>晚餐要先訂位，或吃連鎖店、便利商店</td>
+</tr>
+<tr>
+<td>1/1</td>
+<td><strong>最冷清的一天</strong>：百貨幾乎全休，部分商場與品牌會營業；神社寺廟最熱鬧</td>
+<td>初詣、散步、夜景；吃連鎖店或飯店</td>
+</tr>
+<tr>
+<td>1/2</td>
+<td>多數百貨<strong>初賣＋福袋</strong>開始，人潮爆量</td>
+<td>早起排福袋，或去皇居新年參賀</td>
+</tr>
+<tr>
+<td>1/3</td>
+<td>大致恢復</td>
+<td>（我們已回國）</td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="warn" title="出發前再確認">確認</span> 連鎖店（一蘭、松屋、すき家、壽司郎、牛角、唐吉訶德、便利商店）通常照常營業，是年末年始的救星。</p>
+</div></details>
+<details class="sub" open id="ch00-4"><summary><h3>本攻略的研究範圍說明</h3></summary><div class="subbody">
+<ul>
+<li>中文：Dcard、PTT Japan_Travel、FB 日本自助社團、Threads、台港部落格與旅遊媒體（Funliday、Bring You、MATCHA、LiveJapan、FUN JAPAN 等）</li>
+<li>日文：觀光局 GO TOKYO、Tabelog、るるぶ、各景點與鐵道公司公告</li>
+<li>英文：Time Out Tokyo、Tokyo Weekender、Japan Guide、r/JapanTravel 整理文</li>
+<li>IG／Threads／FB 很多內容要登入才看得到，這份攻略是用搜尋得到的貼文、整理文章與觀光媒體，交叉比對每個地點被提到的次數，來判斷熱門程度</li>
+<li>價格與時間以官方公告為主，找不到 2026～27 年資料的會標 <span class="warn" title="出發前再確認">確認</span></li>
+</ul></div></details></div></section>
+<section class="chapter" id="ch01"><header class="sign"><div class="sign-top"><span class="num">TK<b>01</b></span><div class="sign-name"><h2>行前準備</h2><p class="romaji">Junbi</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch00">← 速覽</a><a href="#ch02">交通 →</a></nav></header><div class="chbody">
+<details class="sub" open id="ch01-0"><summary><h3>證件與入境</h3></summary><div class="subbody">
+<ul>
+<li><strong>護照</strong>：效期需涵蓋停留期間（建議還有 6 個月以上），台灣護照免簽 90 天</li>
+<li><strong>Visit Japan Web（VJW）</strong>：出發前 1～2 週填好入境審查＋海關申報，會產生 QR Code，截圖存在手機相簿（機場網路可能不穩）</li>
+<li>2026/11/1 起免稅改成「退稅制」，<strong>在 VJW 登錄護照資料</strong>後，購物退稅與出境退款會更順（見下方「退稅新制」）</li>
+<li><strong>成田 T2 入境流程</strong>：下機 → 入境審查（出示 VJW QR）→ 領行李 → 海關（出示 VJW QR 走電子閘門）→ 抵達大廳 B1 搭 Skyliner／JR</li>
+<li><strong>出國稅</strong>：日本「國際觀光旅客稅」2026/7/1 起每人從 1,000 日圓<strong>調漲為 3,000 日圓</strong>，已含在機票裡，不用另外付</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch01-1"><summary><h3>退稅新制（2026/11/1 起，這趟一定會遇到）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>以前</th>
+<th>現在（11/1 起）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>結帳</td>
+<td>出示護照，直接付免稅價</td>
+<td><strong>先付含稅價</strong>（10%／食品 8%）</td>
+</tr>
+<tr>
+<td>拿回稅金</td>
+<td>不用</td>
+<td>出境時在機場海關確認你帶著商品出境，之後退回稅金</td>
+</tr>
+<tr>
+<td>上限</td>
+<td>消耗品有上限、要封袋</td>
+<td>取消一般品／消耗品區分與 50 萬上限，但只能買「出境時能帶走的數量」</td>
+</tr>
+<tr>
+<td>期限</td>
+<td>當場</td>
+<td>商品須在購買後 90 天內帶出境</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>實際怎麼做</strong>
+1. 結帳時出示護照（或 VJW 的免稅 QR），店家登錄免稅資料，你先付含稅金額
+2. 1/2 在成田 T2 出境時，到海關的免稅確認處（或電子機台）掃護照，<strong>商品要放隨身行李或托運前先給海關看</strong>
+3. 稅金依各店的退款方式退回（多為退回信用卡，部分店家收手續費；唐吉訶德等 PPIH 集團宣布免收退款手續費）</p>
+<p><span class="warn" title="出發前再確認">確認</span> 新制剛上路，1/2 出境時排隊時間可能比較久 → 這也是要提早到機場的原因。各店退款方式不同，結帳時問清楚並<strong>保留收據</strong>。</p>
+</div></details>
+<details class="sub" open id="ch01-2"><summary><h3>網路：eSIM vs 漫遊 vs Wi-Fi 機</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>適合</th>
+<th>優點</th>
+<th>缺點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>eSIM</strong>（Ubigi、Airalo、KKday／Klook 販售的各家）</td>
+<td>手機支援 eSIM（iPhone XS 以後多數支援）</td>
+<td>不用換卡、落地即用、一人一個不怕走散</td>
+<td>舊手機不支援；要先確認手機沒鎖卡</td>
+</tr>
+<tr>
+<td>實體 SIM 卡</td>
+<td>手機不支援 eSIM</td>
+<td>便宜</td>
+<td>要換卡、台灣門號收不到簡訊（雙卡機除外）</td>
+</tr>
+<tr>
+<td>電信漫遊</td>
+<td>怕麻煩、要收台灣簡訊</td>
+<td>免設定</td>
+<td>9 天通常最貴</td>
+</tr>
+<tr>
+<td>Wi-Fi 機</td>
+<td>兩人共用、要帶筆電</td>
+<td>一台多人用</td>
+<td>兩人走散就沒網路、要充電、要歸還</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>社群主流建議</strong>：兩人<strong>各買一張 eSIM</strong>（9～10 天、每天 3GB 以上或吃到飽），Google Maps＋IG 限動很耗流量。</p>
+</div></details>
+<details class="sub" open id="ch01-3"><summary><h3>付款：Suica、信用卡、現金</h3></summary><div class="subbody">
+<ul>
+<li><strong>Suica／PASMO</strong>：搭車＋便利商店＋自動販賣機＋很多餐廳都能用</li>
+<li>iPhone：Apple 錢包直接新增 Suica，用 Apple Pay 儲值（台灣發行的 Visa／Master／JCB 多數可用）</li>
+<li>JR 東日本的「Welcome Suica Mobile」App（iPhone 專用）是給外國旅客的版本，免押金、效期 180 天</li>
+<li>Android：多數台灣販售的 Android 手機不支援日本 FeliCa → 到成田 T2 買實體 <strong>Welcome Suica</strong></li>
+<li><strong>信用卡</strong>：日本信用卡普及度已大幅提升，燒肉、百貨、藥妝都能刷；出發前找「日本消費回饋」高的卡（如各銀行的日本／海外加碼卡）</li>
+<li><strong>現金</strong>：神社御守、小店、路邊攤、部分拉麵店（自動售票機只收現金）還是要用 → 建議兩人帶 <strong>5～6 萬日圓</strong>，不夠可用 7-Eleven ATM 跨國提款</li>
+<li><strong>QR 付款</strong>：PayPay 需日本門號，不必特地準備；部分店家可用 Alipay+、街口、全支付等台灣電子支付（看店門口標示）</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch01-4"><summary><h3>天氣與穿搭（12 月底～1 月初）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>東京</th>
+<th>鎌倉・江之島</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>白天高溫</td>
+<td>約 10～12°C</td>
+<td>約 10～12°C，<strong>海邊風大體感更冷</strong></td>
+</tr>
+<tr>
+<td>早晚低溫</td>
+<td>約 1～4°C</td>
+<td>約 2～4°C</td>
+</tr>
+<tr>
+<td>天氣</td>
+<td>冬天乾燥、晴天多，<strong>富士山能見度最高的季節</strong></td>
+<td>同左</td>
+</tr>
+<tr>
+<td>日出／日落</td>
+<td>約 6:50／16:35</td>
+<td>約 6:50／16:40</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>洋蔥式穿法：發熱衣＋毛衣／帽T＋<strong>防風大衣或羽絨外套</strong>，室內暖氣很強，外套要好脫</li>
+<li>必帶：圍巾、手套、毛帽（跨年夜和初日出要在戶外站好幾個小時）、暖暖包（日本便利商店也有）、護唇膏、乳液（非常乾燥）</li>
+<li>鞋子：一天會走 15,000～25,000 步，穿<strong>走過很多次的好走鞋</strong></li>
+<li><strong>情侶拍照配色</strong>：冬天東京街景偏灰，社群推薦穿<strong>米白、駝色、酒紅、墨綠</strong>；和服體驗選紅、粉、藍搭配；江之島燈飾拍照穿淺色外套比較不會糊成一片</li>
+<li>太陽 16:35 就下山，<strong>拍照要抓 14:00～16:30</strong>，夕陽景點 16:00 前到</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch01-5"><summary><h3>必裝 App</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>App</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google Maps</td>
+<td>路線、營業時間、評論；先把要去的店加到清單並<strong>下載離線地圖</strong></td>
+</tr>
+<tr>
+<td>乗換案内／Japan Transit Planner</td>
+<td>轉乘、末班車、月台號碼，比 Google 準</td>
+</tr>
+<tr>
+<td>Tabelog（食べログ）</td>
+<td>日本人評分，3.5 分以上就很好吃</td>
+</tr>
+<tr>
+<td>GO（日本計程車）</td>
+<td>叫車，跨年夜回飯店備用</td>
+</tr>
+<tr>
+<td>Klook／KKday</td>
+<td>買 teamLab、Shibuya Sky、迪士尼等門票</td>
+</tr>
+<tr>
+<td>Visit Japan Web</td>
+<td>入境＋免稅 QR</td>
+</tr>
+<tr>
+<td>Safety tips（日本觀光廳）</td>
+<td>地震、海嘯警報（江之島在海邊，一定要裝）</td>
+</tr>
+<tr>
+<td>Google 翻譯／DeepL</td>
+<td>拍照翻譯菜單</td>
+</tr>
+<tr>
+<td>各店官方 LINE／X</td>
+<td>很多店在 X（推特）公告當日售完、臨時休息</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch01-6"><summary><h3>行李清單</h3></summary><div class="subbody">
+<ul>
+<li><strong>證件類</strong>：護照、機票訂位紀錄、VJW QR 截圖、信用卡 2 張以上（分開放）、日圓現金、台灣駕照不用帶（日本不認台灣駕照，除非有日文譯本）</li>
+<li><strong>電子類</strong>：手機、充電線、<strong>行動電源（只能放隨身行李，不能托運）</strong>、日本插座跟台灣一樣（A 型、100V）不用轉接頭</li>
+<li><strong>衣物</strong>：見上方穿搭；飯店多有睡衣、牙刷（環保政策下部分飯店改成要去大廳拿）</li>
+<li><strong>藥品</strong>：個人常備藥、感冒藥、腸胃藥、OK 繃、口罩</li>
+<li><strong>其他</strong>：摺疊購物袋（日本塑膠袋要收費）、小毛巾（很多廁所沒擦手紙）、<strong>一個可摺疊的空行李袋</strong>（回程裝福袋和戰利品）</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch01-7"><summary><h3>禁止／注意攜帶</h3></summary><div class="subbody">
+<ul>
+<li>肉類製品（肉乾、香腸、含肉泡麵）<strong>禁止帶入日本</strong>，罰款很重</li>
+<li>回台灣時：日本的肉製品、新鮮水果也不能帶回台灣</li>
+<li>液體：隨身行李每瓶 100ml 以內；在日本買的清酒、化妝水放托運</li>
+<li>打火機每人限 1 個隨身，不能托運</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch01-8"><summary><h3>保險與緊急狀況</h3></summary><div class="subbody">
+<ul>
+<li>旅平險＋<strong>不便險</strong>（航班延誤、行李延誤）＋<strong>海外突發疾病</strong>；日本醫療很貴</li>
+<li>信用卡附加的保險通常只涵蓋刷卡購買的機票，條件要先看清楚</li>
+<li>詳細緊急聯絡方式見<a href="#ch12">第 12 章</a></li>
+</ul></div></details></div></section>
+<section class="chapter" id="ch02"><header class="sign"><div class="sign-top"><span class="num">TK<b>02</b></span><div class="sign-name"><h2>交通全攻略</h2><p class="romaji">Kōtsū</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch01">← 行前準備</a><a href="#ch03">住宿 →</a></nav></header><div class="chbody">
+<details class="sub" open id="ch02-0"><summary><h3>成田機場 T2 → 市區</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>到哪</th>
+<th>時間</th>
+<th>價格（每人）</th>
+<th>適合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>京成 Skyliner</strong></td>
+<td><strong>京成上野</strong>／日暮里</td>
+<td>約 41 分</td>
+<td>約 2,580 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td><strong>住上野、大塚（日暮里轉山手線）首選</strong></td>
+</tr>
+<tr>
+<td>京成 Access 特急</td>
+<td>淺草、東銀座、日本橋</td>
+<td>約 60～70 分</td>
+<td>約 1,300 日圓</td>
+<td>住淺草、銀座，想省錢</td>
+</tr>
+<tr>
+<td>京成本線（普通／特急）</td>
+<td>京成上野</td>
+<td>約 75～90 分</td>
+<td>約 1,100 日圓</td>
+<td>最便宜，但晚上搭很累</td>
+</tr>
+<tr>
+<td>JR 成田特快 N'EX</td>
+<td>東京、品川、澀谷、新宿</td>
+<td>60～90 分</td>
+<td>約 3,000～3,300 日圓</td>
+<td>住新宿／澀谷、東京站周邊</td>
+</tr>
+<tr>
+<td>平價巴士（Airport Bus TYO-NRT）</td>
+<td>東京站、銀座</td>
+<td>約 65～80 分</td>
+<td>約 1,300～1,500 日圓</td>
+<td>住東京站附近，行李多</td>
+</tr>
+<tr>
+<td>利木津巴士</td>
+<td>各大飯店門口</td>
+<td>70～120 分</td>
+<td>約 3,100～3,600 日圓</td>
+<td>住有停靠的飯店</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><span class="warn" title="出發前再確認">確認</span> 京成 2026 年各票價在不同網站數字不一致，以<a href="https://www.keisei.co.jp/">京成官網</a>為準。Skyliner 可以在 Klook／KKday 買優惠票或「Skyliner＋地鐵券」套票，常比官網便宜。</p>
+</blockquote>
+<h3>12/25 抵達當晚建議</h3>
+<ol>
+<li>19:00 落地 → 約 20:00 出關（聖誕節航班多，可能更久）</li>
+<li>B1 京成櫃台／售票機換 Skyliner 指定席（或直接用預購 QR 進站）</li>
+<li><strong>搭 20:20～20:40 的 Skyliner</strong> → 21:00～21:20 到京成上野 → 走路到飯店</li>
+<li>晚上的 Skyliner 每 20～40 分一班，末班約 23:00 前後，不用擔心搭不到</li>
+</ol>
+</div></details>
+<details class="sub" open id="ch02-1"><summary><h3>回程 1/2：最晚幾點出發？</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15:30</td>
+<td>回飯店拿寄放的行李</td>
+</tr>
+<tr>
+<td><strong>16:20～16:40</strong></td>
+<td>京成上野搭 Skyliner（<strong>事先買好指定席</strong>，新年連假可能滿座）</td>
+</tr>
+<tr>
+<td>17:05～17:20</td>
+<td>抵達成田 T2，星宇報到櫃台</td>
+</tr>
+<tr>
+<td>17:20～18:30</td>
+<td>托運、<strong>退稅確認（新制第一年，可能排隊）</strong>、安檢、出境</td>
+</tr>
+<tr>
+<td>18:30～19:40</td>
+<td>免稅店、吃晚餐</td>
+</tr>
+<tr>
+<td>19:40</td>
+<td>登機（起飛 20:10）</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>不要排 1/2 下午還在澀谷、新宿遠處逛：澀谷 → 上野 → 成田合計要 1.5 小時以上。最後半天排上野、銀座、日本橋這些在 Skyliner 沿線附近的地方。</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch02-2"><summary><h3>東京市區交通基本觀念</h3></summary><div class="subbody">
+<ul>
+<li><strong>JR 山手線</strong>：繞東京一圈的綠色環狀線，上野、秋葉原、東京、新宿、澀谷、原宿、池袋、<strong>大塚</strong>都在線上</li>
+<li><strong>東京地鐵（Tokyo Metro，9 條線）＋都營地下鐵（4 條線）</strong>：兩家公司，轉乘時要出閘門再進，Suica 會自動算</li>
+<li><strong>刷 Suica 就好</strong>：不用買單程票，進出站刷卡自動扣款</li>
+</ul>
+<h3>Tokyo Subway Ticket 划算嗎？</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>票種</th>
+<th>價格（2026/3/14 起）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>24 小時</td>
+<td>1,000 日圓</td>
+</tr>
+<tr>
+<td>48 小時</td>
+<td>1,500 日圓</td>
+</tr>
+<tr>
+<td>72 小時</td>
+<td>2,000 日圓</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>只能搭東京地鐵＋都營地下鐵</strong>，JR（山手線）、百合海鷗線、私鐵都不能用</li>
+<li>從<strong>第一次進站</strong>開始算時間，不是用日曆天</li>
+<li>地鐵單程約 180～330 日圓，一天搭 4 次以上才划算</li>
+<li><strong>建議</strong>：這趟很多段要搭 JR（上野 ↔ 秋葉原、新宿、澀谷）和私鐵（鎌倉、江之島），<strong>直接刷 Suica 最省心</strong>。12/30～12/31 地鐵為主的日子（銀座、麻布台、淺草）可以考慮買 48 小時券</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch02-3"><summary><h3>鎌倉・江之島交通</h3></summary><div class="subbody">
+<h3>從上野去鎌倉</h3>
+<ul>
+<li><strong>JR</strong>：上野 →（上野東京線）→ 東京 →（橫須賀線）→ 鎌倉，約 70～80 分，約 1,200 日圓</li>
+<li>或上野 → 品川轉橫須賀線</li>
+<li>想先去北鎌倉（圓覺寺、明月院）就在<strong>北鎌倉站</strong>下車，走到鶴岡八幡宮約 20～25 分</li>
+</ul>
+<h3>江之島 → 回東京</h3>
+<ul>
+<li><strong>小田急浪漫特快（Romancecar）</strong>：片瀨江之島 → 新宿，約 70 分，車票＋特急券約 1,800 日圓 <span class="warn" title="出發前再確認">確認</span>（週末熱門車次要先訂位，小田急官網可訂）</li>
+<li>或小田急快速急行：約 80 分、約 700 日圓，不用訂位</li>
+</ul>
+<h3>票券比較</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>票券</th>
+<th>內容</th>
+<th>價格（參考）</th>
+<th>適合誰</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>江之電一日券「のりおりくん」</strong></td>
+<td>江之電全線一日無限搭</td>
+<td>大人 800 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>江之電上下車 3 次以上（鎌倉 → 長谷 → 鎌倉高校前 → 七里濱 → 江之島）</td>
+</tr>
+<tr>
+<td>小田急「江之島・鎌倉周遊券」</td>
+<td>新宿 ↔ 藤澤來回＋藤澤～片瀨江之島＋江之電全線</td>
+<td>新宿出發約 1,640 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>從新宿出發、當天來回。<strong>我們從上野出發、去程走 JR，比較不划算</strong></td>
+</tr>
+<tr>
+<td>江之島島內設施套票（Enoshima Island Pass）</td>
+<td>Sea Candle、岩屋洞窟、Samuel Cocking 苑等</td>
+<td>約 1,550 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>島上設施要全玩</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>我們的建議組合（12/28～12/29）</strong>
+1. 12/28：Suica 搭 JR 上野 → 北鎌倉／鎌倉，在鎌倉站買 <strong>のりおりくん</strong>，江之電玩一整天，晚上住江之島
+2. 12/29：江之島 → 小田急浪漫特快（或快速急行）→ 新宿，Suica 直接刷</p>
+<h3>江之電的小撇步</h3>
+<ul>
+<li>鎌倉 → 長谷 → 極樂寺 → 稻村崎 → <strong>鎌倉高校前</strong> → <strong>七里濱</strong> → 腰越 → 江之島，全程約 25 分</li>
+<li>往江之島方向<strong>坐右側／站右側</strong>看得到海</li>
+<li>週末、假日鎌倉站上車可能要排隊 20～30 分，<strong>早上 9:30 前</strong>或平日比較順</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch02-4"><summary><h3>跨年夜與元旦交通 <span class="warn" title="出發前再確認">確認</span></h3></summary><div class="subbody">
+<ul>
+<li>近年 JR 東日本<strong>不再整夜行駛山手線</strong>；東京地鐵、都營是否加開末班車每年不同，<strong>12 月中下旬</strong>各公司才公告 → 12/31 當天用乗換案内查末班車</li>
+<li>增上寺／東京鐵塔回上野：</li>
+<li>地鐵：御成門站（都營三田線）或大門站（都營淺草線、大江戶線）→ 上野，約 20～25 分（要看當晚有沒有延長營運）</li>
+<li>計程車：約 7 公里，深夜加成（22:00～5:00 約 +20%）後約 4,000～5,000 日圓，<strong>用 GO App 叫車</strong>；跨年後一小時很難叫，可以先走到日比谷、新橋一帶再叫</li>
+<li>江之島初日出臨時車：2026 年元旦小田急<strong>沒有整夜行駛</strong>，改開早上 4:50 新宿發的臨時特急「New Year Express」（6:13 到片瀨江之島）＋清晨臨時各站停車。2027 年版會在 11 月底～12 月公告 <span class="warn" title="出發前再確認">確認</span></li>
+</ul>
+</div></details>
+<details class="sub" open id="ch02-5"><summary><h3>主要轉乘站避坑</h3></summary><div class="subbody">
+<ul>
+<li><strong>新宿站</strong>：世界最多人的車站，出口超過 200 個 → 先在 Google Maps 查好要從「東口／西口／南口／新南口」哪個出口出去</li>
+<li><strong>澀谷站</strong>：施工中，動線一直改 → 跟著「ハチ公口（八公口）」或「Shibuya Scramble Square」指標走</li>
+<li><strong>東京站</strong>：JR 京葉線月台離其他月台很遠（走 10 分鐘以上），去迪士尼要預留時間</li>
+<li><strong>上野站 vs 京成上野站</strong>：是<strong>兩個不同車站</strong>，走路約 3～5 分鐘，Skyliner 在京成上野</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch02-6"><summary><h3>計程車</h3></summary><div class="subbody">
+<ul>
+<li>起跳約 500 日圓（約 1 公里），之後跳得很快；短程 2～3 公里約 1,000～1,500 日圓</li>
+<li>2 人一起搭、拖行李、跨年深夜時很值得</li>
+<li>車門是<strong>自動開關</strong>，不要自己去拉</li>
+</ul></div></details></div></section>
+<section class="chapter" id="ch03"><header class="sign"><div class="sign-top"><span class="num">TK<b>03</b></span><div class="sign-name"><h2>住宿區域選擇</h2><p class="romaji">Shukuhaku</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch02">← 交通</a><a href="#ch04">東京分區 →</a></nav></header><div class="chbody">
+<details class="sub" open id="ch03-0"><summary><h3>先講結論</h3></summary><div class="subbody">
+<blockquote>
+<p><strong>東京住上野（7 晚，同一間飯店）＋ 江之島住 1 晚（12/28）</strong>
+- 上野有 Skyliner 直達成田，<strong>12/25 晚上抵達、1/2 回程都最省力</strong>
+- 走路就能到阿美橫町、上野公園；淺草、秋葉原、東京站都在 10 分鐘車程內；跨年夜去淺草寺初詣也近
+- 大塚是很好的「安靜、平價、在地」替代方案，特別適合喜歡老街居酒屋和懷舊路面電車的人
+- 去江之島那晚，大行李<strong>寄放在上野飯店</strong>，只帶一個過夜包</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch03-1"><summary><h3>東京住宿區域比較</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>區域</th>
+<th>到成田</th>
+<th>到鎌倉</th>
+<th>跨年回飯店</th>
+<th>吃</th>
+<th>價位</th>
+<th>安靜度</th>
+<th>一句話</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>上野</strong></td>
+<td>★★★★★ Skyliner 41 分直達</td>
+<td>★★★☆ 約 75 分</td>
+<td>★★★★ 淺草寺很近</td>
+<td>★★★★ 阿美橫町、御徒町</td>
+<td>★★★★ 中價</td>
+<td>★★★</td>
+<td><strong>交通最平衡，首選</strong></td>
+</tr>
+<tr>
+<td><strong>大塚</strong></td>
+<td>★★★★ 日暮里轉 Skyliner</td>
+<td>★★★ 約 80 分（湘南新宿線）</td>
+<td>★★★</td>
+<td>★★★★ 在地居酒屋、名店拉麵</td>
+<td>★★★★★ 便宜</td>
+<td>★★★★★</td>
+<td>安靜在地派</td>
+</tr>
+<tr>
+<td>淺草</td>
+<td>★★★★ Access 特急直達</td>
+<td>★★</td>
+<td>★★★★★ 淺草寺就在旁邊</td>
+<td>★★★ 晚上店家早關</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>有下町氣氛，晚上偏冷清</td>
+</tr>
+<tr>
+<td>新宿</td>
+<td>★★★ N'EX／巴士</td>
+<td>★★★★ 浪漫特快直達江之島</td>
+<td>★★★</td>
+<td>★★★★★</td>
+<td>★★ 貴</td>
+<td>★</td>
+<td>最熱鬧，購物美食最多</td>
+</tr>
+<tr>
+<td>澀谷</td>
+<td>★★★ N'EX</td>
+<td>★★★★ 湘南新宿線</td>
+<td>★★ 跨年人潮管制</td>
+<td>★★★★★</td>
+<td>★ 最貴</td>
+<td>★</td>
+<td>年輕潮流</td>
+</tr>
+<tr>
+<td>銀座・東京站</td>
+<td>★★★★ 巴士直達</td>
+<td>★★★★★ 橫須賀線直達</td>
+<td>★★★★ 離東京鐵塔近</td>
+<td>★★★★ 高價位為主</td>
+<td>★★</td>
+<td>★★★★</td>
+<td>高級、乾淨</td>
+</tr>
+<tr>
+<td>池袋</td>
+<td>★★★</td>
+<td>★★★★ 湘南新宿線</td>
+<td>★★★</td>
+<td>★★★★ 拉麵激戰區</td>
+<td>★★★★</td>
+<td>★★</td>
+<td>動漫（乙女路）、購物</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch03-2"><summary><h3>上野：推薦飯店</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>飯店</th>
+<th>類型</th>
+<th>特色</th>
+<th>適合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Candeo Hotels 上野公園</strong></td>
+<td>中價</td>
+<td><strong>頂樓「天空 SPA」露天浴池＋三溫暖</strong>，冬天泡澡看夜景</td>
+<td>情侶首選，泡湯回血</td>
+</tr>
+<tr>
+<td><strong>Nohga Hotel 上野東京</strong></td>
+<td>中價設計旅店</td>
+<td>社群很紅的設計感客房、1F 餐廳早餐好評</td>
+<td>喜歡拍照、有質感</td>
+</tr>
+<tr>
+<td>三井花園飯店 上野</td>
+<td>中價</td>
+<td>上野站正對面、部分高樓層房看得到晴空塔</td>
+<td>交通最優先</td>
+</tr>
+<tr>
+<td>APA Hotel 京成上野站前</td>
+<td>平價</td>
+<td>京成上野站旁、部分房看不忍池；房間小</td>
+<td>預算型、只回來睡覺</td>
+</tr>
+<tr>
+<td>上野御徒町周邊商務旅館（相鐵 Fresa、Daiwa Roynet 等）</td>
+<td>平價～中價</td>
+<td>選擇多、價格穩定</td>
+<td>比價用</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>社群提醒：飯店寫「車站步行 1 分」要看是<strong>哪一個站</strong>——上野站、京成上野站、上野御徒町站、上野廣小路站都不一樣。訂房前用 Google Maps 量一下到<strong>京成上野站</strong>的距離（拖行李去 Skyliner 的那段）。</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch03-3"><summary><h3>大塚：推薦飯店與區域特色</h3></summary><div class="subbody">
+<p><strong>為什麼考慮大塚？</strong>
+- JR 山手線大塚站：到池袋 1 站、新宿約 15 分、上野約 15 分
+- 都電荒川線（東京櫻花路面電車）就在站前，一日券可以坐著復古路面電車到<strong>都電雜司谷（鬼子母神）、早稻田、王子、町屋</strong>散步
+- 居酒屋、立飲、深夜拉麵密度很高，觀光客少，價格是東京市中心的 7～8 成
+- 去成田：大塚 → 日暮里（山手線約 10 分）→ Skyliner</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>飯店</th>
+<th>類型</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>星野集團 OMO5 東京大塚</strong></td>
+<td>中價</td>
+<td>檜木架高床「YAGURA Room」，OMO Ranger 帶路的<strong>大塚喝酒散步團</strong>（需預約）、站前步行 1 分</td>
+</tr>
+<tr>
+<td>東橫 INN 東京大塚站北口</td>
+<td>平價</td>
+<td>含簡單早餐，房間小</td>
+</tr>
+<tr>
+<td>站前其他商務旅館</td>
+<td>平價</td>
+<td>比價用</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>大塚周邊必吃</strong>（詳見<a href="#ch07">第 7 章</a>）：飯糰「おにぎり ぼんご」（排隊名店）、擔擔麵「創作麺工房 鳴龍」（新大塚，Tabelog 百名店）、米其林必比登居酒屋「みや穂」</p>
+</div></details>
+<details class="sub" open id="ch03-4"><summary><h3>其他區域代表飯店（比價參考）</h3></summary><div class="subbody">
+<ul>
+<li><strong>淺草</strong>：OMO3 淺草（頂樓看晴空塔）、The Gate Hotel 雷門、Richmond Premier 淺草</li>
+<li><strong>新宿</strong>：Hotel Gracery 新宿（哥吉拉頭）、Hotel Groove 新宿（歌舞伎町塔）、京王廣場飯店</li>
+<li><strong>澀谷</strong>：澀谷 Stream Excel 東急、Sequence Miyashita Park（宮下公園旁）</li>
+<li><strong>銀座</strong>：三井花園飯店銀座 Premier（高樓景觀）、Hotel Gracery 銀座</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch03-5"><summary><h3>鎌倉・江之島住一晚</h3></summary><div class="subbody">
+<h3>住哪一晚？</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>日期</th>
+<th>優點</th>
+<th>缺點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. 主推</strong></td>
+<td><strong>12/28（一）晚</strong></td>
+<td>平日人少、店家正常營業；鎌倉玩一整天 → 七里濱夕陽 → 江之島燈飾 → 隔天早上江之島富士山</td>
+<td>沒有初日出</td>
+</tr>
+<tr>
+<td>B. 跨年海景版</td>
+<td>12/31（四）晚</td>
+<td>1/1 在江之島看<strong>初日出</strong>（江之島是關東著名初日出地點）</td>
+<td>房價最高、最難訂；江之島元旦人潮多；鶴岡八幡宮元旦排隊 1～3 小時；店家可能休息</td>
+</tr>
+</tbody>
+</table></div>
+<h3>推薦住宿</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>住宿</th>
+<th>地點</th>
+<th>特色</th>
+<th>適合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>鎌倉王子大飯店（Kamakura Prince Hotel）</strong></td>
+<td>七里濱高台</td>
+<td><strong>全客房海景</strong>、頂樓露台看夕陽＋富士山＋江之島，情侶評價最高</td>
+<td>預算可以拉高的浪漫一晚</td>
+</tr>
+<tr>
+<td><strong>岩本樓</strong></td>
+<td>江之島島上</td>
+<td>江之島歷史最悠久的老旅館之一，有羅馬風格浴池；晚上可以散步去看島上燈飾</td>
+<td>想住在島上、看燈飾最方便</td>
+</tr>
+<tr>
+<td>惠比壽屋</td>
+<td>江之島島上</td>
+<td>老字號旅館、展望大浴場看夜景</td>
+<td>和式旅館體驗</td>
+</tr>
+<tr>
+<td>紀伊國屋旅館</td>
+<td>江之島</td>
+<td>海邊和風旅館、岩風呂</td>
+<td>和式、預算中等</td>
+</tr>
+<tr>
+<td>Hotel Metropolitan 鎌倉</td>
+<td>鎌倉站～若宮大路</td>
+<td>2020 年新開、乾淨現代</td>
+<td>想住鎌倉市區、隔天早上逛寺廟</td>
+</tr>
+<tr>
+<td>鎌倉 Park Hotel</td>
+<td>由比濱</td>
+<td>海景、老牌</td>
+<td>海景＋鎌倉市區都要</td>
+</tr>
+<tr>
+<td>片瀨江之島、藤澤站周邊商務旅館</td>
+<td>—</td>
+<td>便宜、交通方便</td>
+<td>預算型</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>冬天的江之島燈飾平日點到 20:00，<strong>住島上或片瀨</strong>就不用趕最後一班車回東京，晚上可以慢慢逛。</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch03-6"><summary><h3>換宿時行李怎麼處理？</h3></summary><div class="subbody">
+<ol>
+<li><strong>最推薦</strong>：上野那間飯店訂 12/25～12/28 和 12/29～1/2 兩段，跟櫃台說「12/29 會回來住」，大行李寄放在飯店（大部分飯店都可以）</li>
+<li><strong>宅急便（ヤマト運輸）</strong>：飯店櫃台可以寄行李到下一間飯店，一件約 2,000～3,000 日圓，前一天寄</li>
+<li><strong>車站置物櫃</strong>：鎌倉站、藤澤站有大型置物櫃，但週末很快滿</li>
+</ol>
+<p>過夜包只要帶：換洗衣物、盥洗、充電器、行動電源、薄外套。</p>
+</div></details>
+<details class="sub" open id="ch03-7"><summary><h3>年末年始訂房注意</h3></summary><div class="subbody">
+<ul>
+<li>12/30～1/2 是日本國內旅遊旺季，房價比平常高 30～80%，<strong>10～11 月還沒訂的話盡快訂</strong></li>
+<li>選「可免費取消」的方案先卡位，之後再比價</li>
+<li>確認<strong>跨年夜有沒有門禁</strong>（膠囊旅館、部分民宿有）</li>
+<li>確認早餐 1/1 是否照常供應（部分飯店元旦早餐改成特別菜色，也有人推薦飯店的「お節料理」新年早餐體驗）</li>
+</ul></div></details></div></section>
+<section class="chapter" id="ch04"><header class="sign"><div class="sign-top"><span class="num">TK<b>04</b></span><div class="sign-name"><h2>東京分區景點攻略</h2><p class="romaji">Tōkyō</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch03">← 住宿</a><a href="#ch05">鎌倉・江之島 →</a></nav></header><div class="chbody"><blockquote>
+<p>每區包含：必去、社群熱門拍照點、周邊吃什麼、停留時間、💑 情侶亮點、🗓 年末年始注意。
+美食細節在<a href="#ch07">第 7 章</a>、購物細節在<a href="#ch08">第 8 章</a>、拍照細節在<a href="#ch09">第 9 章</a>。</p>
+</blockquote>
+<hr />
+
+<details class="sub" open id="ch04-0"><summary><h3>4-1 淺草・晴空塔</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天～一天｜<strong>最佳時段</strong>：早上 8～10 點人少好拍</p>
+<h3>必去</h3>
+<ul>
+<li><strong>淺草寺</strong>：雷門 → 仲見世通 → 寶藏門 → 本堂 → 五重塔。寺院境內 24 小時開放，本堂約 6:30～17:00（冬季）</li>
+<li><strong>淺草文化觀光中心 8F 免費展望台</strong>：雷門正對面，俯瞰仲見世通＋晴空塔，社群必拍</li>
+<li><strong>隅田公園・吾妻橋</strong>：拍「晴空塔＋朝日啤酒金色火焰」的經典角度</li>
+<li><strong>合羽橋道具街</strong>：日本廚具、食物模型，買刀、陶碗的好地方（週日多數休）</li>
+<li><strong>東京晴空塔</strong>：天望甲板 350m／天望迴廊 450m，<strong>日落前 30 分鐘入場</strong>可看夕陽轉夜景；晴天看得到富士山</li>
+<li><strong>東京晴空塔城 Solamachi</strong>：寶可夢中心晴空塔店、吉卜力橡子共和國、Kirby Café、各種角色商店</li>
+</ul>
+<h3>社群熱門拍照點</h3>
+<ul>
+<li>雷門大燈籠正下方仰拍（燈籠底部有龍雕刻）</li>
+<li>寶藏門＋五重塔同框，穿和服最出片</li>
+<li>淺草寺西參道、傳法院通：江戶風格街道</li>
+<li>隅田川「櫻橋」或「東京水岸街道（すみだリバーウォーク）」步道拍晴空塔</li>
+</ul>
+<h3>吃</h3>
+<p>淺草今半（壽喜燒，午間套餐較划算）、淺草メンチ（炸肉餅）、浅草 浪花家（鯛魚燒）、花月堂（巨大菠蘿麵包）、ホッピー通り（燉牛筋、白天就能喝酒的居酒屋街）、大黒家（天丼）</p>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li><strong>和服租借</strong>：每人約 3,000～6,000 日圓（含髮型另加），冬季可加購披肩／羽織；社群人氣店：愛和服、VASARA、梨花和服 <span class="warn" title="出發前再確認">確認</span> 需預約</li>
+<li>人力車：兩人搭 30 分鐘約 9,000～10,000 日圓，車伕會幫拍照</li>
+</ul>
+<h3>🗓 年末年始</h3>
+<ul>
+<li>12/31 深夜～1/1 是<strong>初詣人潮最多</strong>的時候，雷門到本堂可能要排 1～2 小時</li>
+<li>12 月中下旬有「羽子板市」（12/17～19，我們去不到）；年末仲見世通有新年裝飾</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-1"><summary><h3>4-2 上野・谷根千（我們的住宿區）</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：零碎時間＋半天散步</p>
+<h3>必去</h3>
+<ul>
+<li><strong>阿美橫町（アメ横）</strong>：上野～御徒町高架橋下 400 公尺的市場，藥妝、零食、海鮮、乾貨。<strong>12/28～12/31 是年末年貨市集</strong>，叫賣聲超熱鬧（但人潮也是最擠）</li>
+<li><strong>上野公園</strong>：東京國立博物館、國立西洋美術館、上野動物園、不忍池</li>
+<li><span class="warn" title="出發前再確認">確認</span> 上野動物園的熊貓已在 2026 年 1 月歸還中國，目前<strong>沒有熊貓</strong></li>
+<li><span class="warn" title="出發前再確認">確認</span> 博物館、美術館、動物園年末年始（約 12/29～1/1）休館</li>
+<li><strong>湯島天神</strong>：學問之神，梅花有名</li>
+<li><strong>谷根千（谷中・根津・千駄木）</strong>：東京保留最多昭和老街的地方</li>
+<li>谷中銀座商店街＋「夕やけだんだん」階梯（看夕陽）</li>
+<li>根津神社的千本鳥居（比京都伏見稻荷小，但人少好拍）</li>
+<li>谷中靈園、SCAI THE BATHHOUSE（澡堂改建的藝廊）</li>
+<li>カヤバ珈琲（百年老屋咖啡）</li>
+</ul>
+<h3>吃</h3>
+<p>肉の大山（和牛炸肉餅）、鴨 to 蔥（御徒町鴨湯拉麵）、名代宇奈とと（平價鰻魚飯）、上野藪蕎麥、やきとり文楽（高架下串燒）、一蘭上野店（24 小時，跨年救星）</p>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>傍晚散步不忍池，看弁天堂與池面夜景</li>
+<li>谷中老街吃炸肉餅、喝咖啡的慢步調約會</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-2"><summary><h3>4-3 秋葉原・神田</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：3～4 小時｜動漫遊戲迷建議半天</p>
+<h3>必去</h3>
+<ul>
+<li><strong>秋葉原電器街</strong>：Radio 會館（模型、卡牌、公仔）、まんだらけ（中古動漫）、Super Potato（復古遊戲）、扭蛋會館、Animate、Yodobashi Akiba（電器＋玩具，退稅方便）</li>
+<li><strong>神田明神</strong>：千年歷史神社，和《Love Live!》等動畫合作，有動漫繪馬、限定御守</li>
+<li>🗓 1/1～1/3 初詣人潮多；1/4～1/6 則是上班族集體參拜，平日更擠</li>
+<li><strong>mAAch ecute 神田萬世橋</strong>：舊車站紅磚高架橋改建的文創商場＋咖啡廳，安靜好拍</li>
+</ul>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>女僕咖啡廳體驗一次就好（@home cafe 是觀光客入門款，有拍立得服務）</li>
+<li>一起轉扭蛋、玩夾娃娃機（GiGO、Taito Station）</li>
+</ul>
+<p>詳細動漫購物攻略見<a href="#ch08">第 8 章</a>。</p>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-3"><summary><h3>4-4 澀谷</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天～一天｜<strong>Shibuya Sky 預約日落前 40 分鐘</strong></p>
+<h3>必去</h3>
+<ul>
+<li><strong>澀谷十字路口（Scramble Crossing）</strong>：世界最繁忙路口；從 2F Starbucks、MAGNET by SHIBUYA109 頂樓（付費）、Shibuya Scramble Square、L'OCCITANE Cafe 都能俯瞰</li>
+<li><strong>SHIBUYA SKY</strong>：澀谷 Scramble Square 頂樓 229m 露天展望台</li>
+<li>2026 官網預約：大人 <strong>2,700 日圓（14:59 前）／3,400 日圓（15:00 後）</strong>；現場買再貴 300 日圓</li>
+<li>10:00～22:30（最後入場 21:20）；天氣不好會關閉露天區</li>
+<li><strong>夕陽時段最先賣完</strong>，開放預約當天就要搶（官網通常提前約 4 週開放 <span class="warn" title="出發前再確認">確認</span>）</li>
+<li>頂樓不能帶包包、手機要用掛繩（有提供置物櫃），帽子會被吹走</li>
+<li><strong>澀谷 PARCO 6F</strong>：任天堂 TOKYO、寶可夢中心澀谷、JUMP SHOP、CAPCOM STORE，動漫迷必去</li>
+<li><strong>宮下公園（MIYASHITA PARK）</strong>：屋頂公園＋商場，1F「澀谷橫丁」是 19 間各地美食的居酒屋街，氣氛熱鬧</li>
+<li><strong>澀谷 Hikarie 11F</strong>：免費看澀谷街景</li>
+<li><strong>忠犬八公像</strong>、中心街、SHIBUYA109、澀谷 Sakura Stage（2024 新地標）</li>
+</ul>
+<h3>社群熱門拍照點</h3>
+<ul>
+<li>Shibuya Sky 角落玻璃牆（情侶背影剪影照）、天空長椅</li>
+<li>十字路口從 Shibuya Scramble Square 往下拍長曝光</li>
+<li>宮下公園頂樓晚上的燈光</li>
+</ul>
+<h3>🗓 年末年始</h3>
+<ul>
+<li><span class="warn" title="出發前再確認">確認</span> 澀谷十字路口跨年倒數活動已<strong>連續多年停辦</strong>，跨年夜車站周邊<strong>禁止路上飲酒</strong>、大型螢幕提早關閉，有警力管制，<strong>不推薦去澀谷跨年</strong></li>
+<li>Shibuya Sky 元旦早上常有「初日出」特別營業（通常抽籤或另售票 <span class="warn" title="出發前再確認">確認</span>）</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-4"><summary><h3>4-5 原宿・表參道・明治神宮</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天</p>
+<h3>必去</h3>
+<ul>
+<li><strong>明治神宮</strong>：東京初詣人數第一（三天約 300 萬人）。平常日走森林參道很舒服；大鳥居、酒樽牆是拍照點</li>
+<li><strong>竹下通</strong>：可麗餅（Marion Crepes、Santa Monica Crepes）、彩色棉花糖、平價服飾</li>
+<li><strong>Harakado（東急 Plaza 原宿「ハラカド」）</strong>：2024 年新開，地下有<strong>錢湯「小杉湯原宿」</strong>，可以一起體驗日本澡堂（男女分開）</li>
+<li><strong>東急 Plaza 表參道「Omokado」</strong>：入口萬花筒鏡面手扶梯是拍照點，頂樓有樹的露台</li>
+<li><strong>表參道之丘</strong>、<strong>貓街（Cat Street）</strong>、裏原宿古著、選物店</li>
+<li><strong>代代木公園</strong>：<span class="warn" title="出發前再確認">確認</span> 2026/11/13～2027/1/11 有大型燈光秀「代々木 Forest of Lights」（17:30～22:00，需買票，全長 1.8 公里互動式燈光森林）</li>
+</ul>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>表參道櫸木大道的冬季燈飾（往年 12 月點燈，<span class="warn" title="出發前再確認">確認</span>2026 年是否舉辦待確認）</li>
+<li>明治神宮「夫婦楠」：兩棵大樟樹被注連繩連在一起，象徵感情圓滿，情侶必拜</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-5"><summary><h3>4-6 新宿</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天～晚上</p>
+<h3>必去</h3>
+<ul>
+<li><strong>東京都廳展望台（免費）</strong>：45F、202m，晴天看富士山；晚上看新宿夜景</li>
+<li>晚上都廳大樓外牆有<strong>「TOKYO Night &amp; Light」光雕投影</strong>（金氏世界紀錄最大建築投影），在都民廣場看</li>
+<li><span class="warn" title="出發前再確認">確認</span> 年末年始可能休館，出發前查官網</li>
+<li><strong>回憶橫丁（思い出横丁）</strong>：昭和風串燒小巷，晚上燈籠很出片</li>
+<li><strong>黃金街</strong>：200 間小酒吧，很多酒吧要收座位費（500～1,500 日圓），選有英文菜單或標示「No cover charge」的店</li>
+<li><strong>歌舞伎町</strong>：Hotel Gracery 的哥吉拉頭（8F 露台可近看）、歌舞伎町塔（Tokyu Kabukicho Tower）</li>
+<li>Sanrio 主題「Hotel Floria」展覽在歌舞伎町塔（2026/7/15～2027/5/31 <span class="warn" title="出發前再確認">確認</span>）</li>
+<li><strong>新宿東口 3D 貓看板</strong>（Cross 新宿 Vision）</li>
+<li><strong>新宿御苑</strong>：<span class="warn" title="出發前再確認">確認</span> 年末年始（12/29～1/3）休園</li>
+<li>伊勢丹新宿本店：百貨地下美食街是東京最強之一</li>
+</ul>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>都廳免費夜景＋光雕投影 → 回憶橫丁串燒，是零門票的約會路線</li>
+<li>歌舞伎町晚上治安注意：不要跟路邊拉客走、不要進沒標價格的店</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-6"><summary><h3>4-7 銀座・丸之內・東京站・日本橋</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天～一天｜抵達當晚就能來看燈飾</p>
+<h3>必去</h3>
+<ul>
+<li><strong>東京車站丸之內站舍</strong>：百年紅磚建築，從<strong>丸之內站前廣場</strong>或 <strong>KITTE 6F 屋頂庭園</strong>（免費）拍最漂亮</li>
+<li><strong>丸之內仲通燈飾</strong>：香檳金色 LED 行道樹，往年 11 月中～2 月中，12 月點到 24:00 <span class="warn" title="出發前再確認">確認</span>（2026 年日程請查官網）</li>
+<li><strong>日比谷 Magic Time Illumination</strong>：2026/11/12～2027/2/28，日比谷 Step 廣場的聖誕樹<strong>只到 12/25</strong>（抵達當晚還看得到！）</li>
+<li><strong>東京站一番街「東京動漫人物街」</strong>：寶可夢、JUMP SHOP、吉伊卡哇、三麗鷗等 30 家角色商店；同層「東京拉麵街」</li>
+<li><strong>皇居外苑・二重橋</strong>：🗓 1/2 有新年一般參賀（見<a href="#ch06">第 6 章</a>）；皇居東御苑年末年始休園</li>
+<li><strong>銀座</strong>：GINZA SIX（頂樓庭園）、銀座三越、伊東屋（文具）、UNIQLO 全球旗艦店、無印良品旗艦店（含 MUJI Hotel、MUJI Diner）</li>
+<li><strong>築地場外市場</strong>：玉子燒、海鮮丼、生蠔。早上 7～11 點去；🗓 年末 12/28～30 是年貨採購人潮高峰，12/31 起多數店休息 <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>日本橋</strong>：日本道路起點、COREDO 室町、三越本店（日本第一家百貨）</li>
+<li><strong>TOFROM YAESU TOWER</strong>（2026 新開，東京站八重洲口）</li>
+</ul>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>12/25 抵達當晚：上野 → 東京站 JR 只要 7 分鐘，<strong>丸之內燈飾＋日比谷聖誕樹</strong>是送給彼此的第一份聖誕禮物</li>
+<li>行幸通：東京車站正對皇居的筆直大道，晚上燈光對稱好拍</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-7"><summary><h3>4-8 六本木・麻布台・虎之門・東京鐵塔</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天～晚上</p>
+<h3>必去</h3>
+<ul>
+<li><strong>麻布台之丘（Azabudai Hills）</strong>：2023 年新地標</li>
+<li><strong>teamLab Borderless</strong>：日期時間指定、動態價格，<span class="warn" title="出發前再確認">確認</span> 預約時查價</li>
+<li>麻布台之丘聖誕市集（往年到 12/25）<span class="warn" title="出發前再確認">確認</span></li>
+<li>從中央廣場、森 JP 塔周邊看東京鐵塔的角度很近</li>
+<li><strong>東京鐵塔</strong>：Main Deck 150m／Top Deck 250m（Top Deck Tour 需預約）；<strong>從芝公園 4 號地</strong>、<strong>增上寺</strong>拍鐵塔</li>
+<li><strong>增上寺</strong>：德川家菩提寺，背景就是東京鐵塔；🗓 <strong>跨年夜有除夜之鐘＋倒數</strong>，見第 6 章</li>
+<li><strong>六本木之丘 Tokyo City View（52F）</strong>：室內展望台，<strong>東京鐵塔正對面</strong>，夜景最佳角度之一；另有頂樓露天 Sky Deck（另付費、天氣好才開）</li>
+<li>森美術館同一張票</li>
+<li>六本木之丘「櫸坂燈飾」往年只到 12/25 <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>東京中城（Tokyo Midtown）</strong>：冬季燈飾（往年 11 月中～12/25 <span class="warn" title="出發前再確認">確認</span>）</li>
+<li><strong>虎之門之丘 Station Tower「TOKYO NODE」</strong>：45F 有餐廳和空中花園，看東京鐵塔</li>
+<li><strong>赤羽橋</strong>：IG 很紅的東京鐵塔正面角度（地下停車場階梯、人行道），<span class="warn" title="出發前再確認">確認</span> 有人實測排隊約 1.5 小時</li>
+</ul>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>Tokyo City View 或麻布台之丘高樓餐廳的夜景晚餐（見<a href="#ch07">第 7 章</a>）</li>
+<li>跨年夜在增上寺看東京鐵塔倒數</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-8"><summary><h3>4-9 台場・豐洲</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：半天～一天</p>
+<h3>必去</h3>
+<ul>
+<li><strong>teamLab Planets TOKYO（豐洲）</strong>：要赤腳走進水裡的沉浸式展覽，大人約 3,800～4,200 日圓 <span class="warn" title="出發前再確認">確認</span>；營運到 <strong>2027 年底</strong></li>
+<li>穿<strong>可以捲到膝蓋的褲子</strong>（現場也有短褲可借）；裙子要注意有鏡面地板</li>
+<li><strong>豐洲 千客萬來</strong>（2024 年新開）：江戶街道風格美食街＋<strong>溫泉「東京豐洲 萬葉俱樂部」</strong>，頂樓免費足湯看東京灣、彩虹大橋</li>
+<li><strong>豐洲市場</strong>：鮪魚拍賣參觀（清晨，需預約或從觀景廊看）、壽司大等名店（排隊數小時）</li>
+<li>🗓 週日、國定假日和部分週三休市；年末年始約 12/31～1/4 休市 <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>台場</strong>：DiverCity 前的<strong>實物大獨角獸鋼彈</strong>（每天有變身演出）、自由女神像＋彩虹大橋、台場海濱公園、富士電視台球體展望室</li>
+<li><strong>有明</strong>：東京夢想公園（Tokyo Dream Park，朝日電視台的娛樂設施，預定 2026/3/27 開幕 <span class="warn" title="出發前再確認">確認</span>）、有明花園</li>
+</ul>
+<h3>交通</h3>
+<ul>
+<li>百合海鷗線（無人駕駛，坐<strong>第一節車廂最前排</strong>看彩虹大橋）</li>
+<li>從豐洲站或新橋站搭</li>
+</ul>
+<h3>💑 情侶亮點</h3>
+<ul>
+<li>台場海濱公園看彩虹大橋＋東京鐵塔夜景（拍照角度推薦：把東京鐵塔和大樓群一起入鏡）</li>
+<li>東京灣屋形船晚餐遊船（見<a href="#ch09">第 9 章</a>）</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-9"><summary><h3>4-10 池袋</h3></summary><div class="subbody">
+<p><strong>建議停留</strong>：2～4 小時（住大塚的話很近）</p>
+<ul>
+<li><strong>太陽城（Sunshine City）</strong>：<strong>寶可夢中心 MEGA TOKYO</strong>（全東京最大）、寶可夢咖啡廳（需預約）、陽光 60 展望台「てんぼうパーク」、陽光水族館（天空企鵝）</li>
+<li><strong>乙女路</strong>：Animate 池袋本店（世界最大動漫店）、K-BOOKS，女性向動漫聖地</li>
+<li>拉麵激戰區：無敵家（豚骨，排隊必然）、蒙古湯麵中本</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-10"><summary><h3>4-11 文青散步區</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>區域</th>
+<th>特色</th>
+<th>推薦</th>
+<th>從上野去</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>下北澤</strong></td>
+<td>古著、劇場、Live House</td>
+<td>Bonus Track、Reload、mikan 下北、古著店 100 家以上</td>
+<td>約 40 分</td>
+</tr>
+<tr>
+<td><strong>吉祥寺</strong></td>
+<td>「最想住的街」</td>
+<td>井之頭公園划船、口琴橫丁、吉卜力美術館（三鷹，需預約）</td>
+<td>約 45 分</td>
+</tr>
+<tr>
+<td><strong>中目黑</strong></td>
+<td>河畔、咖啡</td>
+<td>星巴克臻選東京烘焙工坊（建築超美）、目黑川</td>
+<td>約 35 分</td>
+</tr>
+<tr>
+<td><strong>代官山</strong></td>
+<td>安靜高級</td>
+<td>蔦屋書店 T-Site、Log Road</td>
+<td>約 35 分</td>
+</tr>
+<tr>
+<td><strong>清澄白河</strong></td>
+<td>咖啡之都</td>
+<td>Blue Bottle 日本一號店、清澄庭園、東京都現代美術館</td>
+<td>約 25 分</td>
+</tr>
+<tr>
+<td><strong>谷根千</strong></td>
+<td>昭和老街</td>
+<td>見 4-2</td>
+<td>走路／1 站</td>
+</tr>
+<tr>
+<td><strong>高圓寺</strong></td>
+<td>更便宜的古著</td>
+<td>古著、二手唱片</td>
+<td>約 35 分</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>🗓 小店年末年始常休 12/29～1/3 或更久，<strong>文青散步排在 12/26～12/28 最保險</strong>。</p>
+</blockquote>
+<hr />
+</div></details>
+<details class="sub" open id="ch04-11"><summary><h3>4-12 2025～2026 新景點清單</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>景點</th>
+<th>地點</th>
+<th>開幕</th>
+<th>一句話</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>高輪 Gateway City</strong></td>
+<td>高輪 Gateway 站</td>
+<td>2026/3/28 全面開幕</td>
+<td>JR 東日本打造的未來城，含 <strong>MoN Takanawa</strong> 文化博物館</td>
+</tr>
+<tr>
+<td><strong>大井町 TRACKS</strong></td>
+<td>大井町</td>
+<td>2026/3/28</td>
+<td>新商業設施</td>
+</tr>
+<tr>
+<td><strong>PokéPark KANTO</strong></td>
+<td>稻城市・讀賣樂園內</td>
+<td>2026/2/5</td>
+<td>全球首座寶可夢常設戶外樂園；門票 7,900 日圓起，<strong>抽籤＋先到先得</strong> <span class="warn" title="出發前再確認">確認</span> 見<a href="#ch10">第 10 章</a></td>
+</tr>
+<tr>
+<td>江戶東京博物館</td>
+<td>兩國</td>
+<td>2026/3/31 重新開館（整修約 4 年）<span class="warn" title="出發前再確認">確認</span></td>
+<td>江戶街景重現</td>
+</tr>
+<tr>
+<td>東京夢想公園</td>
+<td>有明</td>
+<td>預定 2026/3/27 <span class="warn" title="出發前再確認">確認</span></td>
+<td>朝日電視台娛樂設施</td>
+</tr>
+<tr>
+<td>TOFROM YAESU TOWER</td>
+<td>東京站八重洲</td>
+<td>2026</td>
+<td>八重洲再開發</td>
+</tr>
+<tr>
+<td>Hotel Floria（Sanrio）</td>
+<td>歌舞伎町塔</td>
+<td>2026/7/15～2027/5/31</td>
+<td>三麗鷗主題展覽</td>
+</tr>
+<tr>
+<td>代々木 Forest of Lights</td>
+<td>代代木公園</td>
+<td>2026/11/13～2027/1/11</td>
+<td>1.8 公里燈光森林</td>
+</tr>
+<tr>
+<td>豐洲 千客萬來</td>
+<td>豐洲</td>
+<td>2024</td>
+<td>美食街＋溫泉</td>
+</tr>
+<tr>
+<td>Harakado</td>
+<td>原宿</td>
+<td>2024</td>
+<td>地下有錢湯</td>
+</tr>
+<tr>
+<td>澀谷 Sakura Stage</td>
+<td>澀谷</td>
+<td>2024</td>
+<td>新地標</td>
+</tr>
+<tr>
+<td>麻布台之丘＋teamLab Borderless</td>
+<td>麻布台</td>
+<td>2023～2024</td>
+<td>東京鐵塔旁新地標</td>
+</tr>
+<tr>
+<td>哈利波特影城</td>
+<td>練馬</td>
+<td>2023</td>
+<td>冬季「Magical Winter」2026/11/13～2027/1/11</td>
+</tr>
+</tbody>
+</table></div></div></details></div></section>
+<section class="chapter" id="ch05"><header class="sign"><div class="sign-top"><span class="num">TK<b>05</b></span><div class="sign-name"><h2>鎌倉・江之島專章</h2><p class="romaji">Kamakura・Enoshima</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch04">← 東京分區</a><a href="#ch06">年末年始 →</a></nav></header><div class="chbody"><blockquote>
+<p>這趟我們排 <strong>12/28（一）鎌倉＋江之電沿線 → 晚上江之島燈飾 → 住江之島</strong>，<strong>12/29（二）早上江之島 → 中午回東京</strong>。
+平日去、避開元旦人潮，是社群裡最多人推薦的時間點。</p>
+</blockquote>
+
+<details class="sub" open id="ch05-0"><summary><h3>沿線站序與景點</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>車站</th>
+<th>路線</th>
+<th>景點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>北鎌倉</td>
+<td>JR（到鎌倉 3 分）</td>
+<td>圓覺寺、明月院</td>
+</tr>
+<tr>
+<td><strong>鎌倉</strong></td>
+<td>JR／江之電起點</td>
+<td>鶴岡八幡宮、小町通</td>
+</tr>
+<tr>
+<td><strong>長谷</strong></td>
+<td>江之電</td>
+<td>鎌倉大佛、長谷寺</td>
+</tr>
+<tr>
+<td>極樂寺</td>
+<td>江之電</td>
+<td>極樂寺、復古小站</td>
+</tr>
+<tr>
+<td>稻村崎</td>
+<td>江之電</td>
+<td>稻村崎公園（夕陽＋富士山）</td>
+</tr>
+<tr>
+<td><strong>鎌倉高校前</strong></td>
+<td>江之電</td>
+<td>灌籃高手平交道</td>
+</tr>
+<tr>
+<td><strong>七里濱</strong></td>
+<td>江之電</td>
+<td>七里濱海灘、bills</td>
+</tr>
+<tr>
+<td>腰越</td>
+<td>江之電</td>
+<td>吻仔魚店、電車開在馬路上的路段</td>
+</tr>
+<tr>
+<td><strong>江之島</strong></td>
+<td>江之電（再往前是終點藤澤）</td>
+<td>步行約 15 分過弁天橋到江之島</td>
+</tr>
+<tr>
+<td>片瀨江之島</td>
+<td>小田急</td>
+<td>浪漫特快 → 新宿，約 70 分</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch05-1"><summary><h3>Day A｜12/28（一）鎌倉 → 江之電 → 江之島燈飾</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8:00</td>
+<td>上野出發，JR 上野東京線＋橫須賀線</td>
+<td>約 75 分</td>
+</tr>
+<tr>
+<td>9:15</td>
+<td><strong>北鎌倉</strong>下車 → 圓覺寺</td>
+<td>鎌倉五山第二，早上安靜</td>
+</tr>
+<tr>
+<td>9:50</td>
+<td>明月院（冬季人少，看「悟之窗」圓窗）</td>
+<td>想省時間可跳過</td>
+</tr>
+<tr>
+<td>10:30</td>
+<td>步行 20 分 → <strong>鶴岡八幡宮</strong></td>
+<td>走段葛參道、本宮看海</td>
+</tr>
+<tr>
+<td>11:30</td>
+<td><strong>小町通</strong>邊走邊吃（午餐在這裡吃）</td>
+<td>見下方美食</td>
+</tr>
+<tr>
+<td>13:00</td>
+<td>鎌倉站買<strong>のりおりくん</strong>，江之電 → 長谷</td>
+<td></td>
+</tr>
+<tr>
+<td>13:15</td>
+<td><strong>鎌倉大佛（高德院）</strong></td>
+<td>參拜約 300 日圓，可進大佛體內（另 50 日圓）<span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td>14:00</td>
+<td><strong>長谷寺</strong></td>
+<td>約 400 日圓，觀景台看由比濱海灣、弁天窟 <span class="warn" title="出發前再確認">確認</span> 冬季 16:00 關門</td>
+</tr>
+<tr>
+<td>15:00</td>
+<td>江之電 → <strong>鎌倉高校前</strong>（灌籃高手平交道）</td>
+<td>平日人較少</td>
+</tr>
+<tr>
+<td>15:45</td>
+<td>江之電 1 站 → <strong>七里濱</strong>或步行到<strong>稻村崎公園</strong></td>
+<td>找好位置等夕陽</td>
+</tr>
+<tr>
+<td>16:35</td>
+<td><strong>日落</strong>：夕陽＋富士山剪影＋江之島</td>
+<td>冬天看到富士山機率最高</td>
+</tr>
+<tr>
+<td>17:15</td>
+<td>江之電 → 江之島站，步行過橋到島上，飯店 check-in</td>
+<td></td>
+</tr>
+<tr>
+<td>18:00</td>
+<td><strong>「湘南の宝石」燈飾</strong>：Samuel Cocking 苑＋Sea Candle</td>
+<td>平日點到 20:00</td>
+</tr>
+<tr>
+<td>19:30</td>
+<td>晚餐（島上或片瀨）→ 回旅館泡湯</td>
+<td>島上店家晚上很早關，先查好</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch05-2"><summary><h3>Day B｜12/29（二）江之島晨間 → 回東京</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6:30</td>
+<td>（早起的話）<strong>日出</strong>：島上南側或片瀨東濱看日出，西邊看富士山</td>
+<td>日出約 6:50</td>
+</tr>
+<tr>
+<td>8:30</td>
+<td>退房、寄放行李（或帶著走）</td>
+<td></td>
+</tr>
+<tr>
+<td>9:00</td>
+<td><strong>江島神社</strong>：邊津宮 → 中津宮 → 奧津宮</td>
+<td>可搭「江之島手扶梯」（Escar，付費）省力</td>
+</tr>
+<tr>
+<td>10:00</td>
+<td><strong>戀人之丘・龍戀之鐘</strong>：兩人一起敲鐘、掛愛情鎖</td>
+<td>必拍</td>
+</tr>
+<tr>
+<td>10:30</td>
+<td><strong>稚兒之淵</strong>（岩石海岸，天氣好看富士山）→ <strong>岩屋洞窟</strong></td>
+<td>洞窟約 500 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td>11:30</td>
+<td>午餐：<strong>吻仔魚丼</strong>（見下方）</td>
+<td></td>
+</tr>
+<tr>
+<td>12:30</td>
+<td>弁財天仲見世通買伴手禮：<strong>章魚仙貝（あさひ本店）</strong></td>
+<td>排隊必然，但很快</td>
+</tr>
+<tr>
+<td>13:30</td>
+<td>片瀨江之島站 → <strong>小田急浪漫特快</strong> → 新宿</td>
+<td>約 70 分，先訂位</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>不想早起：Day B 可以睡到 8 點，略過日出，其他照走。
+想加碼：<strong>新江之島水族館</strong>（水母區很浪漫）或<strong>江之島 Island Spa</strong>（溫泉看海、富士山）。</p>
+</blockquote>
+<hr />
+</div></details>
+<details class="sub" open id="ch05-3"><summary><h3>鎌倉景點詳解</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>景點</th>
+<th>看點</th>
+<th>門票（參考）</th>
+<th>冬季時間（參考）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>鶴岡八幡宮</strong></td>
+<td>鎌倉的中心、源氏守護神；大石階上的本宮可以遠望由比濱</td>
+<td>免費</td>
+<td>全天（社務所約 8:30～16:30）</td>
+</tr>
+<tr>
+<td><strong>小町通</strong></td>
+<td>鎌倉站東口到八幡宮的美食購物街</td>
+<td>—</td>
+<td>店家約 10:00～17:00</td>
+</tr>
+<tr>
+<td><strong>鎌倉大佛（高德院）</strong></td>
+<td>13.35m 露天青銅大佛，鎌倉代表</td>
+<td>約 300 日圓</td>
+<td>約 8:00～17:00</td>
+</tr>
+<tr>
+<td><strong>長谷寺</strong></td>
+<td>十一面觀音、海景觀景台、弁天窟（洞窟內小佛像）、和み地藏（可愛）</td>
+<td>約 400 日圓</td>
+<td>約 8:00～16:00</td>
+</tr>
+<tr>
+<td><strong>報國寺</strong></td>
+<td><strong>竹林庭園</strong>＋在竹林裡喝抹茶，「鎌倉的嵐山」</td>
+<td>約 400 日圓（抹茶另加）</td>
+<td>約 9:00～16:00</td>
+</tr>
+<tr>
+<td><strong>圓覺寺</strong></td>
+<td>北鎌倉大寺院，國寶舍利殿</td>
+<td>約 500 日圓</td>
+<td>約 8:00～16:00</td>
+</tr>
+<tr>
+<td><strong>明月院</strong></td>
+<td>圓窗「悟之窗」；6 月繡球花最有名</td>
+<td>約 500 日圓</td>
+<td>約 9:00～16:00</td>
+</tr>
+<tr>
+<td><strong>錢洗弁財天</strong></td>
+<td>在洞窟泉水洗錢，傳說錢會倍增</td>
+<td>免費</td>
+<td>8:00～16:30</td>
+</tr>
+<tr>
+<td><strong>由比濱</strong></td>
+<td>鎌倉最大海灘，冬天很安靜</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="warn" title="出發前再確認">確認</span> 門票與時間以 2025 年前的資料整理，年末可能縮短，出發前查官網。</p>
+<h3>灌籃高手平交道（鎌倉高校前站）</h3>
+<ul>
+<li>《灌籃高手》動畫片頭的場景，海＋江之電＋平交道，<strong>全球動漫迷朝聖地</strong></li>
+<li>江之電約每 12 分鐘一班，<strong>上行、下行都會經過</strong>，一小時有 10 次機會</li>
+<li>拍照規則（現場有警衛）：<strong>不能站在車道或平交道上</strong>、不能擋住住戶出入、要在人行道上排隊拍；<strong>週末假日塞車會入鏡</strong></li>
+<li>最佳拍攝：站在<strong>車站往鎌倉方向的坡道上</strong>往下拍，或在平交道旁的人行道側拍</li>
+<li>鎌倉高校前站本身也是「最靠近海的車站」，月台直接看海</li>
+</ul>
+<h3>七里濱・稻村崎（夕陽＋富士山）</h3>
+<ul>
+<li>冬天空氣乾燥，<strong>12～2 月是一年中看到富士山最清楚的季節</strong></li>
+<li><strong>稻村崎公園</strong>：江之島＋富士山＋夕陽同框的經典角度，比七里濱人少</li>
+<li><strong>七里濱</strong>：寬廣海灘，夕陽、衝浪客剪影</li>
+<li>情侶拍照：逆光剪影、兩人牽手走沙灘、腳印愛心</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch05-4"><summary><h3>江之島景點詳解</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>景點</th>
+<th>看點</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>江之島弁天橋</strong>＋青銅鳥居</td>
+<td>入島第一個拍照點</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>江島神社</strong>（邊津宮、中津宮、奧津宮）</td>
+<td>日本三大弁財天之一；<strong>粉紅色心形繪馬</strong>是情侶最愛</td>
+<td>免費（奉安殿另收費）</td>
+</tr>
+<tr>
+<td><strong>江之島 Escar</strong></td>
+<td>島上的付費手扶梯，分三段，坡很陡可以省力</td>
+<td>約 360 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>Samuel Cocking 苑</strong></td>
+<td>西式庭園，冬季燈飾主會場</td>
+<td>白天免費、燈飾期間晚上收費 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>江之島 Sea Candle</strong></td>
+<td>展望燈塔，360 度看相模灣與富士山</td>
+<td>約 500 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>戀人之丘・龍戀之鐘</strong></td>
+<td>天女與五頭龍的傳說；<strong>兩人一起敲鐘就能永遠在一起</strong>，柵欄掛滿愛情鎖（鎖可在附近店買）</td>
+<td>免費</td>
+</tr>
+<tr>
+<td><strong>稚兒之淵</strong></td>
+<td>島最西側岩石台地，夕陽＋富士山</td>
+<td>浪大時不要靠近</td>
+</tr>
+<tr>
+<td><strong>岩屋洞窟</strong></td>
+<td>海蝕洞穴，拿蠟燭走進洞裡</td>
+<td>約 500 日圓 <span class="warn" title="出發前再確認">確認</span>，浪大時關閉</td>
+</tr>
+<tr>
+<td><strong>新江之島水族館</strong></td>
+<td>水母、相模灣大水槽，<strong>水母夢幻廳</strong>是約會熱點</td>
+<td>島外片瀨海岸，約 2,800 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>江之島 Island Spa</strong></td>
+<td>溫泉＋泳池，看海景與富士山</td>
+<td>日歸溫泉</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>冷知識：日本有「情侶一起拜弁財天會被女神吃醋而分手」的說法，但江之島因為「天女與五頭龍」的愛情傳說，反而是<strong>關東最有名的戀愛聖地</strong>，不用擔心 😉</p>
+</blockquote>
+<h3>「湘南の宝石」江之島燈飾 2026–2027</h3>
+<ul>
+<li><strong>期間：2026/12/1（二）～2027/2/28（日）</strong>，第 7 屆，<strong>2025 年被認定為「日本三大燈飾」之一</strong></li>
+<li><strong>時間</strong>：平日與 <strong>12/31～1/3 為 17:00～20:00</strong>；週末、假日到 21:00 <span class="warn" title="出發前再確認">確認</span></li>
+<li>會場：Samuel Cocking 苑（主會場）、Sea Candle、江之島島內各處、片瀨海岸</li>
+<li>看點：Sea Candle 變成彩色燈塔、苑內光之隧道、<strong>亮燈前的「魔幻時刻」夕陽＋富士山剪影</strong></li>
+<li>拍攝建議：16:20 先上 Sea Candle 看夕陽 → 17:00 點燈瞬間 → 苑內逛燈飾</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch05-5"><summary><h3>鎌倉・江之島美食</h3></summary><div class="subbody">
+<h3>吻仔魚丼（しらす丼）</h3>
+<ul>
+<li><strong>生吻仔魚</strong>：湘南的生しらす <strong>1/1～3/10 禁漁</strong>，<strong>3 月中～12 月底</strong>才吃得到；我們 12/28～29 去剛好是最後機會，但<strong>冬天漁獲不穩定、常常沒有</strong>，看店門口白板</li>
+<li>釜揚げ（燙熟）吻仔魚整年都有</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>地點</th>
+<th>招牌</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>とびっちょ</strong></td>
+<td>江之島弁財天仲見世通</td>
+<td>釜揚げしらす丼、海鮮丼（約 1,300 日圓起）</td>
+<td>江之島最有名，排隊</td>
+</tr>
+<tr>
+<td><strong>江之島亭</strong></td>
+<td>江之島山頂附近</td>
+<td>生＋釜揚げ雙色丼</td>
+<td>1909 年創業，看海</td>
+</tr>
+<tr>
+<td><strong>富士見亭</strong></td>
+<td>江之島</td>
+<td>生＋釜揚げ半半丼（約 1,300 日圓）</td>
+<td>天氣好看得到富士山</td>
+</tr>
+<tr>
+<td>鎌倉釜飯 かまかま</td>
+<td>鎌倉</td>
+<td>吻仔魚雙色釜飯（約 1,650 日圓）</td>
+<td></td>
+</tr>
+<tr>
+<td>しらすや</td>
+<td>腰越</td>
+<td>吻仔魚定食</td>
+<td>在地人推薦，江之電腰越站</td>
+</tr>
+</tbody>
+</table></div>
+<h3>小町通邊走邊吃</h3>
+<ul>
+<li><strong>いも吉館</strong>：紫芋霜淇淋</li>
+<li><strong>鎌倉まめや</strong>：各種口味炒豆（試吃很多）、伴手禮</li>
+<li><strong>鎌倉ニュージャーマン</strong>：卡士達奶油泡芙「かまくらカスター」</li>
+<li><strong>段葛 こ寿々</strong>：蕨餅（わらび餅），口感 Q 彈</li>
+<li>各種<strong>抹茶甜點</strong>、可麗餅、仙貝現烤</li>
+<li><span class="warn" title="出發前再確認">確認</span> 鎌倉市有「<strong>禁止邊走邊吃</strong>」的條例宣導，請在店門口吃完再走</li>
+</ul>
+<h3>其他</h3>
+<ul>
+<li><strong>bills 七里濱</strong>：「世界第一早餐」舒芙蕾鬆餅，海景座位，7:00 開門，晚餐也有</li>
+<li><strong>Pacific DRIVE-IN</strong>：七里濱停車場旁的夏威夷風漢堡、Loco moco</li>
+<li><strong>あさひ本店</strong>（江之島）：整隻章魚壓成的「章魚仙貝」，現壓現吃</li>
+<li><strong>鴿子餅乾（鳩サブレー）</strong>：豐島屋本店（若宮大路），鎌倉代表伴手禮</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch05-6"><summary><h3>避開人潮的關鍵</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時段</th>
+<th>人潮</th>
+<th>建議</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>週末、假日</td>
+<td>江之電鎌倉站排隊 20～30 分、平交道人擠人</td>
+<td>我們排<strong>平日 12/28～29</strong></td>
+</tr>
+<tr>
+<td><strong>1/1～1/3</strong></td>
+<td><strong>鶴岡八幡宮三天約 250 萬人</strong>，排隊 1～3 小時；12/31 深夜～1/1 凌晨最擠，1/1～1/3 10:00～15:00 也是高峰</td>
+<td>不要排在這三天去鎌倉</td>
+</tr>
+<tr>
+<td>1/1 清晨</td>
+<td>江之島、片瀨海岸看初日出的人很多</td>
+<td>想看初日出見第 11 章「跨年海景版」</td>
+</tr>
+<tr>
+<td>1/2 早上</td>
+<td><strong>箱根驛傳</strong>（大學接力馬拉松）往路會經過湘南海岸國道 134 號，8:00 從東京出發</td>
+<td>我們那天回國不受影響</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch05-7"><summary><h3>小提醒</h3></summary><div class="subbody">
+<ul>
+<li>鎌倉坡多、寺廟有石階，<strong>穿好走的鞋</strong></li>
+<li>寺廟冬季 16:00～16:30 就關門，<strong>下午排海邊、早上排寺廟</strong></li>
+<li>江之島島上晚上 18:00 後很多店關門，晚餐先查好或在片瀨、藤澤吃</li>
+<li>海邊風大，<strong>帽子、圍巾、手套</strong>一定要帶</li>
+</ul></div></details></div></section>
+<section class="chapter" id="ch06"><header class="sign"><div class="sign-top"><span class="num">TK<b>06</b></span><div class="sign-name"><h2>年末年始・季節限定特輯</h2><p class="romaji">Nenmatsu Nenshi</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch05">← 鎌倉・江之島</a><a href="#ch07">美食 →</a></nav></header><div class="chbody"><blockquote>
+<p>這趟從聖誕節到新年，<strong>一次經歷日本一年中最有儀式感的一週</strong>：聖誕燈飾、年末採買、除夜之鐘、跨年、初日出、初詣、福袋。
+但同時也是<strong>最多店休息</strong>的時候。這章教你怎麼「蹭到節慶」又「不撲空」。</p>
+</blockquote>
+
+<details class="sub" open id="ch06-0"><summary><h3>時間軸總覽</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>日本在做什麼</th>
+<th>我們可以做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12/25（五）</td>
+<td>聖誕節最後一天，<strong>很多聖誕燈飾、聖誕市集當天結束</strong></td>
+<td>抵達當晚衝丸之內、日比谷</td>
+</tr>
+<tr>
+<td>12/26～12/27</td>
+<td>聖誕裝飾一夜換成新年門松、注連繩</td>
+<td>看街景變化、買新年裝飾小物</td>
+</tr>
+<tr>
+<td>12/28～12/30</td>
+<td><strong>「御用納め」</strong>公司放假、年末大掃除、年貨採買</td>
+<td>阿美橫町、築地場外年末市集</td>
+</tr>
+<tr>
+<td>12/31 大晦日</td>
+<td>吃<strong>年越蕎麥麵</strong>、看紅白歌合戰、寺廟敲<strong>除夜之鐘</strong> 108 響</td>
+<td>跨年</td>
+</tr>
+<tr>
+<td>1/1 元日</td>
+<td><strong>初日出</strong>、<strong>初詣</strong>、吃お節料理（年菜）、多數店休息</td>
+<td>初詣、福袋（部分）</td>
+</tr>
+<tr>
+<td>1/2</td>
+<td><strong>初賣</strong>（百貨開賣福袋）、皇居新年一般參賀、箱根驛傳</td>
+<td>福袋或參賀 → 回國</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-1"><summary><h3>聖誕燈飾（12/25 抵達當晚＋之後幾天）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>燈飾</th>
+<th>地點</th>
+<th>期間（參考）</th>
+<th>12/25 之後還有嗎？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>丸之內燈飾</strong></td>
+<td>丸之內仲通</td>
+<td>往年 11 月中～2 月中，12 月到 24:00 <span class="warn" title="出發前再確認">確認</span></td>
+<td>✅ 有</td>
+</tr>
+<tr>
+<td><strong>日比谷 Magic Time Illumination</strong></td>
+<td>東京中城日比谷</td>
+<td><strong>2026/11/12～2027/2/28</strong>（聖誕樹只到 12/25）</td>
+<td>✅ 有（樹沒了）</td>
+</tr>
+<tr>
+<td><strong>代々木 Forest of Lights</strong></td>
+<td>代代木公園</td>
+<td><strong>2026/11/13～2027/1/11</strong>，17:30～22:00，需買票</td>
+<td>✅ 有</td>
+</tr>
+<tr>
+<td><strong>湘南の宝石</strong></td>
+<td>江之島</td>
+<td><strong>2026/12/1～2027/2/28</strong></td>
+<td>✅ 有</td>
+</tr>
+<tr>
+<td>惠比壽花園廣場（巴卡拉水晶燈）</td>
+<td>惠比壽</td>
+<td>往年 11 月初～1 月上旬 <span class="warn" title="出發前再確認">確認</span></td>
+<td>✅ 大概有</td>
+</tr>
+<tr>
+<td>東京巨蛋城 Winter Illumination</td>
+<td>水道橋</td>
+<td>往年 11 月中～2 月中 <span class="warn" title="出發前再確認">確認</span></td>
+<td>✅ 大概有</td>
+</tr>
+<tr>
+<td>讀賣樂園「Jewellumination」</td>
+<td>稻城</td>
+<td>往年 10 月～隔年 5 月 <span class="warn" title="出發前再確認">確認</span></td>
+<td>✅ 有（可搭配 PokéPark）</td>
+</tr>
+<tr>
+<td>六本木之丘櫸坂燈飾</td>
+<td>六本木</td>
+<td>往年到 12/25 <span class="warn" title="出發前再確認">確認</span></td>
+<td>❌ 12/25 當晚最後一天</td>
+</tr>
+<tr>
+<td>東京中城（六本木）</td>
+<td>六本木</td>
+<td>往年到 12/25 <span class="warn" title="出發前再確認">確認</span></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>麻布台之丘聖誕市集</td>
+<td>麻布台</td>
+<td>往年到 12/25 <span class="warn" title="出發前再確認">確認</span></td>
+<td>❌</td>
+</tr>
+</tbody>
+</table></div>
+<h3>12/25 抵達當晚怎麼排？</h3>
+<ul>
+<li>21:00 左右到上野飯店放行李 → JR 7 分鐘到東京站 → <strong>丸之內仲通燈飾</strong>（點到 24:00）→ 走 10 分鐘到<strong>日比谷</strong>看聖誕樹最後一晚（<span class="warn" title="出發前再確認">確認</span> 確認當晚點燈到幾點）</li>
+<li>太累的話：上野站周邊、阿美橫町宵夜就好，丸之內燈飾之後幾天都還在</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-2"><summary><h3>年末採買（12/28～12/31）</h3></summary><div class="subbody">
+<ul>
+<li><strong>阿美橫町</strong>：年末最後幾天會變成年貨市場，鮭魚卵、螃蟹、鮪魚、乾貨叫賣，超熱鬧（12/30～31 最擠，注意扒手）</li>
+<li><strong>築地場外市場</strong>：12/28～30 是年末採買高峰，12/31 起多數店家休息 <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>百貨地下美食街</strong>：12/29～31 有賣<strong>新年年菜（お節料理）</strong>、鏡餅、新年和菓子</li>
+<li>便利商店、超市：買「<strong>年越蕎麥麵</strong>」杯麵、新年限定零食當伴手禮</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-3"><summary><h3>12/31 跨年怎麼過？</h3></summary><div class="subbody">
+<h3>不推薦：澀谷十字路口</h3>
+<ul>
+<li>澀谷倒數活動已<strong>連續多年停辦</strong>，跨年夜車站周邊<strong>禁止路上飲酒</strong>、大螢幕提早關、有圍欄和警力管制</li>
+<li>社群評價：「人很多但什麼都沒有」「被警察一直請移動」</li>
+</ul>
+<h3>推薦跨年地點</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>地點</th>
+<th>氣氛</th>
+<th>看點</th>
+<th>適合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>增上寺＋東京鐵塔</strong></td>
+<td>★★★★★ 浪漫</td>
+<td>往年有<strong>除夜之鐘</strong>、跨年時<strong>東京鐵塔燈光變化倒數</strong>；過去曾有放「願望氣球」的活動 <span class="warn" title="出發前再確認">確認</span></td>
+<td><strong>情侶首選</strong></td>
+</tr>
+<tr>
+<td>淺草寺</td>
+<td>★★★★ 傳統</td>
+<td>除夜之鐘（淺草寺的鐘樓「弁天山」）＋初詣，離上野近</td>
+<td>想體驗傳統、離飯店近</td>
+</tr>
+<tr>
+<td>明治神宮</td>
+<td>★★★★ 莊嚴</td>
+<td>跨年<strong>整夜開放</strong>參拜，0:00 後人潮湧入</td>
+<td>想第一時間初詣</td>
+</tr>
+<tr>
+<td>寺廟敲鐘體驗</td>
+<td>★★★★ 特別</td>
+<td>部分寺廟開放一般人排隊敲除夜之鐘（多數要拿號碼牌，額滿為止）<span class="warn" title="出發前再確認">確認</span></td>
+<td>想親手敲鐘</td>
+</tr>
+<tr>
+<td>飯店房間／高樓餐廳</td>
+<td>★★★ 舒服</td>
+<td>看紅白歌合戰、吃年越蕎麥麵，0:00 用窗戶看夜景</td>
+<td>怕冷、怕人多</td>
+</tr>
+<tr>
+<td>東京迪士尼</td>
+<td>—</td>
+<td><span class="warn" title="出發前再確認">確認</span> <strong>2026/12/31 不辦跨年活動</strong>（官方日曆）</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<h3>我們的 12/31 跨年流程（增上寺版）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18:00</td>
+<td>早點吃晚餐（12/31 很多餐廳提早關或休息，<strong>先訂位</strong>），或吃<strong>年越蕎麥麵</strong></td>
+</tr>
+<tr>
+<td>20:00</td>
+<td>東京鐵塔周邊散步、芝公園拍鐵塔</td>
+</tr>
+<tr>
+<td>22:30</td>
+<td>進增上寺境內卡位（人很多，越晚越擠）</td>
+</tr>
+<tr>
+<td>23:30</td>
+<td>除夜之鐘開始</td>
+</tr>
+<tr>
+<td>0:00</td>
+<td><strong>倒數、新年快樂</strong> 🎉，東京鐵塔燈光變化</td>
+</tr>
+<tr>
+<td>0:15</td>
+<td>增上寺初詣（排隊）</td>
+</tr>
+<tr>
+<td>1:00</td>
+<td>回飯店：地鐵（看當晚是否延長營運）或 <strong>GO App 叫車</strong>（先走離人潮遠一點再叫）</td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="warn" title="出發前再確認">確認</span> 增上寺 2026 年跨年活動內容（是否有氣球、倒數方式）<strong>12 月才會公告</strong>，請查增上寺官網。</p>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-4"><summary><h3>1/1 元旦：初日出與初詣</h3></summary><div class="subbody">
+<h3>初日出（新年第一道日出，約 6:50）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>地點</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>江之島</strong>（跨年海景版才適合）</td>
+<td>關東著名初日出地點，小田急往年元旦清晨有臨時特急</td>
+</tr>
+<tr>
+<td>Shibuya Sky、晴空塔、東京鐵塔</td>
+<td>元旦清晨特別營業，<strong>通常需抽籤或另外售票</strong> <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td>飯店高樓層房間</td>
+<td>最輕鬆</td>
+</tr>
+<tr>
+<td>台場海濱公園</td>
+<td>東京灣方向看日出</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>我們主推版跨年到凌晨 1 點，<strong>元旦早上建議睡飽</strong>，不排初日出。</p>
+</blockquote>
+<h3>初詣（新年第一次參拜）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>神社／寺廟</th>
+<th>三天人數</th>
+<th>特色</th>
+<th>建議時段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>明治神宮</strong></td>
+<td>約 300 萬（全國第一）</td>
+<td>森林參道、夫婦楠、規模最大</td>
+<td>1/1 下午人少一點（仍要排）</td>
+</tr>
+<tr>
+<td><strong>淺草寺</strong></td>
+<td>約 280 萬</td>
+<td>熱鬧、仲見世通有攤販</td>
+<td>1/1 早上</td>
+</tr>
+<tr>
+<td><strong>神田明神</strong></td>
+<td>多</td>
+<td>動漫合作御守、繪馬</td>
+<td>1/1～1/3 下午</td>
+</tr>
+<tr>
+<td>湯島天神</td>
+<td>中</td>
+<td>離上野最近，學業</td>
+<td>隨時</td>
+</tr>
+<tr>
+<td>根津神社</td>
+<td>中</td>
+<td>千本鳥居</td>
+<td>人較少</td>
+</tr>
+<tr>
+<td>東京大神宮</td>
+<td>中</td>
+<td><strong>東京最有名的「結緣」神社</strong>，情侶祈求感情順利</td>
+<td>推薦情侶</td>
+</tr>
+</tbody>
+</table></div>
+<h3>初詣禮儀</h3>
+<ol>
+<li>鳥居前鞠躬，走參道<strong>兩側</strong>（中間是神明走的）</li>
+<li><strong>手水舍</strong>：右手拿杓洗左手 → 換手洗右手 → 倒水在左手漱口 → 洗杓柄</li>
+<li>投香油錢（5 日圓「ご縁」＝好緣分，情侶適合）</li>
+<li><strong>二拜二拍手一拜</strong>（神社）；寺廟是合掌不拍手</li>
+<li>抽籤（おみくじ）：抽到不好的籤綁在神社的架子上</li>
+<li>買新年御守：<strong>縁結び（結緣）</strong>、<strong>恋愛成就</strong>、健康、交通安全；去年的御守可以帶來歸還</li>
+</ol>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-5"><summary><h3>福袋攻略（1/1～1/2）</h3></summary><div class="subbody">
+<h3>日本福袋基本知識</h3>
+<ul>
+<li>每年<strong>元旦或 1/2「初賣」</strong>時開賣，一個 3,000～30,000 日圓，內容價值通常是售價的 2～5 倍</li>
+<li>近年許多品牌改成<strong>網路預購、抽籤、或公開內容</strong>（看得到裡面裝什麼）</li>
+<li>近年<strong>元旦不營業的百貨越來越多</strong>，大型百貨多從 <strong>1/2 開始初賣</strong></li>
+</ul>
+<h3>1/1 vs 1/2 開賣（以往年傾向推估 <span class="warn" title="出發前再確認">確認</span> 2027 年請查各店公告）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>類型</th>
+<th>往年開賣</th>
+<th>代表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大型百貨（三越、伊勢丹、高島屋、松坂屋、西武、大丸）</td>
+<td><strong>1/2</strong></td>
+<td>化妝品、名牌、食品福袋</td>
+</tr>
+<tr>
+<td>部分商場／時尚大樓</td>
+<td>1/1 或 1/2</td>
+<td>SHIBUYA109、部分 LUMINE、PARCO（各館不同）</td>
+</tr>
+<tr>
+<td>Apple 直營店</td>
+<td>往年 1/2 起數日的「初売り」活動（近年不是福袋，是買指定商品送禮品卡）</td>
+<td></td>
+</tr>
+<tr>
+<td>電器量販（Yodobashi、Bic Camera）</td>
+<td><strong>1/1</strong></td>
+<td>電器、遊戲福袋（多抽籤）</td>
+</tr>
+<tr>
+<td>咖啡、食品（星巴克、無印良品、Mister Donut 等）</td>
+<td>多為<strong>事前網路抽籤</strong>，日本地址或會員才能參加 <span class="warn" title="出發前再確認">確認</span></td>
+<td></td>
+</tr>
+<tr>
+<td>唐吉訶德</td>
+<td>1/1（24 小時店照常）</td>
+<td>各種雜貨福袋</td>
+</tr>
+</tbody>
+</table></div>
+<h3>搶福袋實戰</h3>
+<ol>
+<li><strong>12 月中</strong>上各品牌日本官網、IG、X 查「福袋 2027」「初売り」公告</li>
+<li>熱門品牌（像化妝品、高單價名牌）<strong>開門前 1～2 小時</strong>就會排隊，冷到要帶暖暖包</li>
+<li>現場會有隊伍號碼牌，聽工作人員指示</li>
+<li>買完別急著拆，回飯店拆比較有儀式感，也方便拍開箱影片</li>
+<li>回程要預留行李空間（摺疊旅行袋！）</li>
+<li>新制退稅：福袋也能辦免稅，記得出示護照</li>
+</ol>
+<h3>我們的建議</h3>
+<ul>
+<li><strong>1/1</strong>：電器量販、唐吉訶德、有開門的商場隨意逛</li>
+<li><strong>1/2 早上（回國日）</strong>：<strong>上野松坂屋</strong>或<strong>銀座三越</strong>（都在 Skyliner 沿線附近），10:00 開門前排隊 → 11:00 前買完 → 午餐 → 15:30 回飯店拿行李</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-6"><summary><h3>1/2 皇居新年一般參賀</h3></summary><div class="subbody">
+<ul>
+<li>每年 1/2 天皇與皇族在皇居長和殿陽台向民眾致意，<strong>免費、不用預約</strong></li>
+<li>2026 年辦了 5 場（上午 3 場、下午 2 場），約 6 萬人參加</li>
+<li>往年時間約 <strong>10:10、11:00、11:50（上午）、13:30、14:20（下午）</strong> <span class="warn" title="出發前再確認">確認</span> 2027 年請查宮內廳公告</li>
+<li>從<strong>皇居正門（二重橋）</strong>入場，要經過<strong>安檢</strong>（不能帶大包包、危險物品），提早 1～2 小時排</li>
+<li>會發日本國旗小旗子揮舞</li>
+<li>從皇居 → 東京站 → 上野 → Skyliner 很順，<strong>可以和 1/2 回國接得上</strong>（參加上午場）</li>
+</ul>
+<blockquote>
+<p><strong>福袋 vs 參賀二選一</strong>：喜歡購物選福袋，想要「一生一次」的文化體驗選參賀。</p>
+</blockquote>
+<hr />
+</div></details>
+<details class="sub" open id="ch06-7"><summary><h3>年末年始休業清單 <span class="warn" title="出發前再確認">確認</span>（以往年為準，出發前查官網）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>類型</th>
+<th>往年休業</th>
+<th>對策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>國立博物館、美術館、上野動物園</td>
+<td>約 12/28 或 12/29～1/1</td>
+<td>排在 12/26～27</td>
+</tr>
+<tr>
+<td>新宿御苑、皇居東御苑</td>
+<td>約 12/29～1/3</td>
+<td>排在前面</td>
+</tr>
+<tr>
+<td>東京都廳展望台</td>
+<td>年末年始可能休</td>
+<td>查官網</td>
+</tr>
+<tr>
+<td>豐洲市場、築地場外</td>
+<td>約 12/31～1/4 休</td>
+<td>排在 12/26～30</td>
+</tr>
+<tr>
+<td>吉卜力美術館</td>
+<td>年末年始休館</td>
+<td>查官網</td>
+</tr>
+<tr>
+<td>小型餐廳、個人咖啡廳、文青小店</td>
+<td>12/29～1/3，甚至到 1/5</td>
+<td>排在前面；Google Maps 看當日營業時間</td>
+</tr>
+<tr>
+<td>百貨公司</td>
+<td>12/31 提早關門、<strong>1/1 多數休</strong>、1/2 初賣</td>
+<td>1/1 改逛有營業的商場</td>
+</tr>
+<tr>
+<td><strong>照常營業</strong></td>
+<td>連鎖餐廳、便利商店、唐吉訶德、Yodobashi／Bic Camera、多數展望台、teamLab、迪士尼</td>
+<td>年末年始的好朋友</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch06-8"><summary><h3>年末年始必吃</h3></summary><div class="subbody">
+<ul>
+<li><strong>年越蕎麥麵</strong>（12/31）：象徵長長久久，切斷一年的厄運；連鎖蕎麥麵店（富士そば、ゆで太郎）都有</li>
+<li><strong>お節料理</strong>（新年年菜）：百貨地下街、飯店早餐有機會吃到</li>
+<li><strong>お雑煮</strong>（年糕湯）、<strong>甘酒</strong>（神社常免費或便宜發送，暖身）</li>
+<li>神社的屋台（攤販）：章魚燒、炒麵、雞蛋糕、蘋果糖</li>
+</ul></div></details></div></section>
+<section class="chapter" id="ch07"><header class="sign"><div class="sign-top"><span class="num">TK<b>07</b></span><div class="sign-name"><h2>美食大全</h2><p class="romaji">Gurume</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch06">← 年末年始</a><a href="#ch08">購物 →</a></nav></header><div class="chbody"><blockquote>
+<p>店家是綜合台灣部落格、Dcard／Threads 常見推薦、Tabelog 排名與英文旅遊社群交叉整理。
+價格為<strong>每人參考價</strong>，排隊時間是社群常見描述，<span class="warn" title="出發前再確認">確認</span> <strong>年末年始（12/29～1/3）一定要先查 Google Maps 營業時間或店家 X／IG</strong>。</p>
+</blockquote>
+
+<details class="sub" open id="ch07-0"><summary><h3>東京吃飯的基本規則</h3></summary><div class="subbody">
+<ul>
+<li><strong>排隊名店</strong>：開門前 30～60 分鐘到，或下午 14:00～17:00 離峰時段去</li>
+<li><strong>售票機</strong>：拉麵、牛丼店常先在門口機器買餐券（很多只收現金或交通 IC 卡）</li>
+<li><strong>訂位</strong>：燒肉、壽司 omakase、夜景餐廳<strong>一定要訂</strong>，見本章最後</li>
+<li><strong>座位費</strong>：居酒屋會收「お通し」（小菜＋座位費，300～600 日圓），不是被坑</li>
+<li><strong>不用給小費</strong></li>
+<li><strong>Tabelog 3.5 分以上</strong>就是很好吃的店，3.8 分以上是名店</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch07-1"><summary><h3>壽司</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>價格</th>
+<th>特色</th>
+<th>社群評價</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>壽司大</strong></td>
+<td>豐洲市場</td>
+<td>約 5,000～6,000 日圓（套餐）</td>
+<td>市場排隊之王</td>
+<td>排 2～4 小時，<span class="warn" title="出發前再確認">確認</span> 市場休市日不開</td>
+</tr>
+<tr>
+<td><strong>美登利壽司</strong></td>
+<td>梅丘本店、銀座、澀谷 Mark City 等</td>
+<td>2,000～4,000 日圓</td>
+<td>CP 值超高、大塊</td>
+<td>抽號碼牌等 1～2 小時</td>
+</tr>
+<tr>
+<td><strong>根室花まる</strong></td>
+<td>KITTE 丸之內 5F 等</td>
+<td>2,000～4,000 日圓</td>
+<td>北海道迴轉壽司</td>
+<td>平日也要排，<strong>先用 App／店頭機器抽號</strong></td>
+</tr>
+<tr>
+<td><strong>銀座 おのでら 回轉壽司</strong></td>
+<td>銀座</td>
+<td>4,000～8,000 日圓</td>
+<td>高級迴轉壽司、品質接近 omakase</td>
+<td>需預約或排隊</td>
+</tr>
+<tr>
+<td><strong>すしざんまい本店</strong></td>
+<td>築地</td>
+<td>2,000～5,000 日圓</td>
+<td><strong>24 小時營業</strong>、跨年救星</td>
+<td>觀光客多但穩定</td>
+</tr>
+<tr>
+<td>くら壽司 淺草 ROX 店</td>
+<td>淺草</td>
+<td>1,500～3,000 日圓</td>
+<td>江戶主題全球旗艦店，有扭蛋</td>
+<td>好玩、平價</td>
+</tr>
+<tr>
+<td>壽司郎、藏壽司、Hama 壽司</td>
+<td>各地</td>
+<td>1,500～2,500 日圓</td>
+<td>連鎖、年末年始照常</td>
+<td>安全牌</td>
+</tr>
+<tr>
+<td>Omakase 高級壽司</td>
+<td>銀座、六本木</td>
+<td>15,000～40,000 日圓</td>
+<td>情侶紀念晚餐</td>
+<td>用 OMAKASE／TableCheck 預約</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-2"><summary><h3>燒肉・和牛・牛舌</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>價格</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>六歌仙</strong></td>
+<td>新宿</td>
+<td>8,000～15,000 日圓</td>
+<td>黑毛和牛<strong>吃到飽</strong>（雪之宴方案），台灣人最愛</td>
+</tr>
+<tr>
+<td><strong>敘敘苑</strong></td>
+<td>各地</td>
+<td>午餐 2,000～5,000、晚餐 10,000 日圓起</td>
+<td>高級連鎖；<strong>午間套餐最划算</strong>，部分分店高樓夜景</td>
+</tr>
+<tr>
+<td><strong>焼肉 うしごろ</strong></td>
+<td>西麻布、銀座等</td>
+<td>12,000 日圓起</td>
+<td>高級、約會氣氛</td>
+</tr>
+<tr>
+<td><strong>牛かつ もと村</strong></td>
+<td>澀谷、新宿、上野等</td>
+<td>1,500～2,500 日圓</td>
+<td>炸牛排，自己在小石板上烤，排隊 30～60 分</td>
+</tr>
+<tr>
+<td><strong>牛たん 利久</strong></td>
+<td>東京站、新宿等</td>
+<td>2,500～4,000 日圓</td>
+<td>仙台厚切牛舌</td>
+</tr>
+<tr>
+<td><strong>ねぎし</strong></td>
+<td>各地</td>
+<td>1,500～3,000 日圓</td>
+<td>牛舌連鎖、麥飯山藥泥</td>
+</tr>
+<tr>
+<td>焼肉ライク、牛角</td>
+<td>各地</td>
+<td>1,000～4,000 日圓</td>
+<td>平價連鎖、年末年始照常</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-3"><summary><h3>壽喜燒・涮涮鍋</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>價格</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>淺草今半</strong></td>
+<td>淺草、日本橋等</td>
+<td>午間 4,000～、晚間 15,000 日圓起</td>
+<td>百年黑毛和牛壽喜燒，店員幫你煮；<strong>午間套餐</strong>最受歡迎</td>
+</tr>
+<tr>
+<td>人形町今半</td>
+<td>人形町、銀座</td>
+<td>同上</td>
+<td>同系統老店</td>
+</tr>
+<tr>
+<td>しゃぶ葉、温野菜</td>
+<td>各地</td>
+<td>2,000～4,000 日圓</td>
+<td>吃到飽連鎖</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-4"><summary><h3>拉麵・沾麵</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>類型</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>創作麺工房 鳴龍</strong></td>
+<td>新大塚（大塚步行約 10 分）</td>
+<td>擔擔麵、醬油</td>
+<td>曾獲米其林星、Tabelog 百名店，<strong>常提早賣完</strong>，先看 X</td>
+</tr>
+<tr>
+<td><strong>AFURI</strong></td>
+<td>原宿、惠比壽、新宿等</td>
+<td>柚子鹽</td>
+<td>清爽，女生很愛</td>
+</tr>
+<tr>
+<td><strong>風雲兒</strong></td>
+<td>新宿南口</td>
+<td>魚介雞白湯沾麵</td>
+<td>英文社群最常被提到的店，排 20～40 分</td>
+</tr>
+<tr>
+<td><strong>六厘舍</strong></td>
+<td>東京站拉麵街</td>
+<td>濃厚沾麵</td>
+<td>早上就有長隊</td>
+</tr>
+<tr>
+<td><strong>篝（Kagari）</strong></td>
+<td>銀座</td>
+<td>雞白湯</td>
+<td>曾獲米其林推薦，奶油般濃湯</td>
+</tr>
+<tr>
+<td><strong>無敵家</strong></td>
+<td>池袋</td>
+<td>豚骨</td>
+<td>排隊必然，營業到深夜</td>
+</tr>
+<tr>
+<td><strong>ラーメン凪 煮干王</strong></td>
+<td>新宿黃金街</td>
+<td>小魚乾</td>
+<td>黃金街 2 樓、24 小時（<span class="warn" title="出發前再確認">確認</span> 確認）</td>
+</tr>
+<tr>
+<td><strong>鴨 to 蔥</strong></td>
+<td>御徒町</td>
+<td>鴨湯</td>
+<td>上野住宿附近，營業到深夜</td>
+</tr>
+<tr>
+<td><strong>蒙古タンメン中本</strong></td>
+<td>上野、池袋等</td>
+<td>激辛</td>
+<td>吃辣挑戰</td>
+</tr>
+<tr>
+<td><strong>一蘭</strong></td>
+<td>上野、新宿、澀谷等</td>
+<td>豚骨</td>
+<td><strong>24 小時</strong>、跨年救星、一人座位隔間</td>
+</tr>
+<tr>
+<td>麺屋武藏</td>
+<td>新宿</td>
+<td>濃厚</td>
+<td>老牌名店</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-5"><summary><h3>炸豬排・天婦羅・鰻魚・其他和食</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>類型</th>
+<th>店</th>
+<th>區域</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>炸豬排</td>
+<td><strong>とんかつ まい泉 青山本店</strong></td>
+<td>表參道</td>
+<td>錢湯改建的店面，豬排三明治是伴手禮</td>
+</tr>
+<tr>
+<td>炸豬排</td>
+<td><strong>成蔵</strong></td>
+<td>高田馬場</td>
+<td>低溫粉紅炸豬排，Tabelog 頂級，排隊 2 小時以上</td>
+</tr>
+<tr>
+<td>炸豬排</td>
+<td><strong>井泉 本店</strong></td>
+<td>上野・湯島</td>
+<td>「用筷子就能切開」的軟嫩豬排，豬排三明治發源</td>
+</tr>
+<tr>
+<td>炸豬排</td>
+<td>蓬萊屋</td>
+<td>上野</td>
+<td>百年老店腰內肉豬排</td>
+</tr>
+<tr>
+<td>天丼</td>
+<td><strong>金子半之助</strong></td>
+<td>日本橋本店</td>
+<td>超大份江戶前天丼，排隊 1 小時</td>
+</tr>
+<tr>
+<td>天丼</td>
+<td>大黒家</td>
+<td>淺草</td>
+<td>黑色醬汁天丼老店</td>
+</tr>
+<tr>
+<td>鰻魚</td>
+<td><strong>名代宇奈とと</strong></td>
+<td>上野、新橋等</td>
+<td>1,000 日圓有找的平價鰻魚飯</td>
+</tr>
+<tr>
+<td>鰻魚</td>
+<td>宮川本廛</td>
+<td>築地</td>
+<td>老店</td>
+</tr>
+<tr>
+<td>漢堡排</td>
+<td><strong>挽肉と米</strong></td>
+<td>吉祥寺、澀谷</td>
+<td>現烤炭火漢堡排，<strong>要上官網抽時段整理券</strong></td>
+</tr>
+<tr>
+<td>烏龍麵</td>
+<td><strong>五代目 花山烏冬</strong></td>
+<td>銀座</td>
+<td>超寬的鬼平烏龍麵，排隊 1 小時以上</td>
+</tr>
+<tr>
+<td>蕎麥麵</td>
+<td>上野藪蕎麥、神田まつや</td>
+<td>上野、神田</td>
+<td>百年老店，12/31 吃年越蕎麥麵首選（<span class="warn" title="出發前再確認">確認</span> 當天大排）</td>
+</tr>
+<tr>
+<td>文字燒</td>
+<td>月島文字燒街</td>
+<td>月島</td>
+<td>70 家文字燒店，東京在地小吃</td>
+</tr>
+<tr>
+<td>飯糰</td>
+<td><strong>おにぎり ぼんご</strong></td>
+<td>大塚</td>
+<td>60 年以上飯糰名店，配料滿到溢出</td>
+</tr>
+<tr>
+<td>飯糰</td>
+<td>淺草 宿六</td>
+<td>淺草</td>
+<td>東京最老飯糰店，米其林必比登</td>
+</tr>
+<tr>
+<td>居酒屋</td>
+<td><strong>大塚 みや穂</strong></td>
+<td>大塚</td>
+<td>米其林必比登、有機蔬菜＋日本酒</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-6"><summary><h3>市場・橫丁小吃</h3></summary><div class="subbody">
+<ul>
+<li><strong>築地場外</strong>：玉子燒（山長、丸武）、きつねや（牛雜丼）、生蠔、海膽、鮪魚串</li>
+<li><strong>阿美橫町</strong>：肉の大山（和牛炸肉餅）、みなとや（便宜海鮮丼）、各國小吃攤、水果串</li>
+<li><strong>豐洲 千客萬來</strong>：江戶街道美食街，海鮮丼、壽司、和牛</li>
+<li><strong>回憶橫丁</strong>（新宿）：串燒、內臟燒、燉煮</li>
+<li><strong>澀谷橫丁</strong>（宮下公園）：全國各地鄉土料理，熱鬧居酒屋氣氛</li>
+<li><strong>ホッピー通り</strong>（淺草）：燉牛筋、白天就能喝</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch07-7"><summary><h3>甜點・麵包</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>招牌</th>
+<th>社群熱度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Le Souffle</strong></td>
+<td>代代木</td>
+<td>舒芙蕾（現點現烤 15～30 分）</td>
+<td>舒芙蕾專門店</td>
+</tr>
+<tr>
+<td><strong>Accueil</strong></td>
+<td>惠比壽</td>
+<td>舒芙蕾鬆餅，季節限定</td>
+<td>排隊</td>
+</tr>
+<tr>
+<td><strong>I'm donut?</strong></td>
+<td>中目黑、澀谷、原宿</td>
+<td>生甜甜圈（超軟布里歐）</td>
+<td><strong>Threads／IG 爆紅</strong>，排隊 1 小時以上</td>
+</tr>
+<tr>
+<td><strong>AMAM DACOTAN</strong></td>
+<td>表參道</td>
+<td>福岡人氣麵包店，造型麵包</td>
+<td>IG 熱門</td>
+</tr>
+<tr>
+<td><strong>Truffle BAKERY</strong></td>
+<td>數店</td>
+<td>白松露鹽可頌</td>
+<td>台灣人必買</td>
+</tr>
+<tr>
+<td><strong>Marion Crepes／Santa Monica Crepes</strong></td>
+<td>原宿竹下通</td>
+<td>可麗餅</td>
+<td>原宿必吃</td>
+</tr>
+<tr>
+<td><strong>浪花家總本店</strong></td>
+<td>麻布十番</td>
+<td>鯛魚燒元祖</td>
+<td>老店</td>
+</tr>
+<tr>
+<td><strong>茶寮都路里</strong></td>
+<td>大丸東京 10F</td>
+<td>宇治抹茶聖代</td>
+<td>京都老店東京分店</td>
+</tr>
+<tr>
+<td><strong>PRESS BUTTER SAND</strong></td>
+<td>東京站</td>
+<td>奶油夾心餅</td>
+<td>伴手禮</td>
+</tr>
+<tr>
+<td><strong>LESS</strong></td>
+<td>惠比壽等</td>
+<td>精緻甜點、泡芙</td>
+<td>Tabelog 甜點排行</td>
+</tr>
+<tr>
+<td><strong>一幸庵</strong></td>
+<td>茗荷谷</td>
+<td>和菓子</td>
+<td>Tabelog 甜點排行高分</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-8"><summary><h3>咖啡廳</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>星巴克臻選東京烘焙工坊</strong></td>
+<td>中目黑</td>
+<td>隈研吾設計，4 層樓，限定飲品</td>
+</tr>
+<tr>
+<td><strong>Blue Bottle 清澄白河</strong></td>
+<td>清澄白河</td>
+<td>日本一號店，倉庫改建</td>
+</tr>
+<tr>
+<td><strong>Fuglen Tokyo</strong></td>
+<td>富谷（代代木公園旁）</td>
+<td>挪威復古咖啡、晚上變酒吧</td>
+</tr>
+<tr>
+<td><strong>ONIBUS COFFEE</strong></td>
+<td>中目黑</td>
+<td>電車經過的木屋咖啡</td>
+</tr>
+<tr>
+<td><strong>GLITCH COFFEE</strong></td>
+<td>神保町、銀座</td>
+<td>淺焙精品咖啡</td>
+</tr>
+<tr>
+<td><strong>カヤバ珈琲</strong></td>
+<td>谷中</td>
+<td>百年老屋，雞蛋三明治</td>
+</tr>
+<tr>
+<td><strong>喫茶 YOU</strong></td>
+<td>銀座</td>
+<td>歌舞伎座旁，<strong>滑蛋蛋包飯</strong>，排隊</td>
+</tr>
+<tr>
+<td><strong>珈琲天国</strong></td>
+<td>淺草</td>
+<td>印字烙印鬆餅</td>
+</tr>
+<tr>
+<td>L'OCCITANE Cafe</td>
+<td>澀谷</td>
+<td>俯瞰十字路口</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</div></details>
+<details class="sub" open id="ch07-9"><summary><h3>💑 情侶約會餐廳（夜景、氣氛）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>區域</th>
+<th>類型</th>
+<th>參考價格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sky Restaurant 634（Musashi）</strong></td>
+<td>晴空塔 345m</td>
+<td>法式和食</td>
+<td>晚餐 15,000 日圓起</td>
+</tr>
+<tr>
+<td><strong>THE MOON</strong></td>
+<td>六本木之丘 52F</td>
+<td>法式，正對東京鐵塔</td>
+<td>晚餐 10,000 日圓起 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>Andaz Tokyo Rooftop Bar</strong></td>
+<td>虎之門之丘 52F</td>
+<td>酒吧，夜景</td>
+<td>飲料 2,500 日圓起</td>
+</tr>
+<tr>
+<td><strong>Mandarin Bar</strong></td>
+<td>文華東方 37F（日本橋）</td>
+<td>酒吧，東京夜景</td>
+<td>飲料 2,500 日圓起</td>
+</tr>
+<tr>
+<td>TOKYO NODE 內餐廳</td>
+<td>虎之門之丘 Station Tower 45F～49F</td>
+<td>法、義、創意料理</td>
+<td>依店家</td>
+</tr>
+<tr>
+<td><strong>敘敘苑高樓分店</strong></td>
+<td>新宿等</td>
+<td>燒肉＋夜景</td>
+<td>晚餐 10,000 日圓起</td>
+</tr>
+<tr>
+<td>屋形船</td>
+<td>淺草／台場出發</td>
+<td>東京灣遊船＋天婦羅</td>
+<td>約 10,000～15,000 日圓（含飲料無限暢飲）</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>預算建議：這趟排<strong>一晚「好好吃一頓」</strong>的紀念晚餐（例如 12/27 Shibuya Sky 後或 12/30 台場夜景前），其他天吃平價名店。</p>
+</blockquote>
+<hr />
+</div></details>
+<details class="sub" open id="ch07-10"><summary><h3>便利商店・超市必買</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>店</th>
+<th>必買</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>7-Eleven</strong></td>
+<td>雞蛋三明治、金の食パン、<strong>焦糖布丁</strong>、關東煮（冬天才有）</td>
+</tr>
+<tr>
+<td><strong>全家 FamilyMart</strong></td>
+<td><strong>ファミチキ</strong>（炸雞）、限定甜點、「ファミマル」自有品牌</td>
+</tr>
+<tr>
+<td><strong>LAWSON</strong></td>
+<td><strong>からあげクン</strong>（炸雞塊）、Premium 蛋糕捲、Uchi Café 甜點、Bascheee（巴斯克起司蛋糕）</td>
+</tr>
+<tr>
+<td>超市（成城石井、Life、OK、Ozeki）</td>
+<td>晚上 20 點後的<strong>熟食半價貼紙</strong>、水果、優格、泡麵、日本限定零食</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch07-11"><summary><h3>年末年始吃飯對策</h3></summary><div class="subbody">
+<ul>
+<li><strong>12/31 晚餐</strong>：提早訂位，或吃年越蕎麥麵（富士そば、ゆで太郎等連鎖 24 小時店）</li>
+<li><strong>1/1 全天</strong>：連鎖餐廳（一蘭、壽司郎、松屋、すき家、CoCo 壱番屋、磯丸水產 24 小時海鮮居酒屋）、便利商店、飯店餐廳、神社攤販</li>
+<li>很多個人小店 <strong>12/29～1/3 甚至到 1/5 都休</strong> → 想吃的小店排在 12/26～12/28</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch07-12"><summary><h3>訂位工具</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TableCheck</strong></td>
+<td>高級餐廳、飯店餐廳，有中文介面</td>
+</tr>
+<tr>
+<td><strong>Tabelog 預約（食べログ）</strong></td>
+<td>很多店可直接線上訂</td>
+</tr>
+<tr>
+<td><strong>OMAKASE</strong></td>
+<td>高級壽司、割烹，熱門店開放即滿</td>
+</tr>
+<tr>
+<td><strong>AutoReserve</strong></td>
+<td>代訂只能電話訂位的店</td>
+</tr>
+<tr>
+<td>Google Maps「預訂」按鈕</td>
+<td>部分店家</td>
+</tr>
+<tr>
+<td>飯店櫃台</td>
+<td>請櫃台幫忙打電話（中高價位飯店多可協助）</td>
+</tr>
+<tr>
+<td>抽號碼牌 App（EPARK、各店 LINE）</td>
+<td>根室花まる、挽肉と米、美登利等</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>取消政策很嚴格：很多店 1～2 天前取消要全額付費，不能去一定要提早取消。</p>
+</blockquote></div></details></div></section>
+<section class="chapter" id="ch08"><header class="sign"><div class="sign-top"><span class="num">TK<b>08</b></span><div class="sign-name"><h2>購物攻略</h2><p class="romaji">Kaimono</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch07">← 美食</a><a href="#ch09">約會・拍照 →</a></nav></header><div class="chbody"><blockquote>
+<p>2026/11/1 起免稅改成<strong>先付含稅、出境時退稅</strong>，詳見<a href="#ch01">第 1 章</a>。<strong>所有收據都要留著</strong>。</p>
+</blockquote>
+
+<details class="sub" open id="ch08-0"><summary><h3>百貨・商場</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>地點</th>
+<th>區域</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>伊勢丹新宿本店</strong></td>
+<td>新宿</td>
+<td>東京最強百貨之一，<strong>地下美食街</strong>、男裝館</td>
+</tr>
+<tr>
+<td><strong>銀座三越</strong></td>
+<td>銀座</td>
+<td>經典百貨，1/2 初賣福袋人氣高</td>
+</tr>
+<tr>
+<td><strong>GINZA SIX</strong></td>
+<td>銀座</td>
+<td>精品、蔦屋書店、頂樓庭園</td>
+</tr>
+<tr>
+<td><strong>松坂屋上野店</strong></td>
+<td>上野（住宿附近）</td>
+<td>老字號百貨，回國日買福袋最順路</td>
+</tr>
+<tr>
+<td><strong>澀谷 PARCO</strong></td>
+<td>澀谷</td>
+<td>潮牌＋<strong>6F 動漫遊戲樓層</strong></td>
+</tr>
+<tr>
+<td><strong>SHIBUYA109</strong></td>
+<td>澀谷</td>
+<td>日系辣妹平價服飾</td>
+</tr>
+<tr>
+<td><strong>LUMINE／NEWoMan</strong></td>
+<td>新宿、池袋等</td>
+<td>年輕女裝、選物</td>
+</tr>
+<tr>
+<td><strong>表參道之丘</strong></td>
+<td>表參道</td>
+<td>精品、設計品牌</td>
+</tr>
+<tr>
+<td><strong>東京中城日比谷／六本木</strong></td>
+<td>日比谷、六本木</td>
+<td>生活風格、設計</td>
+</tr>
+<tr>
+<td><strong>KITTE 丸之內</strong></td>
+<td>東京站</td>
+<td>日本各地特產、雜貨、伴手禮</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch08-1"><summary><h3>藥妝店</h3></summary><div class="subbody">
+<h3>去哪買？</h3>
+<ul>
+<li><strong>唐吉訶德（Don Quijote）</strong>：<strong>24 小時</strong>（部分店）、什麼都有、年末年始照常營業；澀谷 MEGA 店、新宿歌舞伎町店、淺草店、上野店</li>
+<li>PPIH 集團宣布新制退稅<strong>免收退款手續費</strong>（條件見店內公告 <span class="warn" title="出發前再確認">確認</span>）</li>
+<li>出發前在 Klook／KKday 或官網找<strong>優惠券</strong>（滿額折扣）</li>
+<li><strong>松本清、大國藥妝、Sundrug、鶴羽藥妝</strong>：價格常比唐吉訶德便宜，阿美橫町一條街上就有好幾家可以比價</li>
+<li><strong>@cosme TOKYO</strong>（原宿）：日本美妝排行榜實體店，可以試用</li>
+</ul>
+<h3>必買清單（社群常年熱門）</h3>
+<p><strong>藥品</strong>
+| 品項 | 用途 |
+|---|---|
+| EVE QUICK／EVE A 錠 | 止痛（頭痛、經痛）|
+| 合利他命 EX Plus | 疲勞、肩頸 |
+| 太田胃散 | 胃藥 |
+| 新表飛鳴 S | 整腸 |
+| 龍角散 | 喉嚨 |
+| 參天 Sante 眼藥水（FX、Beauteye）| 眼睛疲勞 |
+| 小林製藥 退熱貼、口內炎貼片 | 居家常備 |
+| 液體 OK 繃 | 傷口 |</p>
+<p><strong>美妝保養</strong>
+| 品項 | 說明 |
+|---|---|
+| Melano CC 美白精華 | 平價美白精華，必買 |
+| 肌研極潤 Hada Labo | 化妝水 |
+| Curél 珂潤 | 敏感肌保養 |
+| Biore UV Aqua Rich、ANESSA | 防曬 |
+| CANMAKE、Cezanne、KATE | 平價彩妝 |
+| 花王蒸氣眼罩 | 送禮、自用 |
+| Fino 髮膜、&amp;honey 洗護 | 頭髮保養 |
+| LuLuLun 面膜 | 日常面膜 |</p>
+<blockquote>
+<p>小技巧：藥品類每人有購買數量限制；<strong>同一家店同一天買滿 5,000 日圓（未稅）以上</strong>才能退稅（<span class="warn" title="出發前再確認">確認</span> 新制門檻以店家說明為準）。</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch08-2"><summary><h3>電器</h3></summary><div class="subbody">
+<ul>
+<li><strong>Yodobashi Akiba</strong>（秋葉原）、<strong>Bic Camera</strong>（有樂町、新宿、池袋）：電器、相機、遊戲、玩具、藥妝都有</li>
+<li>熱門：<strong>拍立得 instax</strong>、相機、耳機、電動牙刷、吹風機（日本電壓 100V，台灣 110V 可用）、電子鍋（確認是不是「國際電壓」款）</li>
+<li><span class="warn" title="出發前再確認">確認</span> <strong>Nintendo Switch 2 日本版</strong>：日本有「日本語專用」便宜款，<strong>只能設定日文</strong>，買之前看清楚包裝上有沒有「多言語對應」</li>
+<li>寶可夢卡、熱門玩具常有限購（一人一盒）</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch08-3"><summary><h3>動漫・遊戲・角色商店（重點加長版）</h3></summary><div class="subbody">
+<h3>地圖式整理</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>區域</th>
+<th>必去</th>
+<th>特色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>澀谷 PARCO 6F</strong></td>
+<td><strong>任天堂 TOKYO</strong>、<strong>寶可夢中心澀谷</strong>（門口有超夢）、<strong>JUMP SHOP</strong>、<strong>CAPCOM STORE</strong></td>
+<td>一層樓逛完四大品牌，<strong>第一推薦</strong></td>
+</tr>
+<tr>
+<td><strong>池袋太陽城</strong></td>
+<td><strong>寶可夢中心 MEGA TOKYO</strong>（最大）、寶可夢咖啡廳（需預約）</td>
+<td>寶可夢迷必去</td>
+</tr>
+<tr>
+<td><strong>池袋乙女路</strong></td>
+<td>Animate 池袋本店（世界最大）、K-BOOKS、Lashinbang</td>
+<td>女性向動漫、二創、同人</td>
+</tr>
+<tr>
+<td><strong>秋葉原</strong></td>
+<td>Radio 會館、まんだらけ Complex、駿河屋、Super Potato（復古遊戲）、扭蛋會館、Animate、GiGO</td>
+<td>公仔、模型、卡牌、二手</td>
+</tr>
+<tr>
+<td><strong>中野百老匯</strong></td>
+<td>數十家まんだらけ分店、古早玩具、手錶</td>
+<td>二手稀有品寶庫（<span class="warn" title="出發前再確認">確認</span> 有改建計畫，確認營業狀況）</td>
+</tr>
+<tr>
+<td><strong>東京站一番街「東京動漫人物街」</strong></td>
+<td>寶可夢商店、JUMP SHOP、吉伊卡哇樂園、三麗鷗、橡子共和國（吉卜力）等</td>
+<td>約 30 家角色商店，<strong>回國前最後補貨</strong></td>
+</tr>
+<tr>
+<td><strong>晴空塔 Solamachi</strong></td>
+<td>寶可夢中心晴空塔、Kirby Café（需預約）、橡子共和國、JUMP SHOP</td>
+<td>跟晴空塔一起排</td>
+</tr>
+<tr>
+<td><strong>日本橋高島屋</strong></td>
+<td><strong>寶可夢中心 TOKYO DX＋寶可夢咖啡廳</strong></td>
+<td>咖啡廳有皮卡丘會出來</td>
+</tr>
+<tr>
+<td><strong>台場 DiverCity</strong></td>
+<td>實物大獨角獸鋼彈、<strong>The Gundam Base Tokyo</strong></td>
+<td>鋼彈模型聖地</td>
+</tr>
+<tr>
+<td><strong>原宿 Kiddy Land</strong></td>
+<td>6 層樓角色商品（史努比、拉拉熊、吉伊卡哇、三麗鷗）</td>
+<td>女生最愛</td>
+</tr>
+<tr>
+<td><strong>銀座 Sanrio World</strong></td>
+<td>三麗鷗大型店</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>主題咖啡廳（都需要預約）</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>咖啡廳</th>
+<th>預約方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>寶可夢咖啡廳</strong>（日本橋、池袋）</td>
+<td>官網，<strong>入店日 31 天前 18:00（日本時間）開放</strong>，秒殺 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>Kirby Café TOKYO</strong>（晴空塔）</td>
+<td>官網抽籤／先到先得 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>吉卜力美術館</strong>（三鷹）</td>
+<td>每月 10 日 10:00 開賣<strong>下個月</strong>的票 → <strong>12 月的票 11/10 開賣</strong>（Lawson Ticket）<span class="warn" title="出發前再確認">確認</span> 年末年始休館，選 12/26～28</td>
+</tr>
+<tr>
+<td>各種期間限定合作咖啡廳</td>
+<td>出發前查「コラボカフェ 東京 12月」</td>
+</tr>
+</tbody>
+</table></div>
+<h3>主題樂園類</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>地點</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PokéPark KANTO</strong>（讀賣樂園）</td>
+<td>2026/2 開幕，7,900 日圓起，抽籤＋先到先得，見<a href="#ch10">第 10 章</a></td>
+</tr>
+<tr>
+<td><strong>哈利波特影城</strong>（練馬）</td>
+<td>冬季「Magical Winter」2026/11/13～2027/1/11，門票約 6,300～7,300 日圓（依日期）<span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td>三麗鷗彩虹樂園（多摩）</td>
+<td>室內樂園，冬天不怕冷</td>
+</tr>
+<tr>
+<td>東京迪士尼樂園／海洋</td>
+<td>見<a href="#ch10">第 10 章</a></td>
+</tr>
+</tbody>
+</table></div>
+<h3>動漫購物小技巧</h3>
+<ul>
+<li>秋葉原、中野的二手店<strong>價格比官方店便宜</strong>，但要看盒況</li>
+<li>扭蛋一次 300～500 日圓，準備<strong>百圓硬幣</strong>（現在很多機台也能刷交通 IC 卡）</li>
+<li>寶可夢中心等官方店<strong>年末年始照常營業</strong>（1/1 部分店休，<span class="warn" title="出發前再確認">確認</span> 查官網）</li>
+<li>退稅：官方店多可辦，記得帶護照</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch08-4"><summary><h3>古著・選物</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>區域</th>
+<th>推薦</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>下北澤</strong></td>
+<td>古著店超過 100 家，Bonus Track、Reload 選物街區</td>
+</tr>
+<tr>
+<td><strong>高圓寺</strong></td>
+<td>更便宜、更在地的古著與二手唱片</td>
+</tr>
+<tr>
+<td><strong>原宿・裏原</strong></td>
+<td>日系潮牌、選物店</td>
+</tr>
+<tr>
+<td><strong>二手名牌</strong></td>
+<td>KOMEHYO（新宿）、大黑屋、Brand Off、RAGTAG（澀谷、原宿）</td>
+</tr>
+<tr>
+<td><strong>2nd STREET</strong></td>
+<td>二手連鎖，價格便宜，挖寶</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch08-5"><summary><h3>台灣人愛買的日系品牌</h3></summary><div class="subbody">
+<ul>
+<li><strong>Onitsuka Tiger</strong>（銀座、表參道旗艦，NIPPON MADE 系列）</li>
+<li><strong>PORTER 吉田包</strong>（表參道 KURA CHIKA、丸之內）</li>
+<li><strong>ISSEY MIYAKE</strong>（BAO BAO、PLEATS PLEASE）</li>
+<li><strong>COMME des GARÇONS PLAY</strong>（愛心眼睛）</li>
+<li><strong>Snow Peak、mont-bell</strong>（戶外）</li>
+<li><strong>UNIQLO／GU、無印良品</strong>（銀座旗艦店有日本限定商品）</li>
+<li><strong>Loft、Hands、3COINS、大創</strong>（生活雜貨）</li>
+<li><strong>伊東屋</strong>（銀座，文具控天堂，可以做客製化筆記本）</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch08-6"><summary><h3>伴手禮排行榜</h3></summary><div class="subbody">
+<h3>東京</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>伴手禮</th>
+<th>哪裡買</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PRESS BUTTER SAND</strong>（奶油夾心餅）</td>
+<td>東京站、羽田、成田</td>
+</tr>
+<tr>
+<td><strong>東京芭娜娜</strong></td>
+<td>東京站、各大車站、成田</td>
+</tr>
+<tr>
+<td><strong>Sugar Butter Tree</strong></td>
+<td>東京站、百貨</td>
+</tr>
+<tr>
+<td><strong>N.Y. Perfect Cheese</strong></td>
+<td>東京站（排隊）</td>
+</tr>
+<tr>
+<td><strong>Tokyo Milk Cheese Factory</strong></td>
+<td>東京站、上野、成田</td>
+</tr>
+<tr>
+<td><strong>ROYCE' 生巧克力</strong></td>
+<td>百貨、成田</td>
+</tr>
+<tr>
+<td><strong>Calbee＋ 薯條 / 期間限定零食</strong></td>
+<td>東京站、原宿</td>
+</tr>
+<tr>
+<td><strong>KitKat Chocolatory</strong></td>
+<td>百貨（日本限定口味）</td>
+</tr>
+<tr>
+<td>舟和 芋羊羹</td>
+<td>淺草</td>
+</tr>
+<tr>
+<td>銀座 文明堂、木村家紅豆麵包</td>
+<td>銀座</td>
+</tr>
+</tbody>
+</table></div>
+<h3>鎌倉・江之島</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>伴手禮</th>
+<th>哪裡買</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>鴿子餅乾（鳩サブレー）</strong></td>
+<td>豐島屋本店（若宮大路）</td>
+</tr>
+<tr>
+<td><strong>紅谷「くるみっ子」</strong>（核桃焦糖餅）</td>
+<td>鎌倉</td>
+</tr>
+<tr>
+<td>鎌倉五郎本店「半月」</td>
+<td>小町通</td>
+</tr>
+<tr>
+<td>鎌倉まめや 炒豆</td>
+<td>小町通</td>
+</tr>
+<tr>
+<td>鎌倉啤酒</td>
+<td>鎌倉站周邊</td>
+</tr>
+<tr>
+<td><strong>女夫饅頭（めおとまんじゅう）</strong></td>
+<td>江之島弁財天仲見世通，「夫婦饅頭」，<strong>情侶伴手禮</strong></td>
+</tr>
+<tr>
+<td>章魚仙貝</td>
+<td>江之島（要現吃）</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>成田 T2 出境後也有很多伴手禮店，但<strong>選擇比市區少、熱門的會賣完</strong>，重要的先在東京站買。</p>
+</blockquote>
+<hr />
+</div></details>
+<details class="sub" open id="ch08-7"><summary><h3>💑 情侶紀念品＆手作體驗</h3></summary><div class="subbody">
+<ul>
+<li><strong>神社情侶御守</strong>：東京大神宮（結緣）、江島神社（粉紅心形繪馬）、神田明神</li>
+<li><strong>龍戀之鐘愛情鎖</strong>：江之島，鎖上刻兩人名字</li>
+<li><strong>合羽橋筷子刻字</strong>：淺草合羽橋、部分筷子專賣店可刻名字</li>
+<li><strong>江戶切子玻璃杯對杯</strong>：淺草、日本橋專賣店</li>
+<li><strong>手作戒指工作坊</strong>：吉祥寺、表參道等有 2～3 小時完成的情侶對戒體驗（需預約 <span class="warn" title="出發前再確認">確認</span>）</li>
+<li><strong>調香工作坊</strong>：調一瓶專屬香水</li>
+<li><strong>伊東屋客製化筆記本</strong>：選封面、內頁、扣環，做一本「東京旅行手帳」</li>
+<li><strong>大頭貼（プリクラ）</strong>：澀谷、原宿的 Purikura 機台，日本女生最愛，貼紙超可愛</li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch08-8"><summary><h3>年末年始購物時間表</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>狀況</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12/26～12/30</td>
+<td>正常，<strong>大部分購物在這幾天完成</strong></td>
+</tr>
+<tr>
+<td>12/31</td>
+<td>百貨、商場<strong>提早關門</strong>（約 18:00～19:00）</td>
+</tr>
+<tr>
+<td>1/1</td>
+<td>百貨幾乎全休；電器量販、唐吉訶德、部分商場有開＋福袋</td>
+</tr>
+<tr>
+<td>1/2</td>
+<td><strong>百貨初賣＋福袋</strong>，人潮爆量</td>
+</tr>
+</tbody>
+</table></div>
+<p>福袋攻略見<a href="#ch06">第 6 章</a>。</p></div></details></div></section>
+<section class="chapter" id="ch09"><header class="sign"><div class="sign-top"><span class="num">TK<b>09</b></span><div class="sign-name"><h2>情侶約會・拍照特輯</h2><p class="romaji">Dēto</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch08">← 購物</a><a href="#ch10">一日遊 →</a></nav></header><div class="chbody">
+<details class="sub" open id="ch09-0"><summary><h3>夜景排行（社群熱度＋情侶適合度）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>排名</th>
+<th>展望台</th>
+<th>高度</th>
+<th>價格（參考）</th>
+<th>看什麼</th>
+<th>優點</th>
+<th>缺點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>SHIBUYA SKY</strong></td>
+<td>229m 露天</td>
+<td>2,700／3,400 日圓（官網，15:00 前／後）</td>
+<td>澀谷十字路口、新宿高樓、富士山夕陽</td>
+<td><strong>露天無玻璃</strong>、夕陽轉夜景最美、拍照最出片</td>
+<td>夕陽時段秒殺、風大很冷</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>六本木之丘 Tokyo City View</strong></td>
+<td>52F 室內</td>
+<td>約 2,000～2,500 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td><strong>東京鐵塔正面</strong>、晴空塔</td>
+<td>拍東京鐵塔最佳角度、室內溫暖、比較好訂</td>
+<td>有玻璃反光（貼近玻璃或用黑布）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>東京晴空塔</strong></td>
+<td>350m／450m</td>
+<td>天望甲板約 2,000～3,000 日圓（依日期）<span class="warn" title="出發前再確認">確認</span></td>
+<td>全東京最高、晴天看富士山</td>
+<td>高度第一</td>
+<td>太高，夜景反而比較遠</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>東京鐵塔</strong></td>
+<td>150m／250m</td>
+<td>Main Deck 約 1,200 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>東京市中心、麻布台</td>
+<td>站在「主角」裡面，懷舊浪漫</td>
+<td>看不到鐵塔本身</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>東京都廳展望台</strong></td>
+<td>202m 室內</td>
+<td><strong>免費</strong></td>
+<td>新宿高樓、晴天富士山</td>
+<td>免費、晚上外牆光雕投影</td>
+<td>玻璃反光、<span class="warn" title="出發前再確認">確認</span> 年末年始可能休</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>麻布台之丘</strong></td>
+<td>—</td>
+<td>公共區域免費</td>
+<td>近距離東京鐵塔</td>
+<td>新地標、街景好拍</td>
+<td>高樓展望多在餐廳內</td>
+</tr>
+<tr>
+<td>7</td>
+<td>陽光 60 展望台</td>
+<td>251m</td>
+<td>約 1,200～2,400 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>池袋、新宿方向</td>
+<td>人少</td>
+<td>位置偏北</td>
+</tr>
+<tr>
+<td>8</td>
+<td>台場海濱公園</td>
+<td>地面</td>
+<td>免費</td>
+<td>彩虹大橋＋東京鐵塔＋大樓群</td>
+<td>海景浪漫</td>
+<td>冬天海風冷</td>
+</tr>
+</tbody>
+</table></div>
+<h3>推薦組合</h3>
+<ul>
+<li><strong>12/27（日）</strong>：Shibuya Sky 預約 <strong>15:40～16:00 入場</strong> → 16:35 日落 → 17:00 後夜景 → 下樓吃晚餐</li>
+<li><strong>12/31（四）</strong>：麻布台之丘／東京鐵塔周邊 → 增上寺跨年</li>
+<li><strong>想省錢</strong>：都廳（免費）＋光雕投影 → 回憶橫丁</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch09-1"><summary><h3>IG／Threads 熱門打卡點（附最佳時間）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>地點</th>
+<th>拍什麼</th>
+<th>最佳時間</th>
+<th>小技巧</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Shibuya Sky 東南角玻璃牆</strong></td>
+<td>夕陽剪影、天空下的兩人</td>
+<td>日落前 20 分鐘</td>
+<td>頂樓手機要用掛繩，現場有工作人員排隊幫拍</td>
+</tr>
+<tr>
+<td><strong>Shibuya Sky 天空長椅／停機坪</strong></td>
+<td>躺著看天空、兩人背影</td>
+<td>夕陽</td>
+<td>排隊位置要先佔</td>
+</tr>
+<tr>
+<td><strong>雷門燈籠下方</strong></td>
+<td>燈籠底部龍雕仰拍</td>
+<td>早上 8 點前</td>
+<td>人少，和服照最佳</td>
+</tr>
+<tr>
+<td><strong>淺草寺寶藏門＋五重塔</strong></td>
+<td>和服情侶照</td>
+<td>早上 9 點前、傍晚</td>
+<td>側拍帶到五重塔</td>
+</tr>
+<tr>
+<td><strong>吾妻橋</strong></td>
+<td>晴空塔＋朝日啤酒大樓</td>
+<td>傍晚藍調時刻</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>東京車站丸之內（KITTE 6F）</strong></td>
+<td>俯瞰紅磚車站</td>
+<td>日落後 17:00～18:00</td>
+<td>免費</td>
+</tr>
+<tr>
+<td><strong>丸之內仲通燈飾</strong></td>
+<td>香檳金色街道</td>
+<td>17:00 後</td>
+<td>人像用大光圈（手機人像模式）</td>
+</tr>
+<tr>
+<td><strong>芝公園 4 號地</strong></td>
+<td>東京鐵塔全景＋兩人</td>
+<td>傍晚點燈後</td>
+<td>鐵塔點燈約日落後</td>
+</tr>
+<tr>
+<td><strong>赤羽橋</strong></td>
+<td>東京鐵塔正面</td>
+<td>夜間</td>
+<td>IG 很紅，<strong>有人實測排 1.5 小時</strong>，傍晚光線偏暗</td>
+</tr>
+<tr>
+<td><strong>麻布台之丘中央廣場</strong></td>
+<td>鐵塔＋新大樓</td>
+<td>夜間</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>teamLab Planets 水之房間／花之房間</strong></td>
+<td>夢幻光影</td>
+<td>早場人少</td>
+<td>穿淺色、白色衣服最好拍</td>
+</tr>
+<tr>
+<td><strong>teamLab Borderless 燈之森林</strong></td>
+<td>無限鏡面</td>
+<td>早場</td>
+<td>不能帶三腳架</td>
+</tr>
+<tr>
+<td><strong>原宿 Omokado 鏡面入口</strong></td>
+<td>萬花筒自拍</td>
+<td>白天</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>新宿回憶橫丁</strong></td>
+<td>燈籠窄巷</td>
+<td>晚上</td>
+<td>不要拍店內客人</td>
+</tr>
+<tr>
+<td><strong>歌舞伎町哥吉拉</strong></td>
+<td>哥吉拉頭</td>
+<td>晚上</td>
+<td>從新宿東寶大樓前</td>
+</tr>
+<tr>
+<td><strong>谷中夕陽階梯</strong></td>
+<td>下町夕陽</td>
+<td>16:00</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>根津神社千本鳥居</strong></td>
+<td>朱紅鳥居隧道</td>
+<td>早上</td>
+<td>比京都人少</td>
+</tr>
+<tr>
+<td><strong>灌籃高手平交道</strong></td>
+<td>江之電＋海</td>
+<td>平日早上</td>
+<td>不能站車道，見第 5 章</td>
+</tr>
+<tr>
+<td><strong>七里濱／稻村崎</strong></td>
+<td>夕陽＋富士山＋江之島</td>
+<td>16:00～16:40</td>
+<td>逆光剪影</td>
+</tr>
+<tr>
+<td><strong>江之島龍戀之鐘</strong></td>
+<td>兩人敲鐘、愛情鎖</td>
+<td>白天／燈飾時</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>江之島 Sea Candle 燈飾</strong></td>
+<td>彩色燈塔＋光隧道</td>
+<td>17:00 點燈</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>新江之島水族館水母廳</strong></td>
+<td>夢幻水母</td>
+<td>任何時間</td>
+<td>關閃光燈</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch09-2"><summary><h3>拍照小技巧</h3></summary><div class="subbody">
+<ul>
+<li><strong>冬天太陽 16:35 下山</strong>，好光線在 14:00～16:30；夕陽景點 16:00 前到</li>
+<li>「藍調時刻」（日落後 15～25 分鐘）天空是深藍色，夜景最漂亮</li>
+<li>展望台玻璃反光：<strong>鏡頭貼緊玻璃</strong>、穿深色衣服、或用手掌圍住鏡頭</li>
+<li>情侶照姿勢：牽手背影走路、互看、她坐他站、一起看遠方、自拍棒＋0.5x 廣角</li>
+<li>請陌生人幫拍：日本人通常很樂意，說「すみません、写真をお願いできますか？」</li>
+<li><strong>和服照</strong>：腰帶不要彎腰太多、走路小步、手放前面</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch09-3"><summary><h3>情侶體驗</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>體驗</th>
+<th>地點</th>
+<th>價格（參考）</th>
+<th>時間</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>和服租借</strong></td>
+<td>淺草</td>
+<td>每人 3,000～6,000 日圓</td>
+<td>半天～一天</td>
+<td>冬天加購羽織、披肩、內搭發熱衣；當天 17:00～18:00 前歸還</td>
+</tr>
+<tr>
+<td><strong>teamLab Planets</strong></td>
+<td>豐洲</td>
+<td>約 3,800～4,200 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>2 小時</td>
+<td>赤腳＋水，穿可捲褲管</td>
+</tr>
+<tr>
+<td><strong>teamLab Borderless</strong></td>
+<td>麻布台</td>
+<td>動態價格 <span class="warn" title="出發前再確認">確認</span></td>
+<td>2～3 小時</td>
+<td>沒有地圖的迷宮，一起找作品</td>
+</tr>
+<tr>
+<td><strong>屋形船</strong></td>
+<td>淺草、台場出發</td>
+<td>10,000～15,000 日圓</td>
+<td>2.5 小時</td>
+<td>東京灣、彩虹大橋夜景＋天婦羅，飲料無限暢飲</td>
+</tr>
+<tr>
+<td><strong>人力車</strong></td>
+<td>淺草</td>
+<td>兩人 30 分約 9,000～10,000 日圓</td>
+<td>30 分～</td>
+<td>車伕會幫拍照、介紹景點</td>
+</tr>
+<tr>
+<td><strong>錢湯</strong></td>
+<td>原宿小杉湯（Harakado）</td>
+<td>約 550 日圓</td>
+<td>1 小時</td>
+<td>男女分開，泡完約在門口見</td>
+</tr>
+<tr>
+<td><strong>溫泉</strong></td>
+<td>豐洲 萬葉俱樂部、江之島 Island Spa</td>
+<td>3,000～4,000 日圓</td>
+<td>2～3 小時</td>
+<td>有共用休息區，可以一起吃飯休息</td>
+</tr>
+<tr>
+<td><strong>手作戒指／調香</strong></td>
+<td>吉祥寺、表參道等</td>
+<td>每對 15,000～40,000 日圓</td>
+<td>2～3 小時</td>
+<td>需預約 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td><strong>大頭貼 Purikura</strong></td>
+<td>澀谷、原宿</td>
+<td>400～500 日圓</td>
+<td>15 分</td>
+<td>美顏濾鏡超強</td>
+</tr>
+<tr>
+<td><strong>井之頭公園划船</strong></td>
+<td>吉祥寺</td>
+<td>天鵝船約 800 日圓 / 30 分</td>
+<td>30 分</td>
+<td>傳說情侶划船會分手（都市傳說，當笑話就好）</td>
+</tr>
+<tr>
+<td><strong>代々木 Forest of Lights</strong></td>
+<td>代代木公園</td>
+<td>依票種 <span class="warn" title="出發前再確認">確認</span></td>
+<td>1 小時</td>
+<td>2026/11/13～2027/1/11，互動燈光森林</td>
+</tr>
+<tr>
+<td><strong>江之島燈飾＋龍戀之鐘</strong></td>
+<td>江之島</td>
+<td>燈飾區小額門票 <span class="warn" title="出發前再確認">確認</span></td>
+<td>2 小時</td>
+<td>見第 5 章</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch09-4"><summary><h3>三套一日約會範本</h3></summary><div class="subbody">
+<h3>A. 經典東京（第一次來必走）</h3>
+<p>淺草和服散步 → 仲見世通吃點心 → 人力車 → 隅田川步道 → 晴空塔夕陽 → Solamachi 晚餐</p>
+<h3>B. 夜景浪漫</h3>
+<p>六本木之丘森美術館 → 麻布台之丘散步 → teamLab Borderless → 芝公園拍東京鐵塔 → Tokyo City View 夜景 → 高樓酒吧小酌</p>
+<h3>C. 文青慢活</h3>
+<p>清澄白河 Blue Bottle → 谷中銀座散步 → 根津神社鳥居 → 上野不忍池 → 下北澤古著 → 下北澤小酒館晚餐</p>
+<p>（12/27 Shibuya Sky 那天則是：明治神宮 → 原宿 → 表參道 → 澀谷 PARCO → <strong>Shibuya Sky 夕陽</strong> → 宮下公園澀谷橫丁晚餐）</p></div></details></div></section>
+<section class="chapter" id="ch10"><header class="sign"><div class="sign-top"><span class="num">TK<b>10</b></span><div class="sign-name"><h2>一日遊延伸選項（可選）</h2><p class="romaji">Higaeri</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch09">← 約會・拍照</a><a href="#ch11">行程表 →</a></nav></header><div class="chbody"><blockquote>
+<p>主行程已經很滿，這章是「<strong>想把某一天換掉</strong>」時的備案。最容易替換的是 <strong>12/30（三）</strong> 或 <strong>1/1（五）</strong>。</p>
+</blockquote>
+
+<details class="sub" open id="ch10-0"><summary><h3>一眼比較</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>目的地</th>
+<th>從上野</th>
+<th>單程時間</th>
+<th>年末年始可行性</th>
+<th>適合誰</th>
+<th>推薦度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>東京迪士尼樂園／海洋</strong></td>
+<td>JR 京葉線</td>
+<td>約 40 分</td>
+<td><span class="warn" title="出發前再確認">確認</span> 12/26～1/3 <strong>超級擁擠</strong>，12/31 無跨年活動</td>
+<td>迪士尼迷</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>PokéPark KANTO</strong></td>
+<td>京王／小田急</td>
+<td>約 60 分</td>
+<td>需先搶票</td>
+<td>寶可夢迷</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>哈利波特影城</strong></td>
+<td>西武線（池袋轉）</td>
+<td>約 45 分</td>
+<td>Magical Winter 期間</td>
+<td>哈迷</td>
+<td>★★★★</td>
+</tr>
+<tr>
+<td><strong>富士山・河口湖</strong></td>
+<td>新宿轉巴士／電車</td>
+<td>約 2.5 小時</td>
+<td>✅ 冬天看富士山最清楚，但很冷</td>
+<td>想看富士山</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td><strong>箱根</strong></td>
+<td>新宿浪漫特快</td>
+<td>約 2 小時</td>
+<td><span class="warn" title="出發前再確認">確認</span> <strong>1/2～1/3 箱根驛傳封路</strong></td>
+<td>溫泉、湖景</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>川越</strong></td>
+<td>JR／東武</td>
+<td>約 60 分</td>
+<td>✅ 年末年始有開，川越冰川神社是結緣神社</td>
+<td>小江戶、輕鬆半日</td>
+<td>★★★</td>
+</tr>
+<tr>
+<td><strong>日光</strong></td>
+<td>東武 Spacia X</td>
+<td>約 2 小時</td>
+<td>很冷、可能下雪</td>
+<td>世界遺產</td>
+<td>★★</td>
+</tr>
+<tr>
+<td><strong>三麗鷗彩虹樂園</strong></td>
+<td>京王線</td>
+<td>約 70 分</td>
+<td>✅ 室內</td>
+<td>三麗鷗迷</td>
+<td>★★★</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</div></details>
+<details class="sub" open id="ch10-1"><summary><h3>東京迪士尼樂園／迪士尼海洋</h3></summary><div class="subbody">
+<ul>
+<li><strong>東京迪士尼海洋 25 週年「Sparkling Jubilee」</strong>：2026/4/15 起舉辦，年底還在活動期間 → 推薦選<strong>海洋</strong></li>
+<li><strong>門票</strong>：2026 年 10 月起調漲，<strong>依日期浮動，最高 12,400 日圓</strong>（新增 11,900 日圓價位）；年末年始屬於高價日 <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>只能在官網或官方 App 買日期指定票</strong>，熱門日會賣完，<strong>現在（10 月底）就要確認 12 月的票況</strong></li>
+<li><strong>Fantasy Springs</strong>（冰雪奇緣、魔髮奇緣、小飛俠）：熱門設施要用 <strong>DPA（付費快速通關，一項約 1,500～2,500 日圓）</strong>或在 App 搶 Standby Pass <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>年末年始注意</strong>：</li>
+<li>12/26～1/3 是日本學校寒假＋連假，<strong>整年最擠的時段之一</strong></li>
+<li>聖誕活動到 12/25 結束；新年活動 1/1 起</li>
+<li><strong>2026/12/31 官方日曆標示不舉辦跨年夜活動</strong></li>
+<li><strong>建議</strong>：如果要去，選 <strong>12/28（一）</strong> 或 <strong>12/29（二）</strong> 平日，跟鎌倉日對調；早上開園前 1 小時排隊</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch10-2"><summary><h3>PokéPark KANTO（寶可夢公園）</h3></summary><div class="subbody">
+<ul>
+<li><strong>2026/2/5 開幕</strong>，位於讀賣樂園內，全球首座寶可夢常設<strong>戶外</strong>設施（約 2.6 公頃，森林區＋商店街區）</li>
+<li><strong>門票 7,900 日圓起</strong>（13 歲以上）</li>
+<li><strong>買票方式</strong>：</li>
+<li><strong>抽籤</strong>：每月 1～12 日接受「3 個月後那一個月」的申請 → 12 月的抽籤已經過了</li>
+<li><strong>先到先得</strong>：開放「2 個月後同一天」以前的票，賣完為止 → <strong>12/26～12/31 的票在 10/26～10/31 陸續開賣，現在就要上官網查</strong> <span class="warn" title="出發前再確認">確認</span></li>
+<li>年末年始營業日請查官網 <span class="warn" title="出發前再確認">確認</span></li>
+<li><strong>加碼</strong>：同一個讀賣樂園晚上有「<strong>Jewellumination</strong>」燈飾（往年 10 月～隔年 5 月）</li>
+<li>交通：京王相模原線「京王讀賣樂園」站轉纜車，或小田急「讀賣樂園前」站</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch10-3"><summary><h3>哈利波特影城（Warner Bros. Studio Tour Tokyo）</h3></summary><div class="subbody">
+<ul>
+<li>練馬區（舊豐島園），從池袋搭西武線約 15 分鐘到「豐島園」站</li>
+<li>門票依季節約 <strong>6,300～7,300 日圓</strong> <span class="warn" title="出發前再確認">確認</span>，<strong>官網預約日期時段</strong></li>
+<li>冬季活動「<strong>Magical Winter</strong>」：2026/11/13～2027/1/11，霍格華茲大廳聖誕裝飾、下雪特效</li>
+<li>至少留 <strong>4～5 小時</strong>，奶油啤酒必喝</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch10-4"><summary><h3>富士山・河口湖</h3></summary><div class="subbody">
+<p><strong>為什麼冬天去？</strong> 12～2 月空氣最乾淨，富士山白頭最清楚，社群照片最美的季節。</p>
+<h3>交通</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>時間</th>
+<th>價格（參考）</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新宿高速巴士</td>
+<td>約 2 小時</td>
+<td>約 2,000～2,500 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>新宿高速巴士總站（Busta 新宿），需預約</td>
+</tr>
+<tr>
+<td>JR 富士回遊（Fuji Excursion）</td>
+<td>約 2 小時</td>
+<td>約 4,000 日圓 <span class="warn" title="出發前再確認">確認</span></td>
+<td>新宿直達河口湖，指定席</td>
+</tr>
+<tr>
+<td>一日遊團（KKday／Klook）</td>
+<td>全天</td>
+<td>約 6,000～10,000 日圓</td>
+<td>不用自己轉車，最省力</td>
+</tr>
+</tbody>
+</table></div>
+<h3>景點</h3>
+<ul>
+<li><strong>新倉山淺間公園・忠靈塔</strong>：五重塔＋富士山經典照，爬 398 階</li>
+<li><strong>大石公園</strong>：湖畔看富士山，冬天少數幾天有「<strong>鑽石富士</strong>」</li>
+<li><strong>河口湖天上山纜車</strong>：山頂看富士山＋河口湖</li>
+<li><strong>忍野八海</strong>：湧泉池，倒映富士山</li>
+<li><strong>富士吉田本町通</strong>：昭和街道盡頭就是富士山，IG 爆紅（注意車輛，不要站在馬路上拍）</li>
+</ul>
+<h3>注意</h3>
+<ul>
+<li><strong>非常冷</strong>：早晚 -5°C 上下，比東京低 8～10°C</li>
+<li>下雪時巴士可能停駛或延誤、纜車可能停</li>
+<li>富士山看不看得到看運氣，<strong>早上能見度最高</strong>，中午後容易起雲</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch10-5"><summary><h3>箱根</h3></summary><div class="subbody">
+<ul>
+<li>新宿搭<strong>小田急浪漫特快</strong>約 85 分到箱根湯本；「箱根周遊券」含交通無限搭</li>
+<li>經典環線：箱根湯本 → 登山電車 → 雕刻之森美術館 → 纜車 → <strong>大涌谷</strong>（黑蛋，<span class="warn" title="出發前再確認">確認</span> 火山氣體濃度高時封閉）→ <strong>蘆之湖海賊船</strong> → <strong>箱根神社水上鳥居</strong></li>
+<li>想泡溫泉、住一晚很適合，但這趟已經有江之島住一晚</li>
+<li><span class="warn" title="出發前再確認">確認</span> <strong>1/2～1/3 箱根驛傳</strong>：國道 1 號封路、箱根人潮爆滿，<strong>不要排這兩天</strong></li>
+</ul>
+</div></details>
+<details class="sub" open id="ch10-6"><summary><h3>川越（小江戶）</h3></summary><div class="subbody">
+<ul>
+<li>從池袋搭東武東上線約 30 分、或 JR 川越線</li>
+<li><strong>時之鐘</strong>、藏造老街、<strong>菓子屋橫丁</strong>（懷舊零食）、鰻魚飯</li>
+<li><strong>川越冰川神社</strong>：有名的結緣神社，可以「釣」鯛魚籤（鯛みくじ）、<strong>情侶很愛</strong></li>
+<li>半天就能逛完，可以早上去下午回東京</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch10-7"><summary><h3>日光</h3></summary><div class="subbody">
+<ul>
+<li>東武特急 <strong>Spacia X</strong> 從淺草約 2 小時</li>
+<li>東照宮（世界遺產）、華嚴瀑布、中禪寺湖</li>
+<li>冬天很冷、可能下雪，山上部分交通停駛 → 這趟<strong>不推薦</strong></li>
+</ul>
+<hr />
+</div></details>
+<details class="sub" open id="ch10-8"><summary><h3>我們的建議</h3></summary><div class="subbody">
+<ol>
+<li><strong>寶可夢迷</strong>：今天就查 PokéPark KANTO 12/26～12/31 先到先得票</li>
+<li><strong>迪士尼迷</strong>：把 12/28 鎌倉＋12/29 江之島 → 改成 12/29～12/30，12/28（一）去迪士尼海洋</li>
+<li><strong>想看富士山</strong>：其實 <strong>12/28 七里濱、12/29 江之島早上</strong>就有機會看到湘南版的富士山；真的想近看，用 1/1 去河口湖一日遊（元旦交通比較空，但要確認巴士班次）</li>
+<li><strong>都不想換</strong>：主行程已經涵蓋東京＋湘南精華，不用硬塞一日遊</li>
+</ol></div></details></div></section>
+<section class="chapter" id="ch11"><header class="sign"><div class="sign-top"><span class="num">TK<b>11</b></span><div class="sign-name"><h2>建議行程表</h2><p class="romaji">Nittei</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch10">← 一日遊</a><a href="#ch12">預算・避雷 →</a></nav></header><div class="chbody"><blockquote>
+<p><strong>住宿</strong>：上野 7 晚（12/25～12/28、12/29～1/2）＋江之島 1 晚（12/28）
+<strong>原則</strong>：怕休息的（市場、美術館、小店）排前面；跨年和福袋的節慶活動排後面；回國日留在 Skyliner 沿線附近
+花費為<strong>兩人合計</strong>的大約金額（不含住宿與購物），日圓</p>
+</blockquote>
+<hr />
+
+<details class="sub" open id="ch11-0"><summary><h3>主推版（9 天 8 夜）</h3></summary><div class="subbody">
+<h3>Day 1｜12/25（五）抵達・聖誕夜</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+<th>交通</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15:00</td>
+<td>桃園 T1 起飛 JX804</td>
+<td></td>
+</tr>
+<tr>
+<td>19:00</td>
+<td>成田 T2 降落 → 入境、領行李</td>
+<td></td>
+</tr>
+<tr>
+<td>20:20</td>
+<td>Skyliner → 京成上野</td>
+<td>約 41 分</td>
+</tr>
+<tr>
+<td>21:15</td>
+<td>上野飯店 check-in</td>
+<td>步行</td>
+</tr>
+<tr>
+<td>21:45</td>
+<td><strong>丸之內燈飾</strong>＋東京車站夜景（JR 7 分）；有力氣再走到日比谷看聖誕樹最後一晚</td>
+<td>JR</td>
+</tr>
+<tr>
+<td>23:00</td>
+<td>宵夜：一蘭上野店（24h）或阿美橫町居酒屋</td>
+<td></td>
+</tr>
+<tr>
+<td>- 💴 約 8,000（Skyliner×2、宵夜）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- ☔ 雨天：直接在上野吃宵夜，燈飾改 12/30 晚上</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 2｜12/26（六）淺草和服・晴空塔</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8:30</td>
+<td>淺草和服店換裝（預約）</td>
+<td>銀座線上野 → 淺草 5 分</td>
+</tr>
+<tr>
+<td>9:30</td>
+<td><strong>雷門、仲見世通、淺草寺、寶藏門、五重塔</strong>拍照</td>
+<td></td>
+</tr>
+<tr>
+<td>11:00</td>
+<td>淺草文化觀光中心 8F 展望台</td>
+<td>免費</td>
+</tr>
+<tr>
+<td>11:30</td>
+<td>午餐：<strong>淺草今半午間壽喜燒</strong>（或大黒家天丼）</td>
+<td>早點排</td>
+</tr>
+<tr>
+<td>13:00</td>
+<td>人力車 30 分 or 西參道散步</td>
+<td></td>
+</tr>
+<tr>
+<td>14:30</td>
+<td>隅田川步道 → 晴空塔（步行約 20 分）</td>
+<td>和服 17:00 前還（依店家）</td>
+</tr>
+<tr>
+<td>15:30</td>
+<td><strong>晴空塔天望甲板</strong>看夕陽轉夜景</td>
+<td>預約 15:30～16:00</td>
+</tr>
+<tr>
+<td>17:30</td>
+<td>Solamachi：<strong>寶可夢中心</strong>、橡子共和國、Kirby Café（若有約到）</td>
+<td></td>
+</tr>
+<tr>
+<td>19:30</td>
+<td>回上野，晚餐：<strong>牛かつ もと村 上野</strong>或鴨 to 蔥</td>
+<td></td>
+</tr>
+<tr>
+<td>- 💴 約 45,000（和服 2 人、晴空塔、壽喜燒、晚餐）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- ☔ 雨天：和服改 12/30；改去合羽橋＋晴空塔室內</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 3｜12/27（日）明治神宮・原宿・澀谷 Sky</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+<th>備註</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9:00</td>
+<td><strong>明治神宮</strong>（夫婦楠）</td>
+<td>山手線上野 → 原宿 25 分</td>
+</tr>
+<tr>
+<td>10:30</td>
+<td><strong>竹下通</strong>可麗餅 → <strong>Harakado</strong>、<strong>Omokado</strong> 鏡面入口</td>
+<td></td>
+</tr>
+<tr>
+<td>12:00</td>
+<td>午餐：AFURI 原宿 or I'm donut?</td>
+<td></td>
+</tr>
+<tr>
+<td>13:00</td>
+<td>表參道、貓街、裏原宿選物</td>
+<td></td>
+</tr>
+<tr>
+<td>14:30</td>
+<td>走到澀谷：<strong>澀谷 PARCO 6F</strong>（任天堂、寶可夢、JUMP、卡普空）</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>15:45</strong></td>
+<td><strong>SHIBUYA SKY</strong>（預約 15:40～16:00 入場）</td>
+<td>16:35 日落</td>
+</tr>
+<tr>
+<td>17:30</td>
+<td>澀谷十字路口、八公</td>
+<td></td>
+</tr>
+<tr>
+<td>18:30</td>
+<td>晚餐：<strong>宮下公園澀谷橫丁</strong> or 燒肉紀念晚餐</td>
+<td></td>
+</tr>
+<tr>
+<td>20:30</td>
+<td>（有力氣）代々木 Forest of Lights 燈光秀（需買票）</td>
+<td>到 22:00</td>
+</tr>
+<tr>
+<td>- 💴 約 30,000～50,000（Shibuya Sky 6,800、餐費視燒肉與否）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- ☔ 雨天：Shibuya Sky 露天區關閉時可改期（確認退改規定）；改去 teamLab Borderless</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 4｜12/28（一）鎌倉 → 江之電 → 江之島燈飾</h3>
+<p>詳細時間表見<a href="#ch05">第 5 章</a>。
+| 時間 | 行程 |
+|---|---|
+| 8:00 | 上野出發（大行李寄放飯店，只帶過夜包）|
+| 9:15 | 北鎌倉：圓覺寺（＋明月院）|
+| 10:30 | 鶴岡八幡宮 → 小町通吃午餐 |
+| 13:00 | 江之電（のりおりくん）→ 長谷：大佛、長谷寺 |
+| 15:00 | <strong>灌籃高手平交道</strong> |
+| 16:00 | <strong>稻村崎／七里濱夕陽＋富士山</strong> |
+| 17:15 | 江之島 check-in |
+| 18:00 | <strong>湘南の宝石燈飾</strong>（平日到 20:00）|
+| 19:30 | 晚餐 → 旅館泡湯 |
+- 💴 約 25,000（JR、江之電、門票、餐）
+- ☔ 雨天：鎌倉寺廟雨中也很有氣氛；海邊行程縮短，改去新江之島水族館</p>
+<h3>Day 5｜12/29（二）江之島 → 新宿</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6:30</td>
+<td>（選配）日出＋富士山</td>
+</tr>
+<tr>
+<td>9:00</td>
+<td>江島神社三宮 → <strong>龍戀之鐘</strong> → 稚兒之淵 → 岩屋洞窟</td>
+</tr>
+<tr>
+<td>11:30</td>
+<td>午餐：<strong>吻仔魚丼</strong>（とびっちょ／江之島亭）</td>
+</tr>
+<tr>
+<td>12:30</td>
+<td>章魚仙貝、女夫饅頭伴手禮</td>
+</tr>
+<tr>
+<td>13:30</td>
+<td><strong>小田急浪漫特快</strong> → 新宿（約 70 分）</td>
+</tr>
+<tr>
+<td>15:00</td>
+<td>新宿：伊勢丹地下美食、3D 貓看板、歌舞伎町哥吉拉</td>
+</tr>
+<tr>
+<td>17:00</td>
+<td><strong>都廳展望台</strong>夜景（<span class="warn" title="出發前再確認">確認</span> 確認年末是否開放）＋光雕投影</td>
+</tr>
+<tr>
+<td>18:30</td>
+<td>晚餐：<strong>六歌仙</strong>和牛吃到飽 or <strong>回憶橫丁</strong>串燒</td>
+</tr>
+<tr>
+<td>21:00</td>
+<td>回上野（山手線約 25 分）</td>
+</tr>
+<tr>
+<td>- 💴 約 30,000～50,000</td>
+<td></td>
+</tr>
+<tr>
+<td>- ☔ 雨天：江之島縮短，提早回新宿逛百貨</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 6｜12/30（三）豐洲 teamLab・台場・銀座・阿美橫町</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9:00</td>
+<td><strong>teamLab Planets</strong>（早場人少）</td>
+</tr>
+<tr>
+<td>11:30</td>
+<td><strong>豐洲 千客萬來</strong>午餐（海鮮）、頂樓足湯</td>
+</tr>
+<tr>
+<td>13:30</td>
+<td>百合海鷗線（第一節車廂）→ 台場：<strong>獨角獸鋼彈</strong>、Gundam Base</td>
+</tr>
+<tr>
+<td>15:30</td>
+<td>台場海濱公園 → 自由女神＋彩虹大橋夕陽</td>
+</tr>
+<tr>
+<td>17:30</td>
+<td>新橋 → <strong>銀座</strong>：GINZA SIX、伊東屋、UNIQLO 旗艦</td>
+</tr>
+<tr>
+<td>19:30</td>
+<td>晚餐：銀座 or 回上野</td>
+</tr>
+<tr>
+<td>21:00</td>
+<td><strong>阿美橫町年末市集</strong>最後一晚熱鬧（12/30～31 最擠）</td>
+</tr>
+<tr>
+<td>- 💴 約 30,000</td>
+<td></td>
+</tr>
+<tr>
+<td>- ☔ 雨天：台場改成 DiverCity、AQUA CiTY 室內</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 7｜12/31（四）秋葉原 → 麻布台 → 東京鐵塔跨年</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:00</td>
+<td><strong>秋葉原</strong>：Radio 會館、まんだらけ、扭蛋會館、Yodobashi</td>
+</tr>
+<tr>
+<td>12:30</td>
+<td>午餐 → <strong>神田明神</strong>（年末參拜，人還不多）</td>
+</tr>
+<tr>
+<td>14:00</td>
+<td>地鐵 → <strong>麻布台之丘</strong>、<strong>teamLab Borderless</strong>（預約 14:00～15:00）</td>
+</tr>
+<tr>
+<td>17:30</td>
+<td>早點吃晚餐（<strong>預約</strong>）或<strong>年越蕎麥麵</strong></td>
+</tr>
+<tr>
+<td>19:30</td>
+<td>芝公園拍東京鐵塔</td>
+</tr>
+<tr>
+<td>22:30</td>
+<td><strong>增上寺</strong>卡位 → 除夜之鐘 → <strong>0:00 倒數</strong> 🎉</td>
+</tr>
+<tr>
+<td>0:30</td>
+<td>增上寺初詣 → 叫車／地鐵回上野</td>
+</tr>
+<tr>
+<td>- 💴 約 35,000（teamLab、餐、計程車）</td>
+<td></td>
+</tr>
+<tr>
+<td>- <span class="warn" title="出發前再確認">確認</span> 百貨、商場今天提早關門，購物排在白天</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 8｜1/1（五）元旦・初詣・福袋・夜景</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>行程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:00</td>
+<td>睡飽 → 飯店新年早餐</td>
+</tr>
+<tr>
+<td>11:00</td>
+<td><strong>淺草寺</strong>初詣（離上野近）<strong>or</strong> 東京大神宮（結緣）</td>
+</tr>
+<tr>
+<td>13:00</td>
+<td>午餐（連鎖店或神社攤販）</td>
+</tr>
+<tr>
+<td>14:00</td>
+<td><strong>秋葉原 Yodobashi／Bic Camera 福袋</strong>、唐吉訶德</td>
+</tr>
+<tr>
+<td>16:00</td>
+<td>六本木 <strong>Tokyo City View</strong>（看東京鐵塔新年夜景）<strong>or</strong> 晴空塔</td>
+</tr>
+<tr>
+<td>19:00</td>
+<td>晚餐：一蘭、壽司郎、すしざんまい等營業中的店</td>
+</tr>
+<tr>
+<td>21:00</td>
+<td>回飯店整理行李（福袋開箱！）</td>
+</tr>
+<tr>
+<td>- 💴 約 20,000（不含福袋）</td>
+<td></td>
+</tr>
+<tr>
+<td>- <span class="warn" title="出發前再確認">確認</span> 1/1 百貨幾乎全休</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Day 9｜1/2（六）初賣福袋 or 皇居參賀 → 回國</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>時間</th>
+<th>方案 A：福袋</th>
+<th>方案 B：皇居新年參賀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8:30</td>
+<td>退房、寄放行李</td>
+<td>退房、寄放行李</td>
+</tr>
+<tr>
+<td>9:00</td>
+<td><strong>松坂屋上野店</strong>排隊</td>
+<td>皇居正門排隊安檢</td>
+</tr>
+<tr>
+<td>10:00</td>
+<td>開門搶福袋</td>
+<td>10:10 / 11:00 場次（<span class="warn" title="出發前再確認">確認</span> 2027 時間待公告）</td>
+</tr>
+<tr>
+<td>12:00</td>
+<td>午餐（上野）</td>
+<td>東京站午餐＋<strong>東京動漫人物街</strong>補貨</td>
+</tr>
+<tr>
+<td>13:30</td>
+<td>阿美橫町最後補藥妝</td>
+<td>回上野</td>
+</tr>
+<tr>
+<td>15:30</td>
+<td>回飯店拿行李</td>
+<td>回飯店拿行李</td>
+</tr>
+<tr>
+<td><strong>16:20～16:40</strong></td>
+<td><strong>Skyliner</strong> → 成田 T2</td>
+<td>同左</td>
+</tr>
+<tr>
+<td>17:15</td>
+<td>報到、<strong>退稅確認</strong>、出境</td>
+<td></td>
+</tr>
+<tr>
+<td>20:10</td>
+<td>JX805 起飛 ✈️ 23:20 抵達桃園</td>
+<td></td>
+</tr>
+<tr>
+<td>- 💴 約 10,000（Skyliner、餐）＋福袋</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</div></details>
+<details class="sub" open id="ch11-1"><summary><h3>方案二：跨年海景版（12/31 住江之島）</h3></summary><div class="subbody">
+<p>適合：想在海邊看<strong>新年第一道日出</strong>、不怕人多、願意付較高房價。</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>主推版</th>
+<th>跨年海景版</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12/28（一）</td>
+<td>鎌倉＋江之島</td>
+<td><strong>澀谷・原宿</strong>（主推版 Day 3）</td>
+</tr>
+<tr>
+<td>12/29（二）</td>
+<td>江之島 → 新宿</td>
+<td><strong>豐洲・台場・銀座</strong>（主推版 Day 6）</td>
+</tr>
+<tr>
+<td>12/30（三）</td>
+<td>豐洲・台場・銀座</td>
+<td><strong>秋葉原、麻布台、新宿</strong></td>
+</tr>
+<tr>
+<td>12/31（四）</td>
+<td>東京鐵塔跨年</td>
+<td><strong>鎌倉</strong>（上午去，避開晚上人潮）→ 江電沿線 → 七里濱夕陽 → <strong>住江之島</strong>，在旅館迎接新年</td>
+</tr>
+<tr>
+<td>1/1（五）</td>
+<td>東京初詣</td>
+<td><strong>6:50 江之島初日出</strong> → 江島神社初詣 → 吻仔魚丼（<span class="warn" title="出發前再確認">確認</span> 1/1 起生吻仔魚禁漁，只有釜揚げ）→ 下午回東京</td>
+</tr>
+<tr>
+<td>1/2（六）</td>
+<td>同上</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="warn" title="出發前再確認">確認</span> 缺點：12/31 江之島住宿最貴最難訂；1/1 江之島島上人潮很多；鶴岡八幡宮 12/31 晚上～1/1 不要去。</p>
+</div></details>
+<details class="sub" open id="ch11-2"><summary><h3>方案三：輕鬆版（每天睡到自然醒）</h3></summary><div class="subbody">
+<ul>
+<li>拿掉 Day 3 晚上的燈光秀、Day 5 的日出、Day 6 的台場</li>
+<li>每天只排 <strong>2 個區域</strong>，中午後才出門也可以</li>
+<li>江之島改成<strong>住在鎌倉王子大飯店</strong>，飯店內看夕陽就好</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch11-3"><summary><h3>方案四：塞滿版（加迪士尼）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>行程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12/26</td>
+<td>淺草＋晴空塔</td>
+</tr>
+<tr>
+<td>12/27</td>
+<td>原宿＋澀谷 Sky</td>
+</tr>
+<tr>
+<td><strong>12/28（一）</strong></td>
+<td><strong>東京迪士尼海洋</strong>（平日相對好一點）</td>
+</tr>
+<tr>
+<td>12/29（二）</td>
+<td>鎌倉＋江之島燈飾（住江之島）</td>
+</tr>
+<tr>
+<td>12/30（三）</td>
+<td>江之島早上 → 新宿</td>
+</tr>
+<tr>
+<td>12/31</td>
+<td>秋葉原＋麻布台＋跨年</td>
+</tr>
+<tr>
+<td>1/1</td>
+<td>初詣＋豐洲 teamLab（teamLab 元旦營業 <span class="warn" title="出發前再確認">確認</span>）</td>
+</tr>
+<tr>
+<td>1/2</td>
+<td>福袋 → 回國</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+</div></details>
+<details class="sub" open id="ch11-4"><summary><h3>需要提前預約／購票清單（依急迫程度）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>何時開放</th>
+<th>現在（10/31）要做什麼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 <strong>住宿</strong>（上野、江之島）</td>
+<td>已開放</td>
+<td><strong>立刻訂</strong>，選可免費取消</td>
+</tr>
+<tr>
+<td>🔴 <strong>PokéPark KANTO</strong>（如果要去）</td>
+<td>先到先得：2 個月前同日</td>
+<td><strong>立刻查</strong></td>
+</tr>
+<tr>
+<td>🔴 <strong>迪士尼</strong>（如果要去）</td>
+<td>已開放</td>
+<td>立刻確認票況</td>
+</tr>
+<tr>
+<td>🟠 <strong>SHIBUYA SKY 12/27 夕陽時段</strong></td>
+<td>約 4 週前 <span class="warn" title="出發前再確認">確認</span></td>
+<td>11 月底開搶，設提醒</td>
+</tr>
+<tr>
+<td>🟠 <strong>吉卜力美術館</strong></td>
+<td>11/10 10:00（12 月票）</td>
+<td>設鬧鐘</td>
+</tr>
+<tr>
+<td>🟠 <strong>teamLab Planets／Borderless</strong></td>
+<td>已開放</td>
+<td>11 月訂</td>
+</tr>
+<tr>
+<td>🟠 <strong>寶可夢咖啡廳</strong></td>
+<td>31 天前 18:00（日本時間）</td>
+<td>依日期搶</td>
+</tr>
+<tr>
+<td>🟠 <strong>年末餐廳</strong>（燒肉、壽喜燒、12/31 晚餐）</td>
+<td>各店不同</td>
+<td>11 月～12 月初訂</td>
+</tr>
+<tr>
+<td>🟡 和服租借</td>
+<td>已開放</td>
+<td>11 月訂</td>
+</tr>
+<tr>
+<td>🟡 晴空塔</td>
+<td>已開放</td>
+<td>12 月訂</td>
+</tr>
+<tr>
+<td>🟡 浪漫特快 12/29</td>
+<td>1 個月前</td>
+<td>11/29 訂</td>
+</tr>
+<tr>
+<td>🟡 Skyliner（去回程）</td>
+<td>Klook／KKday 隨時</td>
+<td>12 月買優惠票</td>
+</tr>
+<tr>
+<td>🟡 eSIM</td>
+<td>隨時</td>
+<td>12 月買</td>
+</tr>
+<tr>
+<td>🟡 Visit Japan Web</td>
+<td>隨時</td>
+<td>出發前 1～2 週填</td>
+</tr>
+<tr>
+<td>🟢 增上寺跨年、皇居參賀、福袋</td>
+<td>12 月中下旬公告</td>
+<td>12/15 後查</td>
+</tr>
+</tbody>
+</table></div></div></details></div></section>
+<section class="chapter" id="ch12"><header class="sign"><div class="sign-top"><span class="num">TK<b>12</b></span><div class="sign-name"><h2>預算、實用資訊與避雷</h2><p class="romaji">Yosan</p></div></div><div class="sign-line"></div><nav class="sign-adj"><a href="#ch11">← 行程表</a><span></span></nav></header><div class="chbody">
+<details class="sub" open id="ch12-0"><summary><h3>兩人預算表（機票已訂，不含機票）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>省錢版</th>
+<th>舒適版</th>
+<th>享受版</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>東京住宿 7 晚</td>
+<td>105,000</td>
+<td>175,000</td>
+<td>280,000</td>
+<td>年末房價較高；舒適版約每晚 25,000 日圓</td>
+</tr>
+<tr>
+<td>江之島住宿 1 晚</td>
+<td>20,000</td>
+<td>35,000</td>
+<td>60,000+</td>
+<td>鎌倉王子大飯店海景房屬享受版</td>
+</tr>
+<tr>
+<td>交通</td>
+<td>25,000</td>
+<td>30,000</td>
+<td>45,000</td>
+<td>Skyliner 來回、Suica、江之電、浪漫特快、跨年計程車</td>
+</tr>
+<tr>
+<td>餐飲（9 天）</td>
+<td>90,000</td>
+<td>150,000</td>
+<td>250,000</td>
+<td>一晚燒肉／壽喜燒紀念餐另計於享受版</td>
+</tr>
+<tr>
+<td>門票・體驗</td>
+<td>25,000</td>
+<td>45,000</td>
+<td>80,000</td>
+<td>Shibuya Sky、teamLab、晴空塔、和服、燈飾</td>
+</tr>
+<tr>
+<td><strong>小計（日圓）</strong></td>
+<td><strong>約 26.5 萬</strong></td>
+<td><strong>約 43.5 萬</strong></td>
+<td><strong>約 71.5 萬</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>購物、福袋</td>
+<td>自由</td>
+<td>自由</td>
+<td>自由</td>
+<td></td>
+</tr>
+<tr>
+<td>eSIM、保險</td>
+<td>約 NT$2,000～4,000</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>日圓換台幣請依出發時匯率計算（例如 1 日圓 ≈ 0.21 台幣時，舒適版約 NT$9 萬）。</p>
+</blockquote>
+</div></details>
+<details class="sub" open id="ch12-1"><summary><h3>門票價格速查（參考，<span class="warn" title="出發前再確認">確認</span> 以官網為準）</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>每人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SHIBUYA SKY</td>
+<td>2,700（15:00 前）／3,400（15:00 後）官網</td>
+</tr>
+<tr>
+<td>teamLab Planets</td>
+<td>約 3,800～4,200</td>
+</tr>
+<tr>
+<td>teamLab Borderless</td>
+<td>動態價格</td>
+</tr>
+<tr>
+<td>東京晴空塔天望甲板</td>
+<td>約 2,000～3,000（依日期）</td>
+</tr>
+<tr>
+<td>Tokyo City View</td>
+<td>約 2,000～2,500</td>
+</tr>
+<tr>
+<td>東京都廳展望台</td>
+<td>免費</td>
+</tr>
+<tr>
+<td>鎌倉大佛</td>
+<td>約 300</td>
+</tr>
+<tr>
+<td>長谷寺</td>
+<td>約 400</td>
+</tr>
+<tr>
+<td>江之電一日券</td>
+<td>約 800</td>
+</tr>
+<tr>
+<td>和服租借</td>
+<td>3,000～6,000</td>
+</tr>
+<tr>
+<td>迪士尼一日券</td>
+<td>依日期，最高 12,400</td>
+</tr>
+<tr>
+<td>PokéPark KANTO</td>
+<td>7,900 起</td>
+</tr>
+<tr>
+<td>哈利波特影城</td>
+<td>約 6,300～7,300</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch12-2"><summary><h3>社群常見踩雷 <span class="warn" title="出發前再確認">確認</span></h3></summary><div class="subbody">
+<h3>排隊與名店</h3>
+<ul>
+<li>「網紅店排 2 小時、吃 20 分鐘」是常態 → <strong>一天最多排一間</strong>，其他吃不用排的好店</li>
+<li>用 Google Maps 看「熱門時段」圖表，避開尖峰</li>
+<li>很多拉麵店<strong>售完就關</strong>，下午去常撲空</li>
+</ul>
+<h3>觀光陷阱</h3>
+<ul>
+<li>新宿歌舞伎町、澀谷、六本木<strong>路邊拉客的酒吧、居酒屋</strong>：可能收天價，<strong>不要跟著走</strong></li>
+<li>黃金街酒吧：先問座位費（チャージ）</li>
+<li>淺草仲見世通部分商品比外面貴，伴手禮可以在百貨、車站買</li>
+</ul>
+<h3>交通</h3>
+<ul>
+<li>上野站 ≠ 京成上野站</li>
+<li>末班車約 0:00～0:30，錯過只能搭計程車（深夜加成）</li>
+<li>江之電週末鎌倉站排隊很久</li>
+<li>電車上<strong>不講電話</strong>、講話小聲、後背包背在前面</li>
+</ul>
+<h3>年末年始</h3>
+<ul>
+<li>以為百貨 1/1 有開 → <strong>幾乎都沒開</strong></li>
+<li>以為 12/31 晚上能隨便找到餐廳 → <strong>要訂位</strong></li>
+<li>以為可以在澀谷跨年 → <strong>活動停辦＋管制</strong></li>
+<li>以為小店都有開 → <strong>12/29～1/3 很多休</strong>，看 Google Maps 營業時間＋店家社群</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch12-3"><summary><h3>日本禮儀</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>場合</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>電車</td>
+<td>不講電話、手機靜音、不在車廂吃東西（新幹線、特急除外）、讓座給優先席</td>
+</tr>
+<tr>
+<td>手扶梯</td>
+<td>東京站<strong>左邊</strong>、走的人在右邊（但官方其實呼籲兩邊都站著不走）</td>
+</tr>
+<tr>
+<td>垃圾</td>
+<td>街上<strong>幾乎沒有垃圾桶</strong>，帶一個袋子裝自己的垃圾；便利商店的垃圾桶給在店內買的東西用</td>
+</tr>
+<tr>
+<td>邊走邊吃</td>
+<td>很多地方（淺草、鎌倉）不鼓勵，<strong>在店門口吃完</strong></td>
+</tr>
+<tr>
+<td>神社</td>
+<td>鳥居前鞠躬、走參道兩側、二拜二拍手一拜（見第 6 章）</td>
+</tr>
+<tr>
+<td>寺廟</td>
+<td>合掌、不拍手；本堂內有些禁止拍照</td>
+</tr>
+<tr>
+<td>溫泉／錢湯</td>
+<td><strong>先洗身體再泡</strong>、不能穿泳衣（有些設施除外）、毛巾不放進池子、刺青可能被拒</td>
+</tr>
+<tr>
+<td>餐廳</td>
+<td>不用給小費；吃完說「ごちそうさまでした」；拉麵可以發出聲音</td>
+</tr>
+<tr>
+<td>拍照</td>
+<td>不要拍路人正面、不要拍店內（先問）、灌籃高手平交道不要站車道</td>
+</tr>
+<tr>
+<td>菸</td>
+<td>只能在指定吸菸區抽菸，街上邊走邊抽會被罰</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch12-4"><summary><h3>緊急聯絡</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>電話／資訊</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>警察</td>
+<td><strong>110</strong></td>
+</tr>
+<tr>
+<td>救護車、消防</td>
+<td><strong>119</strong></td>
+</tr>
+<tr>
+<td>台北駐日經濟文化代表處（東京）</td>
+<td>03-3280-7811（上班時間）；<strong>24 小時急難救助行動電話</strong>請到外交部領事事務局網站查最新號碼並存進手機 <span class="warn" title="出發前再確認">確認</span></td>
+</tr>
+<tr>
+<td>外交部旅外國人緊急服務專線</td>
+<td>+886-800-085-095（從日本免付費撥打方式請查領事事務局網站 <span class="warn" title="出發前再確認">確認</span>）</td>
+</tr>
+<tr>
+<td>日本觀光客熱線（JNTO Japan Visitor Hotline）</td>
+<td>050-3816-2787（24 小時，中英韓文）</td>
+</tr>
+<tr>
+<td>遺失物（電車）</td>
+<td>到車站窗口或各鐵道公司遺失物中心（JR、東京地鐵、都營各自不同）</td>
+</tr>
+<tr>
+<td>遺失物（街上）</td>
+<td>最近的派出所（交番）</td>
+</tr>
+<tr>
+<td>信用卡掛失</td>
+<td>出發前把<strong>各卡的海外掛失電話</strong>存在手機</td>
+</tr>
+<tr>
+<td>地震</td>
+<td>裝「Safety tips」App；搖晃時遠離窗戶、躲桌下；江之島、海邊遇到<strong>海嘯警報立刻往高處走</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3>生病怎麼辦？</h3>
+<ul>
+<li>輕微：藥妝店有藥劑師，可以用翻譯 App 描述症狀</li>
+<li>需要就醫：JNTO 網站可查「外國語可對應醫療機關」；<strong>年末年始一般診所休息</strong>，要找「休日夜間急患診療所」或醫院急診</li>
+<li>保留<strong>診斷書與收據</strong>回台灣申請保險</li>
+</ul>
+</div></details>
+<details class="sub" open id="ch12-5"><summary><h3>簡單日文小抄</h3></summary><div class="subbody">
+<div class="tw"><table>
+<thead>
+<tr>
+<th>中文</th>
+<th>日文</th>
+<th>拼音</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>你好</td>
+<td>こんにちは</td>
+<td>konnichiwa</td>
+</tr>
+<tr>
+<td>謝謝</td>
+<td>ありがとうございます</td>
+<td>arigatou gozaimasu</td>
+</tr>
+<tr>
+<td>不好意思／請問</td>
+<td>すみません</td>
+<td>sumimasen</td>
+</tr>
+<tr>
+<td>這個</td>
+<td>これ</td>
+<td>kore</td>
+</tr>
+<tr>
+<td>請給我這個</td>
+<td>これをください</td>
+<td>kore wo kudasai</td>
+</tr>
+<tr>
+<td>多少錢？</td>
+<td>いくらですか？</td>
+<td>ikura desu ka?</td>
+</tr>
+<tr>
+<td>可以刷卡嗎？</td>
+<td>カードで払えますか？</td>
+<td>kaado de haraemasu ka?</td>
+</tr>
+<tr>
+<td>兩位</td>
+<td>二人です</td>
+<td>futari desu</td>
+</tr>
+<tr>
+<td>有預約（名字）</td>
+<td>予約した〇〇です</td>
+<td>yoyaku shita ○○ desu</td>
+</tr>
+<tr>
+<td>沒有預約</td>
+<td>予約していません</td>
+<td>yoyaku shite imasen</td>
+</tr>
+<tr>
+<td>可以內用嗎？</td>
+<td>店内で食べられますか？</td>
+<td>tennai de taberaremasu ka?</td>
+</tr>
+<tr>
+<td>外帶</td>
+<td>持ち帰りで</td>
+<td>mochikaeri de</td>
+</tr>
+<tr>
+<td>結帳</td>
+<td>お会計お願いします</td>
+<td>okaikei onegaishimasu</td>
+</tr>
+<tr>
+<td>好吃！</td>
+<td>おいしい！</td>
+<td>oishii!</td>
+</tr>
+<tr>
+<td>廁所在哪裡？</td>
+<td>トイレはどこですか？</td>
+<td>toire wa doko desu ka?</td>
+</tr>
+<tr>
+<td>可以幫我們拍照嗎？</td>
+<td>写真をお願いできますか？</td>
+<td>shashin wo onegai dekimasu ka?</td>
+</tr>
+<tr>
+<td>免稅</td>
+<td>免税できますか？</td>
+<td>menzei dekimasu ka?</td>
+</tr>
+<tr>
+<td>新年快樂（元旦後）</td>
+<td>あけましておめでとうございます</td>
+<td>akemashite omedetou gozaimasu</td>
+</tr>
+<tr>
+<td>祝你有個好年（年末）</td>
+<td>よいお年を</td>
+<td>yoi otoshi wo</td>
+</tr>
+<tr>
+<td>聖誕快樂</td>
+<td>メリークリスマス</td>
+<td>merii kurisumasu</td>
+</tr>
+</tbody>
+</table></div>
+</div></details>
+<details class="sub" open id="ch12-6"><summary><h3>出發前最後檢查清單（12/20 左右）</h3></summary><div class="subbody">
+<ul>
+<li class="chk"><input type="checkbox" id="chk-12-0"> 護照、機票、VJW QR 截圖</li>
+<li class="chk"><input type="checkbox" id="chk-12-1"> eSIM 安裝（出發前一天，落地再開啟）</li>
+<li class="chk"><input type="checkbox" id="chk-12-2"> Suica 加入 Apple 錢包並儲值</li>
+<li class="chk"><input type="checkbox" id="chk-12-3"> 日圓現金 5～6 萬</li>
+<li class="chk"><input type="checkbox" id="chk-12-4"> Shibuya Sky、teamLab、晴空塔等預約截圖</li>
+<li class="chk"><input type="checkbox" id="chk-12-5"> 餐廳預約確認信</li>
+<li class="chk"><input type="checkbox" id="chk-12-6"> 查 2026～27 年末年始公告：<strong>增上寺跨年、皇居參賀時間、各百貨初賣日、江之島燈飾時間、末班車</strong></li>
+<li class="chk"><input type="checkbox" id="chk-12-7"> Google Maps 離線地圖、收藏清單</li>
+<li class="chk"><input type="checkbox" id="chk-12-8"> 天氣預報（東京、鎌倉）</li>
+<li class="chk"><input type="checkbox" id="chk-12-9"> 保險投保</li>
+<li class="chk"><input type="checkbox" id="chk-12-10"> 行動電源放隨身行李</li>
+</ul></div></details></div></section>
+
+  <footer>內容綜合中、日、英文社群與官方資訊整理；價格與時間以各官網為準。</footer>
+</main>
+<button class="top" id="top" type="button" aria-label="回到頂端">↑</button>
+
+<script>
+(function(){
+  // Countdown / trip-day label
+  var start=new Date("2026-12-25T15:00:00+08:00"), end=new Date("2027-01-02T23:20:00+08:00"), now=new Date();
+  var c=document.getElementById("count");
+  if(now<start){c.textContent="距離出發還有 "+Math.ceil((start-now)/864e5)+" 天";}
+  else if(now<=end){c.textContent="旅行第 "+(Math.floor((now-start)/864e5)+1)+" 天";}
+  else{c.textContent="2026/12/25 – 2027/1/2";}
+
+  // Checklist persistence
+  document.querySelectorAll('li.chk input').forEach(function(b){
+    try{b.checked=localStorage.getItem(b.id)==="1";}catch(e){}
+    b.addEventListener("change",function(){try{localStorage.setItem(b.id,b.checked?"1":"0");}catch(e){}});
+  });
+
+  // Current chapter on the line map
+  var stops=[].slice.call(document.querySelectorAll(".stop")), map=document.getElementById("linemap");
+  var chapters=[].slice.call(document.querySelectorAll(".chapter"));
+  function mark(id){
+    stops.forEach(function(s){
+      var on=s.getAttribute("href")==="#"+id; s.classList.toggle("here",on);
+      if(on){map.scrollTo({left:s.offsetLeft-map.clientWidth/2+s.clientWidth/2,behavior:"smooth"});}
+    });
+  }
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)mark(e.target.id);});},
+      {rootMargin:"-30% 0px -65% 0px"});
+    chapters.forEach(function(ch){io.observe(ch);});
+  }
+
+  // Search
+  var q=document.getElementById("q"), clr=document.getElementById("qclear"), hits=document.getElementById("hits");
+  var subs=[].slice.call(document.querySelectorAll("details.sub"));
+  var hasHL=window.CSS&&CSS.highlights&&window.Highlight;
+  function highlight(term){
+    if(!hasHL)return; CSS.highlights.delete("q"); if(!term)return;
+    var ranges=[], lower=term.toLowerCase();
+    document.querySelectorAll(".chbody").forEach(function(root){
+      var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), n;
+      while((n=w.nextNode())){
+        if(n.parentElement.closest(".hidden-by-search"))continue;
+        var t=n.data.toLowerCase(), i=t.indexOf(lower);
+        while(i>-1){var r=new Range();r.setStart(n,i);r.setEnd(n,i+term.length);ranges.push(r);i=t.indexOf(lower,i+term.length);}
+      }
+    });
+    CSS.highlights.set("q",new Highlight(...ranges));
+  }
+  function run(){
+    var term=q.value.trim(), lower=term.toLowerCase(), count=0;
+    clr.hidden=!term;
+    subs.forEach(function(d){
+      var ok=!term||d.textContent.toLowerCase().indexOf(lower)>-1;
+      d.classList.toggle("hidden-by-search",!ok);
+      if(term&&ok){d.open=true;count++;}
+    });
+    chapters.forEach(function(ch){
+      var intro=ch.querySelector(".chbody").textContent.toLowerCase().indexOf(lower)>-1;
+      var any=ch.querySelector("details.sub:not(.hidden-by-search)");
+      ch.classList.toggle("hidden-by-search",!!term&&!any&&!intro);
+    });
+    hits.hidden=!term;
+    hits.textContent=term?(count?"找到 "+count+" 段符合「"+term+"」":"沒有符合「"+term+"」的段落，換個關鍵字試試"):"";
+    highlight(term);
+  }
+  var timer; q.addEventListener("input",function(){clearTimeout(timer);timer=setTimeout(run,150);});
+  clr.addEventListener("click",function(){q.value="";run();q.focus();});
+  document.getElementById("top").addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+})();
+</script>
+
+</body></html>
