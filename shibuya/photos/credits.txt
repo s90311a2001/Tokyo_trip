@@ -1,0 +1,63 @@
+澀谷散步日｜照片來源
+====================
+
+規則：頁面會先找 photos/<站名>.jpg（你自己的照片），找不到才用下面這些 photos/auto/ 的圖。
+授權：以下全部來自 Unsplash，Unsplash License（可免費使用，不需署名；此處仍記錄作者以示尊重）
+授權條款：https://unsplash.com/license
+下載日期：2026-11-08，皆縮成 1280px 寬（原圖皆 ≥ 3000px）
+
+01-meiji-jingu.jpg ｜明治神宮
+  畫面：森林中的木造大鳥居（秋天午後）
+  作者：Lex Brogan（https://unsplash.com/@lexbrogan）
+  來源：https://unsplash.com/photos/wooden-torii-gate-in-a-lush-green-forest-BOQGF_zvmVw
+  授權：Unsplash License
+
+02-takeshita.jpg ｜竹下通
+  畫面：白天人潮滿滿的竹下通，看得到「クレープ」可麗餅招牌
+  作者：Kvnga（Unsplash）
+  來源：https://unsplash.com/photos/people-walking-on-street-during-daytime-7NX_PkUQ9fQ
+  授權：Unsplash License
+
+03-omotesando.jpg ｜表參道
+  畫面：表參道櫸木行道樹大道（秋色）
+  作者：niu（Unsplash）
+  來源：https://unsplash.com/photos/autumn-trees-line-a-busy-city-street-with-cars-orJX4Pp4ctA
+  授權：Unsplash License
+
+04-miyashita-park.jpg ｜宮下公園 MIYASHITA PARK
+  畫面：白天的宮下公園玻璃鋼構建築與入口階梯（直幅，卡片中裁切上半部）
+  作者：Jonathan Phelps（Unsplash）
+  來源：https://unsplash.com/photos/miyashita-park-structure-in-tokyo-iq_SPOcEWvE
+  授權：Unsplash License
+
+05-shibuya-crossing.jpg ｜澀谷八公像＋十字路口
+  畫面：白天的澀谷全向十字路口與周邊大型看板
+  作者：Jezael Melgoza（Unsplash）
+  來源：https://unsplash.com/photos/white-and-red-buss-on-the-middle-of-crossing-street-photo-NiyRORf8d8I
+  授權：Unsplash License
+
+06-shibuya-sky.jpg ｜SHIBUYA SKY
+  畫面：屋頂展望台的日落時分，人群看向遠方天際線
+  作者：Joshua Tsu（Unsplash）
+  來源：https://unsplash.com/photos/p-eHaNMWtHE
+  授權：Unsplash License
+
+07-shibuya-yokocho.jpg ｜澀谷橫丁
+  畫面：宮下公園下方、掛滿布條燈籠的澀谷戶外用餐區
+  作者：Joichiro Sasazono（Unsplash）
+  來源：https://unsplash.com/photos/shibuya-outdoor-dining-area-in-tokyo-iFNdxKKoH5I
+  授權：Unsplash License
+
+
+備選（沒採用，想換可以用）
+--------------------------
+明治神宮  大鳥居與參道廣場  Andrea Serini   https://unsplash.com/photos/a-large-torii-gate-at-a-japanese-shrine-gXJixZ7OVQ0
+竹下通    竹下通入口拱門      Florencia Gonzalez Bazzano  https://unsplash.com/photos/crowded-street-under-a-pink-archway-with-music-decorations-P-xfC5SoPNc
+表參道    東急廣場鏡面入口    Susann Schuster  https://unsplash.com/photos/people-walking-on-street-during-daytime-eIUDWkcZmpQ
+宮下公園  夜晚的宮下公園      ayumi kubo      https://unsplash.com/photos/a-group-of-people-walking-down-a-walkway-at-night-uD-cvss_oq0
+八公像    八公銅像特寫        Vinicius        https://unsplash.com/photos/bronze-statue-of-hachiko-dog-in-tokyo-japan-52CbRwXcsTs
+十字路口  俯瞰十字路口（黑白）Clement Souchet https://unsplash.com/photos/aerial-view-of-shibuya-crossing-with-crowds-and-traffic-kHb2gnSO0sA
+SHIBUYA SKY 白天屋頂玻璃角落 Kazuo ota      https://unsplash.com/photos/9hbNTe7jZFM
+
+地圖：© OpenStreetMap contributors（https://www.openstreetmap.org/copyright）
+步行路線：以 OSRM（routing.openstreetmap.de, foot）依 OSM 路網計算，預先存進 itinerary.js
