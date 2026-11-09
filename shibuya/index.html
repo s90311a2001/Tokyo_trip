@@ -30,12 +30,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offse
 #stage.drag{cursor:grabbing}
 #cam{position:absolute;left:0;top:0;transform-origin:0 0}
 #cam>*{position:absolute;left:0;top:0;display:block}
-#baseImg{will-change:transform;user-select:none;-webkit-user-drag:none;pointer-events:none}
+#baseCv{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}
+#stage.moving.raster #baseCv{display:block}
 #map{overflow:visible}
 /* while the camera moves, show only the pre-rendered picture of the base map (cheap to scale) */
 #stage.moving.raster #mapBase{display:none}
 #stage.moving .st .ring{animation:none}
-.renderbase #title,.renderbase #chip,.renderbase #walkmsg,.renderbase #zoomBtns,.renderbase #sheet,.renderbase #nav,.renderbase #map,.renderbase #baseImg{display:none!important}
+.renderbase #title,.renderbase #chip,.renderbase #walkmsg,.renderbase #zoomBtns,.renderbase #sheet,.renderbase #nav,.renderbase #map,.renderbase #baseCv{display:none!important}
 .renderbase #cam{transform:none!important}
 .renderbase #stage{inset:0 auto auto 0!important;width:2000px;height:2000px;overflow:visible}
 
@@ -243,8 +244,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offse
 </svg>
 <div id="app">
   <div id="stage" aria-label="手繪路線地圖">
+    <canvas id="baseCv"></canvas>
     <div id="cam">
-      <img id="baseImg" alt="" decoding="async" draggable="false">
       <svg id="mapBase" xmlns="http://www.w3.org/2000/svg"><g id="base"></g></svg>
       <svg id="map" xmlns="http://www.w3.org/2000/svg">
         <g id="routes"></g>
@@ -294,15 +295,28 @@ const svg = $("#map"), cam = $("#cam");
 $("#base").innerHTML = `<rect width="${BM.w}" height="${BM.h}" fill="#f7efdc"/>` + BM.svg;
 if (/renderbase/.test(location.search)) { document.body.classList.add("renderbase"); return; }   // used by tools/render_basemap.js
 // basemap.jpg = the same base map pre-rendered at 2x; it is what slides around during animations
-const baseImg = $("#baseImg");
-baseImg.width = BM.w; baseImg.height = BM.h;
-baseImg.onload = () => $("#stage").classList.add("raster");
-baseImg.onerror = () => baseImg.remove();
+// It is drawn into a screen-sized canvas each frame (a huge scaled <img> layer goes blank on phones).
+const baseImg = new Image(), baseCv = $("#baseCv"), bctx = baseCv.getContext("2d");
+baseImg.onload = () => (baseImg.decode ? baseImg.decode() : Promise.resolve()).catch(() => {}).then(() => $("#stage").classList.add("raster"));
 baseImg.src = "basemap.jpg";
+function drawBase(){
+  if (!baseImg.naturalWidth || !V) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), w = Math.round(V.w * dpr), h = Math.round(V.h * dpr);
+  if (baseCv.width !== w || baseCv.height !== h) { baseCv.width = w; baseCv.height = h; }
+  bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  bctx.fillStyle = "#f7efdc"; bctx.fillRect(0, 0, V.w, V.h);
+  // copy only the part of the picture that is on screen
+  const k = baseImg.naturalWidth / BM.w;
+  const ux0 = Math.max(0, C.x - V.fx / C.s), uy0 = Math.max(0, C.y - V.fy / C.s);
+  const ux1 = Math.min(BM.w, C.x + (V.w - V.fx) / C.s), uy1 = Math.min(BM.h, C.y + (V.h - V.fy) / C.s);
+  if (ux1 <= ux0 || uy1 <= uy0) return;
+  bctx.drawImage(baseImg, ux0 * k, uy0 * k, (ux1 - ux0) * k, (uy1 - uy0) * k,
+    (ux0 - C.x) * C.s + V.fx, (uy0 - C.y) * C.s + V.fy, (ux1 - ux0) * C.s, (uy1 - uy0) * C.s);
+}
 let restT = 0;
 function setMoving(on){
   clearTimeout(restT);
-  if (on) $("#stage").classList.add("moving");
+  if (on) { if (!$("#stage").classList.contains("moving")) { $("#stage").classList.add("moving"); drawBase(); } }
   else restT = setTimeout(() => $("#stage").classList.remove("moving"), 450);   // sharpen once things have settled
 }
 const cosm = Math.cos(BM.latm * Math.PI / 180);
@@ -362,7 +376,8 @@ function setV(nv){ // change the focus point without moving the picture
   if (V) { C = { ...C, x: C.x + (nv.fx - V.fx) / C.s, y: C.y + (nv.fy - V.fy) / C.s }; }
   V = nv;
 }
-function apply(){ V = V || view(); cam.style.transform = `translate(${(V.fx - C.x*C.s).toFixed(2)}px,${(V.fy - C.y*C.s).toFixed(2)}px) scale(${C.s.toFixed(4)})`; }
+function apply(){ V = V || view(); cam.style.transform = `translate(${(V.fx - C.x*C.s).toFixed(2)}px,${(V.fy - C.y*C.s).toFixed(2)}px) scale(${C.s.toFixed(4)})`;
+  if (stage.classList.contains("moving")) drawBase(); }
 function stopScale(){ return wideMQ.matches ? 1.9 : 1.75; }
 function camFor(i, v){
   v = v || view();
