@@ -1,18 +1,22 @@
 # 澀谷散步日（12/27）
 
-手機直式為主的「自動播放路線動畫＋互動行程表」。直接雙擊 `index.html` 就能開（需要網路載入地圖與字型）。
+手繪風格地圖上一站一站走：按「下一站」，小人沿真實步行路線走到下一站，再跳出一則 Instagram 風格的貼文（照片可左右滑、介紹、要做的事、備註、Google Maps 導航）。直接雙擊 `index.html` 就能開，地圖完全不需要線上載入（只有字型來自 Google Fonts）。
 
-- `index.html`：頁面本體（Leaflet＋OpenStreetMap，不需 API key）
-- `itinerary.js`：行程資料（站名、座標、時段、亮點、備註、照片檔名、步行路線）
-- `photos/`：放你自己的照片，檔名＝站名，例如 `photos/明治神宮.jpg`（也接受 .jpeg/.png/.webp），會優先使用
-- `photos/auto/`：自動下載的備用照片；來源與授權見 `photos/credits.txt`
+- `index.html`：頁面本體
+- `itinerary.js`：行程資料（站名、時段、介紹、照片清單、地圖插圖、步行路線…，欄位說明在檔案開頭）
+- `basemap.js`：手繪底圖（由 `tools/make_basemap.py` 從 OpenStreetMap 資料產生）
+- `photos/`：放你自己的照片，檔名＝站名，例如 `photos/明治神宮.jpg`、`photos/明治神宮-2.jpg`，會排在輪播最前面
+- `photos/auto/`：自動下載的照片；來源與授權見 `photos/credits.txt`
 
-## 做其他天的頁面
+## 操作
 
-複製整個資料夾 → 改 `itinerary.js`（標題、日期、每站資料）→ 換照片。
-`path`（步行路線座標）可省略，省略時兩站之間畫直線。
+- 下方「下一站 ›」走到下一站，「‹」回上一站，數字直接跳站
+- 地圖可以拖曳、雙指縮放，右上角 ＋／－／全部
+- 手機上點貼文標題列或把手可以收起／展開貼文；點地圖空白處也會收起
+- 照片左右滑看更多，點兩下按讚（只存在這台裝置）
 
-## 小技巧
+## 做其他區域的頁面
 
-- 網址加 `?t=秒數`（例如 `index.html?t=44`）會直接停在那個時間點。
-- 播放中點畫面任一處＝暫停／繼續；暫停或播完後可拖曳地圖、點站點看詳細與導航。
+1. 改 `tools/make_basemap.py` 裡的 `AREA`（範圍）和 `LABELS`（地名、路名）
+2. `python3 tools/make_basemap.py fetch osm_data` → `python3 tools/make_basemap.py build osm_data basemap.js`
+3. 改 `itinerary.js`、換照片

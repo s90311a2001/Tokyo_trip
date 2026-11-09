@@ -61,3 +61,25 @@ SHIBUYA SKY 白天屋頂玻璃角落 Kazuo ota      https://unsplash.com/photos/
 
 地圖：© OpenStreetMap contributors（https://www.openstreetmap.org/copyright）
 步行路線：以 OSRM（routing.openstreetmap.de, foot）依 OSM 路網計算，預先存進 itinerary.js
+手繪底圖：tools/make_basemap.py 用 OpenStreetMap 資料（ODbL）畫成 basemap.js，不需要線上地圖服務
+
+輪播用的其他照片（2026-11-09 加入，皆 Unsplash License，縮成 1080px 寬）
+------------------------------------------------------------------
+01b-meiji-barrels.jpg     明治神宮 日本酒桶牆        Xuedi Liu        https://unsplash.com/photos/w3Ar_AA_7Ow
+01c-meiji-gate.jpg        明治神宮 本殿前廣場        Haewon Oh        https://unsplash.com/photos/8iAunwQrNZk
+01d-meiji-torii-sun.jpg   明治神宮 陽光下的鳥居      Zion C           https://unsplash.com/photos/Gm3JyhN0SWQ
+02b-takeshita-gate.jpg    竹下通 入口拱門            Florencia Gonzalez Bazzano  https://unsplash.com/photos/P-xfC5SoPNc
+02c-crepe.jpg             原宿可麗餅                 note thanun      https://unsplash.com/photos/ayoSDFuaZkI
+02d-takeshita-crowd.jpg   竹下通 人潮與招牌          Florencia Gonzalez Bazzano  https://unsplash.com/photos/VUE0pKZaiUU
+03b-tokyu-plaza.jpg       東急廣場表參道 鏡面入口    Susann Schuster  https://unsplash.com/photos/eIUDWkcZmpQ
+03c-omotesando-street.jpg 表參道 秋天街景            Squids Z         https://unsplash.com/photos/GHaxtbQ_IhY
+04b-miyashita-night.jpg   宮下公園 夜晚              ayumi kubo       https://unsplash.com/photos/uD-cvss_oq0
+04c-miyashita-entrance.jpg 宮下公園 入口電扶梯        Kanchan Raj Pandey https://unsplash.com/photos/1u7H2QYBbWQ
+05b-crossing-aerial.jpg   十字路口 白天俯瞰          Ryoji Iwata      https://unsplash.com/photos/1ctOFoMgGls
+05c-hachiko.jpg           八公銅像                   Vinicius         https://unsplash.com/photos/52CbRwXcsTs
+06b-sky-edge.jpg          SHIBUYA SKY 白天屋頂       Kazuo ota        https://unsplash.com/photos/9hbNTe7jZFM
+06c-sky-twilight.jpg      SHIBUYA SKY 黃昏           Muhammad Rahiman Abdulmanab https://unsplash.com/photos/NNFV0Chi5cc
+06d-sky-night.jpg         東京夜景（東京鐵塔）       Haotian Zheng    https://unsplash.com/photos/omJ9y1iUQKs
+07b-izakaya-lanterns.jpg  居酒屋燈籠【示意，非澀谷橫丁】 Cuvii        https://unsplash.com/photos/5CP1EJ_8tzU
+07c-beer.jpg              啤酒小菜【示意】           Zion C           https://unsplash.com/photos/p07RGfScf3c
+07d-okonomiyaki.jpg       大阪燒【示意】             Yosuke Ota       https://unsplash.com/photos/IveJAkyk7q8
