@@ -29,8 +29,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offse
 #stage{position:absolute;inset:0;overflow:hidden;background:var(--paper);touch-action:none;cursor:grab}
 #stage.drag{cursor:grabbing}
 #cam{position:absolute;left:0;top:0;transform-origin:0 0}
-#cam.moving{will-change:transform}
-#map{display:block;overflow:visible}
+#cam>*{position:absolute;left:0;top:0;display:block}
+#baseImg{will-change:transform;user-select:none;-webkit-user-drag:none;pointer-events:none}
+#map{overflow:visible}
+/* while the camera moves, show only the pre-rendered picture of the base map (cheap to scale) */
+#stage.moving.raster #mapBase{display:none}
+#stage.moving .st .ring{animation:none}
+.renderbase #title,.renderbase #chip,.renderbase #walkmsg,.renderbase #zoomBtns,.renderbase #sheet,.renderbase #nav,.renderbase #map,.renderbase #baseImg{display:none!important}
+.renderbase #cam{transform:none!important}
+.renderbase #stage{inset:0 auto auto 0!important;width:2000px;height:2000px;overflow:visible}
 
 /* map text */
 .lb text{font-family:var(--f-hand);fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round;text-anchor:middle}
@@ -183,10 +190,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offse
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="stage" aria-label="手繪路線地圖">
-    <div id="cam">
-      <svg id="map" xmlns="http://www.w3.org/2000/svg">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
         <defs>
           <g id="t1"><path d="M-1.6 2V-6h3.2V2z" fill="#8a6a4a"/><circle cy="-11" r="8" fill="#9cc177" stroke="#6f9450" stroke-width="1.3"/><path d="M-5.5 -15.5q5.5-5 11 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></g>
           <g id="t2"><path d="M-2 2v-4h4v4z" fill="#8a6a4a"/><path d="M0-24 8-10H4l7 9H-11l7-9h-4z" fill="#6f9a63" stroke="#4f7548" stroke-width="1.2" stroke-linejoin="round"/><path d="M-3.5-18 0-24 3.5-18" fill="#fff"/></g>
@@ -236,7 +240,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offse
           <g id="ic-pin" stroke="#4a3a2a" stroke-width="1.8"><path d="M0 0C-12-14-16-22-16-30a16 16 0 0 1 32 0c0 8-4 16-16 30z" fill="#e0a23a"/><circle cy="-30" r="6" fill="#fff"/></g>
           <g id="walker"><circle r="11" fill="#4f86ad" stroke="#fff" stroke-width="3"/><circle cy="-4" r="2.6" fill="#fff"/><path d="M0-1v5l-3 4M0 4l3 4M-3 1h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/></g>
         </defs>
-        <g id="base"></g>
+</svg>
+<div id="app">
+  <div id="stage" aria-label="手繪路線地圖">
+    <div id="cam">
+      <img id="baseImg" alt="" decoding="async" draggable="false">
+      <svg id="mapBase" xmlns="http://www.w3.org/2000/svg"><g id="base"></g></svg>
+      <svg id="map" xmlns="http://www.w3.org/2000/svg">
         <g id="routes"></g>
         <g id="stops"></g>
         <use id="walkerUse" href="#walker" style="display:none"/>
@@ -280,8 +290,21 @@ const km = m => m >= 1000 ? (m/1000).toFixed(1) + " 公里" : m + " 公尺";
 /* ---------------- map drawing ---------------- */
 const SVGNS = "http://www.w3.org/2000/svg";
 const svg = $("#map"), cam = $("#cam");
-svg.setAttribute("width", BM.w); svg.setAttribute("height", BM.h); svg.setAttribute("viewBox", `0 0 ${BM.w} ${BM.h}`);
+[svg, $("#mapBase")].forEach(e => { e.setAttribute("width", BM.w); e.setAttribute("height", BM.h); e.setAttribute("viewBox", `0 0 ${BM.w} ${BM.h}`); });
 $("#base").innerHTML = `<rect width="${BM.w}" height="${BM.h}" fill="#f7efdc"/>` + BM.svg;
+if (/renderbase/.test(location.search)) { document.body.classList.add("renderbase"); return; }   // used by tools/render_basemap.js
+// basemap.jpg = the same base map pre-rendered at 2x; it is what slides around during animations
+const baseImg = $("#baseImg");
+baseImg.width = BM.w; baseImg.height = BM.h;
+baseImg.onload = () => $("#stage").classList.add("raster");
+baseImg.onerror = () => baseImg.remove();
+baseImg.src = "basemap.jpg";
+let restT = 0;
+function setMoving(on){
+  clearTimeout(restT);
+  if (on) $("#stage").classList.add("moving");
+  else restT = setTimeout(() => $("#stage").classList.remove("moving"), 450);   // sharpen once things have settled
+}
 const cosm = Math.cos(BM.latm * Math.PI / 180);
 const proj = ([lat, lng]) => [(lng - BM.area.w) * BM.kx * cosm, (BM.area.n - lat) * BM.kx];
 const P = S.map(s => proj(s.coords));
@@ -359,11 +382,11 @@ function tween(dur, step){
   const me = { cancel: false }; anim = me;
   return new Promise(res => {
     if (reduce) dur = Math.min(dur, 200);
-    cam.classList.add("moving");
+    setMoving(true);
     const t0 = performance.now();
     const f = now => { if (me.cancel) return res(false);
       const e = clamp((now - t0) / dur, 0, 1); step(e); apply();
-      if (e < 1) requestAnimationFrame(f); else { cam.classList.remove("moving"); anim = null; res(true); } };
+      if (e < 1) requestAnimationFrame(f); else { setMoving(false); anim = null; res(true); } };
     requestAnimationFrame(f);
   });
 }
@@ -388,9 +411,9 @@ stage.addEventListener("pointermove", e => {
   const a = [...ptrs.values()], b = [...gest.pts.values()];
   if (a.length === 1 && b.length >= 1) {
     const dx = a[0].x - b[0].x, dy = a[0].y - b[0].y; if (Math.hypot(dx, dy) > 6) moved = true;
-    if (moved) { C = { ...gest.C, x: gest.C.x - dx / gest.C.s, y: gest.C.y - dy / gest.C.s }; clampC(); apply(); }
+    if (moved) { setMoving(true); C = { ...gest.C, x: gest.C.x - dx / gest.C.s, y: gest.C.y - dy / gest.C.s }; clampC(); apply(); }
   } else if (a.length >= 2 && b.length >= 2) {
-    moved = true;
+    moved = true; setMoving(true);
     const d0 = Math.hypot(b[0].x - b[1].x, b[0].y - b[1].y), d1 = Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y);
     const r = stage.getBoundingClientRect();
     const m0 = { x: (b[0].x + b[1].x) / 2 - r.left, y: (b[0].y + b[1].y) / 2 - r.top }, m1 = { x: (a[0].x + a[1].x) / 2 - r.left, y: (a[0].y + a[1].y) / 2 - r.top };
@@ -399,12 +422,12 @@ stage.addEventListener("pointermove", e => {
 });
 function endPtr(e){
   if (!ptrs.has(e.pointerId)) return;
-  ptrs.delete(e.pointerId); stage.classList.remove("drag");
+  ptrs.delete(e.pointerId); stage.classList.remove("drag"); if (!ptrs.size) setMoving(false);
   gest = ptrs.size ? { C: { ...C }, pts: new Map([...ptrs].map(([k, v]) => [k, { ...v }])) } : null;
   if (!moved && !ptrs.size) tapMap(e);
 }
 stage.addEventListener("pointerup", endPtr); stage.addEventListener("pointercancel", endPtr);
-stage.addEventListener("wheel", e => { e.preventDefault(); if (busy) return; const r = stage.getBoundingClientRect(), p = { x: e.clientX - r.left, y: e.clientY - r.top };
+stage.addEventListener("wheel", e => { e.preventDefault(); if (busy) return; setMoving(true); setMoving(false); const r = stage.getBoundingClientRect(), p = { x: e.clientX - r.left, y: e.clientY - r.top };
   zoomAt({ ...C }, C.s * Math.exp(-e.deltaY * .0015), p, p); }, { passive: false });
 function zoomAt(C0, s, p0, p1){ // stage-relative px: keep the map point under p0 at p1
   V = V || view(); s = clamp(s, .3, 3.2);
@@ -423,10 +446,20 @@ function tapMap(e){
 
 /* ---------------- photos ---------------- */
 function tryLoad(src){ return new Promise(r => { const im = new Image(); im.onload = () => r(true); im.onerror = () => r(false); im.src = src; }); }
-S.forEach(s => { s._photos = (s.photos || []).map(p => typeof p === "string" ? { src: p } : { ...p }).map(p => ({ ...p, url: "photos/auto/" + p.src })); });
+// each photo: url = full size, med = carousel size (photos/auto/m/*.webp), thumb = small (photos/auto/t/*.webp)
+const stem = f => f.replace(/\.[^.]+$/, "");
+S.forEach(s => { s._photos = (s.photos || []).map(p => typeof p === "string" ? { src: p } : { ...p })
+  .map(p => ({ ...p, url: "photos/auto/" + p.src, med: "photos/auto/m/" + stem(p.src) + ".webp", thumb: "photos/auto/t/" + stem(p.src) + ".webp" })); });
+const cache = new Map();
+function preload(url){ if (!url || cache.has(url)) return cache.get(url);
+  const im = new Image(); im.decoding = "async"; const pr = new Promise(r => { im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(() => r(true)); }; im.onerror = () => r(false); });
+  im.src = url; cache.set(url, pr); return pr; }
+const preloadStop = i => { if (i >= 0 && i < N) S[i]._photos.forEach(p => preload(p.med)); };
+// fall back to the full-size file if a smaller version is missing
+document.addEventListener("error", e => { const im = e.target; if (im.tagName === "IMG" && im.dataset.full && im.src.indexOf(im.dataset.full) < 0) im.src = im.dataset.full; }, true);
 async function findUserPhotos(){ // photos/<站名>.jpg, <站名>-2.jpg … go first
   for (const s of S) { const mine = [];
-    for (let k = 1; k <= 6; k++) { const url = "photos/" + encodeURIComponent(s.name) + (k === 1 ? "" : "-" + k) + ".jpg"; if (await tryLoad(url)) mine.push({ url, by: "我的照片" }); else break; }
+    for (let k = 1; k <= 6; k++) { const url = "photos/" + encodeURIComponent(s.name) + (k === 1 ? "" : "-" + k) + ".jpg"; if (await tryLoad(url)) mine.push({ url, med: url, thumb: url, by: "我的照片" }); else break; }
     if (mine.length) s._photos = mine.concat(s._photos); }
 }
 function placeholder(s){
@@ -456,10 +489,10 @@ function postHTML(i){
   const s = S[i], ph = s._photos.length ? s._photos : [{ url: placeholder(s), by: "" }];
   const liked = !!likes[s.name];
   return `<article class="post" data-i="${i}">
-    <header class="ph"><div class="av"><img src="${esc(ph[0].url)}" alt=""></div>
+    <header class="ph"><div class="av"><img src="${esc(ph[0].thumb || ph[0].url)}" data-full="${esc(ph[0].url)}" alt=""></div>
       <div class="who"><b>${esc(s.handle || s.name)}</b><span>${esc(s.area || "")}</span></div>
       <span class="tchip" style="background:${pcolor(s.period)}">${esc(s.period)} ${esc(s.time || "")}</span></header>
-    <div class="car"><div class="track">${ph.map((p, k) => `<div class="slide"><img src="${esc(p.url)}" alt="${esc(s.name)} 照片 ${k+1}" style="object-position:${esc(p.focus || "50% 50%")}" loading="${k ? "lazy" : "eager"}" draggable="false">
+    <div class="car"><div class="track">${ph.map((p, k) => `<div class="slide"><img src="${esc(p.med || p.url)}" data-full="${esc(p.url)}" alt="${esc(s.name)} 照片 ${k+1}" style="object-position:${esc(p.focus || "50% 50%")}" draggable="false">
         ${p.sample ? '<span class="smp">示意</span>' : ""}${p.by ? `<span class="cred">© ${esc(p.by)}</span>` : ""}</div>`).join("")}</div>
       ${ph.length > 1 ? `<span class="cnt">1/${ph.length}</span><button class="arw l" aria-label="上一張">‹</button><button class="arw r" aria-label="下一張">›</button>` : ""}
       <svg class="bigheart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.3 1 5 3 1.7-2 3-3 5-3 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg></div>
@@ -483,7 +516,7 @@ function listHTML(end){
       <div class="who"><b>${end ? "今日回顧" : esc(TRIP.title)}</b><span>${esc(TRIP.date)}・${N} 站・步行約 ${km(totM)}（${totMin} 分鐘）</span></div></header>
     <div class="ov"><p class="sum">${end ? "今天走過的地方，點一下可以回到那一站。" : "按下方「出發」，一站一站走一遍；也可以直接點想看的站。"}</p>
     ${S.map((s, i) => `${i > 0 && s.walk ? `<div class="wk">步行約 ${s.walk.min} 分鐘・${km(s.walk.m)}</div>` : ""}
-      <button class="row" data-go="${i}"><span class="n">${i+1}</span><img src="${esc((s._photos[0] || { url: placeholder(s) }).url)}" alt="">
+      <button class="row" data-go="${i}"><span class="n">${i+1}</span><img src="${esc((s._photos[0] || { thumb: placeholder(s) }).thumb)}" data-full="${esc((s._photos[0] || {}).url || "")}" alt="">
         <span class="t"><b>${esc(s.name)}</b><span>${esc(s.period)} ${esc(s.time || "")}・${esc(s.highlight || "")}</span></span></button>`).join("")}
     ${end ? '<button class="again" data-go="0">再走一次</button>' : ""}
     <p class="foot">${esc(BM.attribution)}。照片來自 Unsplash（Unsplash License），標「示意」的是相似場景、不是該店本身。</p></div>`;
@@ -534,6 +567,7 @@ function paint(){
 async function go(target){
   if (busy || target === cur) { if (target === cur && !wideMQ.matches) setSheet("open"); return; }
   busy = true;
+  preloadStop(target);                 // fetch this stop's photos while the walk animation plays
   const from = cur, walking = target === from + 1 && target >= 1 && target < N;
   if (!wideMQ.matches) { sheet.classList.remove("open", "peek"); sheetState = "hidden"; }
   const endSheet = target >= 0 && target < N ? "open" : "peek";
@@ -589,6 +623,11 @@ let rt = 0; window.addEventListener("resize", () => { clearTimeout(rt); rt = set
 wideMQ.addEventListener?.("change", () => { V = null; layout(); });
 paint(); fillSheet(); layout();
 if (!wideMQ.matches) { sheetState = "peek"; sheet.classList.add("peek"); V = view(); C = camFor(-1, V); apply(); }
+// load order: thumbnails, first stop, then everything else in the background
+S.forEach(s => s._photos[0] && preload(s._photos[0].thumb));
+preloadStop(0);
+const idle = window.requestIdleCallback || (f => setTimeout(f, 600));
+idle(async () => { for (let i = 0; i < N; i++) { await Promise.all(S[i]._photos.map(p => preload(p.med))); } });
 findUserPhotos().then(() => { if (sbody.querySelector(".ov")) fillSheet(); });
 })();
 </script>

@@ -19,4 +19,10 @@
 
 1. 改 `tools/make_basemap.py` 裡的 `AREA`（範圍）和 `LABELS`（地名、路名）
 2. `python3 tools/make_basemap.py fetch osm_data` → `python3 tools/make_basemap.py build osm_data basemap.js`
-3. 改 `itinerary.js`、換照片
+3. 產生動畫用的底圖照片：在這個資料夾開 `python3 -m http.server 8765`，再執行 `node tools/render_basemap.js`（會寫出 `basemap.jpg`）
+4. 改 `itinerary.js`、換照片，然後 `python3 tools/make_photo_sizes.py` 產生小尺寸照片（`photos/auto/m/`、`photos/auto/t/`）
+
+## 為什麼有 basemap.jpg 和小尺寸照片
+
+- 手繪底圖是向量圖，停著的時候最清楚，但移動時手機每一格都要重畫會卡。所以移動中改用預先畫好的 `basemap.jpg`，停下來約半秒後再換回向量圖。
+- 輪播照片用 800px 的 WebP（`m/`），頭像和清單用 240px（`t/`），找不到時會自動改用原圖。點「下一站」時就開始下載下一站的照片，其餘的在背景依序預先載入。
