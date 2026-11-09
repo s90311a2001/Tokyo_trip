@@ -391,6 +391,14 @@ function camFor(i, v){
   const [x, y] = P[i], [dx, dy] = S[i].iconAt || [0, -58];
   return { x: x + dx * .45, y: y + (dy - 20) * .45, s: stopScale() };
 }
+function legCam(i, v){ // frame the whole walk from stop i-1 to stop i
+  v = v || view(); let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  const pts = legs[i].concat([P[i-1], P[i]]);
+  [i-1, i].forEach(k => { const [x, y] = P[k], [dx, dy] = S[k].iconAt || [0, -58]; pts.push([x + dx, y + dy - 40], [x + dx, y + dy + 30]); });
+  pts.forEach(([x, y]) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); });
+  const pad = 40, s = Math.min((v.vw - pad*2) / (x1 - x0 || 1), (v.vh - pad*2) / (y1 - y0 || 1), stopScale());
+  return { x: (x0 + x1) / 2, y: (y0 + y1) / 2, s };
+}
 let anim = null;
 function tween(dur, step){
   if (anim) anim.cancel = true;
@@ -590,21 +598,22 @@ async function go(target){
   setV(vGo);
   if (target >= 0 && target < N) stEls[target].classList.remove("pop");
   if (walking) {
-    const s = S[target], B = camFor(target, vGo), A = { ...C };
-    const Lpx = legLen[target] * B.s, dur = reduce ? 200 : clamp(1300 + Lpx * .9, 1600, 3200);
+    // 1) zoom out once so the whole leg is on screen, 2) the map stays still while the walker
+    //    follows the route, 3) zoom in on the new stop
+    const s = S[target];
     $("#walkmsg").textContent = `往「${s.name}」步行約 ${s.walk ? s.walk.min + " 分鐘" : ""}`; $("#walkmsg").classList.remove("hide");
-    walkerUse.style.display = ""; paint();
     for (let k = 1; k < N; k++) setLeg(k, k < target ? 1 : 0);
-    const la = Math.log(A.s), lb = Math.log(B.s);
-    await tween(dur, e => {
-      const k = ease(e), p = legAt(target, k);
-      walkerUse.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
-      setLeg(target, k);
-      const edge = Math.min(1, k / .2, (1 - k) / .2);             // blend into / out of following the walker
-      const tx = A.x + (B.x - A.x) * k, ty = A.y + (B.y - A.y) * k;
-      C = { x: tx + (p[0] - tx) * edge, y: ty + (p[1] - ty) * edge, s: Math.exp(la + (lb - la) * k) * (1 - .3 * Math.sin(Math.PI * k)) };
-    });
+    await flyTo(legCam(target, vGo), 800);
+    walkerUse.setAttribute("transform", `translate(${legs[target][0][0]} ${legs[target][0][1]})`);
+    walkerUse.style.display = ""; paint();
+    const dur = reduce ? 200 : clamp(900 + legLen[target] * 1.2, 1400, 2600);
+    await new Promise(res => { const t0 = performance.now();
+      const f = now => { const e = clamp((now - t0) / dur, 0, 1), k = ease(e), p = legAt(target, k);
+        walkerUse.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`); setLeg(target, k);
+        if (e < 1) requestAnimationFrame(f); else res(); };
+      requestAnimationFrame(f); });
     walkerUse.style.display = "none"; $("#walkmsg").classList.add("hide");
+    await flyTo(camFor(target, vGo), 800);
   } else {
     await flyTo(camFor(target, vGo));
   }
