@@ -284,11 +284,13 @@ function setImg(img){
 function bindImg(img, i){ img.dataset.stop = i; setImg(img); }
 
 /* ---------- map ---------- */
-const map = L.map("map", { zoomControl:false, zoomSnap:0, zoomDelta:.5, attributionControl:true, fadeAnimation:true, inertia:true });
+// 預設線上載入 OSM 圖磚；若頁面先設定 window.TILES（例如離線打包的圖磚），就改用它
+const TILES = window.TILES || { url:"https://tile.openstreetmap.org/{z}/{x}/{y}.png", opts:{ maxZoom:19 }, map:{} };
+const map = L.map("map", Object.assign({ zoomControl:false, zoomSnap:0, zoomDelta:.5, attributionControl:true, fadeAnimation:true, inertia:true }, TILES.map || {}));
 map.attributionControl.setPosition("topright").setPrefix(false);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+L.tileLayer(TILES.url, Object.assign({
+  attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+}, TILES.opts)).addTo(map);
 
 // legs: legs[i] = path from stop i-1 to stop i (legs[0] empty)
 const legs = S.map((s, i) => i === 0 ? [] : (s.path && s.path.length > 1 ? s.path : [S[i-1].coords, s.coords]));
