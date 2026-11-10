@@ -1,0 +1,21 @@
+{
+  "_comment": "Shibuya 12/27 example. area = map bounds; keep the stops well inside with ~300 m margin. labels: [中文, English, lat, lng, kind, (OSM road name for kind=road)]",
+  "area": { "s": 35.6555, "n": 35.6786, "w": 139.6935, "e": 139.7136 },
+  "snow": true,
+  "labels": [
+    ["代代木公園", "Yoyogi Park", 35.6706, 139.6958, "area"],
+    ["明治神宮之森", "Meiji Jingu Forest", 35.6772, 139.6985, "area"],
+    ["原宿", "Harajuku", 35.6688, 139.7052, "area"],
+    ["神宮前", "Jingumae", 35.6712, 139.7105, "area"],
+    ["青山", "Aoyama", 35.6640, 139.7118, "area"],
+    ["澀谷", "Shibuya", 35.6572, 139.6968, "area"],
+    ["明治通", "Meiji-dori", 35.6648, 139.7034, "road", "明治通り"],
+    ["表參道", "Omotesando", 35.6683, 139.7074, "road", "表参道"],
+    ["青山通", "Aoyama-dori", 35.6612, 139.7102, "road", "青山通り"],
+    ["井之頭通", "Inokashira-dori", 35.6645, 139.6972, "road", "井ノ頭通り"],
+    ["公園通", "Koen-dori", 35.6628, 139.6997, "road", "公園通り"],
+    ["道玄坂", "Dogenzaka", 35.6578, 139.6975, "road", "道玄坂"],
+    ["JR 原宿站", "Harajuku Sta.", 35.6705, 139.7024, "station"],
+    ["JR 澀谷站", "Shibuya Sta.", 35.6585, 139.7014, "station"]
+  ]
+}
